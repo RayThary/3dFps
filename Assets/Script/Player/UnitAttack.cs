@@ -32,13 +32,13 @@ public class UnitAttack : MonoBehaviour
         unitRot = _unitRot;
     }
 
-    public void Attack(Weapon gun , WeaponView _weaponView, Transform _unitHead)
+    public void Attack(Weapon gun, WeaponView _weaponView, Transform _unitHead)
     {
         bool shot = gun.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
             if (_weaponView != null) _weaponView.UnitAttackAnim();
-            StartCoroutine(gunHit(hitDealyTime));
+            StartCoroutine(gunHit(hitDealyTime, gun.GetDamage));
             isRecoil = true;
             unitRot.unitRecoil(gun.GetRecoilPower);
             StartCoroutine(EndSingleRecoil());
@@ -58,7 +58,7 @@ public class UnitAttack : MonoBehaviour
     }
 
 
-    public void Attack(Weapon gun , PlayerInput _input, WeaponView _weaponView, Transform _unitHead)
+    public void Attack(Weapon gun, PlayerInput _input, WeaponView _weaponView, Transform _unitHead)
     {
         if (!isAttackAuto)
         {
@@ -66,7 +66,7 @@ public class UnitAttack : MonoBehaviour
 
         }
     }
-    private IEnumerator attackAuto(Weapon gun , PlayerInput _input, WeaponView _weaponView, Transform _unitHead)
+    private IEnumerator attackAuto(Weapon gun, PlayerInput _input, WeaponView _weaponView, Transform _unitHead)
     {
         isAttackAuto = true;
         isRecoil = true;
@@ -77,7 +77,7 @@ public class UnitAttack : MonoBehaviour
             {
                 if (_weaponView != null) _weaponView.UnitAttackAnim();
                 unitRot.unitRecoil(gun.GetRecoilPower);
-                StartCoroutine(gunHit(hitDealyTime));
+                StartCoroutine(gunHit(hitDealyTime, gun.GetDamage));
                 yield return new WaitForSeconds(0.1f);
             }
             else
@@ -93,20 +93,36 @@ public class UnitAttack : MonoBehaviour
         isAttackAuto = false;
         unitRot.ResetMouseRecoil();
     }
-  
-    private IEnumerator gunHit(float _hitDealyTime)
+
+    private IEnumerator gunHit(float _hitDealyTime, float _damage)
     {
+
+        //이초뒤에 피격판정을준다.
         yield return new WaitForSeconds(_hitDealyTime);
+
         Ray ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 100, hitRay))
         {
-            int iHitLayer = 1 << hit.collider.gameObject.layer;
-            bool isCritical = ((hitHeadRay & iHitLayer) != 0) ? true : false;
+            Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
+            if (enemy != null)
+            {
+                int iHitLayer = 1 << hit.collider.gameObject.layer;
+                bool isCritical = ((hitHeadRay & iHitLayer) != 0) ? true : false;
 
-            StartCoroutine(hitMuzzle(hit.point, isCritical));
-            //hit.collider.GetComponent<>이걸로 대미지 if(null!= )이조건으로 널이아니라면 대미지를 널이라면 대미지가아니도록
+                //히트머즐 
+                StartCoroutine(hitMuzzle(hit.point, isCritical));
+
+                //적관련 대미지부분
+                hitEnemy(enemy, _damage, isCritical);
+            }
+            else
+            {
+                //총이환경피격시나오는부분
+                spawnBulletHole(hit.point, hit.normal);
+            }
+
         }
 
     }
@@ -117,14 +133,26 @@ public class UnitAttack : MonoBehaviour
 
         crosshair.rectTransform.localScale = defaultScale * 1.2f;
         hitCrosshair.gameObject.SetActive(true);
-        yield return new WaitForSeconds(hitDuration);
 
+        yield return new WaitForSeconds(hitDuration);
 
         if (_criticalHit)
             crosshair.color = nomalCrossColor;
         hitCrosshair.gameObject.SetActive(false);
 
-
         crosshair.rectTransform.localScale = defaultScale;
+    }
+
+    private void spawnBulletHole(Vector3 _point, Vector3 _nomal)
+    {
+        GameObject bulletHole = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.BulletHole, GameManager.instance.TempParent);
+        bulletHole.transform.position = _point + _nomal * 0.02f;
+        bulletHole.transform.rotation = Quaternion.LookRotation(-_nomal);
+    }
+
+
+    private void hitEnemy(Enemy _enemy, float _damage, bool _isCritical)
+    {
+        _enemy.HitEnemy(_damage, _isCritical);
     }
 }

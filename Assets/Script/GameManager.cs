@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     private Unit unit;
     public Unit GetUnit { get { return unit; } }
 
+    [SerializeField]
+    private Transform tempParent;
+    public Transform TempParent { get { return tempParent; } }
+
     private void Awake()
     {
         if (instance == null)

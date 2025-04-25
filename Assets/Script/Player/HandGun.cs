@@ -21,8 +21,6 @@ public class HandGun : Weapon
             bullet.transform.localPosition = Vector3.zero;
             bullet.transform.localRotation = Quaternion.identity;
 
-
-
             currentAmmo--;
             return true;
         }

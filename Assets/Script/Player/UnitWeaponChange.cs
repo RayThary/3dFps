@@ -42,11 +42,13 @@ public class UnitWeaponChange
         var weapon1Obj = GameObject.Instantiate(weapon1.WeaponPrefeb, _slot1.transform);
         var view1 = weapon1Obj.GetComponent<WeaponView>();
         weaponViewSlot[1] = view1;
+        view1.Initialize(weapon1);
 
         var weapon2 = weaponSlot[2];
         var weapon2Obj = GameObject.Instantiate(weapon2.WeaponPrefeb, _slot2.transform);
         var view2 = weapon2Obj.GetComponent<WeaponView>();
         weaponViewSlot[2] = view2;
+        view2.Initialize(weapon2);
 
     }
     public WeaponView GetCurrentWeaponview()
@@ -61,7 +63,6 @@ public class UnitWeaponChange
         if (!weaponSlot.ContainsKey(_slotNum)) return;
 
         currentSlot = _slotNum;
-        weaponViewSlot[currentSlot].Initialize(weaponSlot[currentSlot]);
 
        slotSwitch();
     }
@@ -69,6 +70,8 @@ public class UnitWeaponChange
     public void WeaponChange(GameObject _newWeapon)
     {
         weaponSlot.Remove(currentSlot);
+        //weaponview.Initialize(해당무기); 웨펀뷰의 웨펀을 새로바꿔줄무기의 웨펀을 여기서지정해주기
         //weaponSlot.Add()
+
     }
 }

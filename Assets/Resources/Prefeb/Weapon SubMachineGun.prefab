@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4282281359081802794}
   - component: {fileID: 9154871033238034185}
   - component: {fileID: 7696700936357696917}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7361746190064998522}
   - component: {fileID: 6911389690189556811}
   - component: {fileID: 7349235942176193609}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Weapon SubMachineGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 868619034461810431}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: MuzzlePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

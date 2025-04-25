@@ -11,6 +11,8 @@ public class PoolingManager : MonoBehaviour
     {
         HandGunMuzzle,
         SubMachineMuzzle,
+        BulletHole,
+        EnemyA,
     }
 
     [System.Serializable]

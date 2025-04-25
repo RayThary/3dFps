@@ -61,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Scripts\PlayerMoveOnSphere.cs" />
+    <Compile Include="Assets\Script\Weapon\WeaponOffest.cs" />
     <Compile Include="Assets\Script\Player\UnitWeaponChange.cs" />
+    <Compile Include="Assets\Script\Enemy\Enemy.cs" />
     <Compile Include="Assets\Script\Player\UnitRotation.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Models\UnityCharacter\Scripts\CharacterMovement2D.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Models\UnityCharacter\Scripts\CharacterMovement.cs" />
@@ -71,8 +73,10 @@
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Scripts\PlayerMove.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\Anywhere Door\PlayerMovement.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Scripts\SpawnInCircle.cs" />
+    <Compile Include="Assets\Script\Enemy\EnemyData.cs" />
     <Compile Include="Assets\Script\Player\HandGun.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\3rdPersonWithAimMode\ActivateOnKeypress.cs" />
+    <Compile Include="Assets\Script\BulletHole.cs" />
     <Compile Include="Assets\Script\PoolingManager.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\BossCamera\CustomLockCameraY.cs" />
     <Compile Include="Assets\Script\Weapon\WeaponFactory.cs" />
