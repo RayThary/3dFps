@@ -111,7 +111,15 @@ public class Unit : MonoBehaviour
         //Å×½ºÆ®
         if (Input.GetKeyDown(KeyCode.R))
         {
-            weapon.Reload(unitWeaponChange.GetCurrentWeaponview());
+            if (!weapon.IsMelee)
+            {
+                weapon.Reload(unitWeaponChange.GetCurrentWeaponview());
+            }
+            else
+            {
+                weapon.Reload(anim);
+            }
+
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {

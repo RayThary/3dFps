@@ -44,15 +44,12 @@ public class UnitAttack : MonoBehaviour
             else
             {
                 _weapon.Reload(_anim);
-                Debug.Log("¿Á¿Â¿¸");
             }
         }
 
     }
     public void Attack(Weapon _weapon, WeaponView _weaponView)
     {
-
-
         bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
