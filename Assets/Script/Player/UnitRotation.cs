@@ -30,7 +30,7 @@ public class UnitRotation
         recoilRecoverSpeed = recoverSpd;
     }
 
-    public void unitMouseLook(Transform unit, float _mouseX, float _mouseY, float _sensitivity)
+    public void unitMouseLook(Transform unit,Transform _neck , float _mouseX, float _mouseY, float _sensitivity)
     {
         unit.Rotate(0, _mouseX * _sensitivity, 0f, Space.World);
 
@@ -39,6 +39,8 @@ public class UnitRotation
 
         mouseMoveAttack = Mathf.Abs(_mouseY) > 0;
 
+        playerHead.localRotation = Quaternion.Euler(rotationPitch, 0, 0);
+        _neck.localRotation = Quaternion.Euler(rotationPitch, 0, 0);
         if (mouseMoveAttack)
         {
             basePitch = rotationPitch;
@@ -75,7 +77,8 @@ public class UnitRotation
 
         float current = playerHead.localEulerAngles.x;
         if (current > 180f) current -= 360f;
-        // ②내부 조준값과 기준값을 실제 각도로 싱크
+
+        // 내부 조준값과 기준값을 실제 각도로 싱크
         rotationPitch = current;
         basePitch = current;
 

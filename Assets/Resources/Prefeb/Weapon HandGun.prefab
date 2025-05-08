@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4537404642384979482}
-  m_Layer: 13
+  m_Layer: 12
   m_Name: MuzzlePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,14 +24,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11309162364111707}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6, y: 0.75, z: -0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.6000005, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2037557408494193217}
+  m_Father: {fileID: 6631014413115901812}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2832004251592698338
+--- !u!1 &779197638887595975
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -39,29 +39,51 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 219992943576979595}
-  m_Layer: 13
-  m_Name: Shot
+  - component: {fileID: 205668643603107665}
+  - component: {fileID: 2530484909934558429}
+  m_Layer: 14
+  m_Name: WeaponPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &219992943576979595
+--- !u!4 &205668643603107665
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2832004251592698338}
+  m_GameObject: {fileID: 779197638887595975}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7, y: 0.7, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.006893964, w: 0.9999762}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2037557408494193217}
+  m_Father: {fileID: 6631014413115901812}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2530484909934558429
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779197638887595975}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7, y: 1.8, z: 0.9}
+  m_Center: {x: 0.1, y: 0.3, z: 0.1}
 --- !u!1 &6685627023603766913
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +95,7 @@ GameObject:
   - component: {fileID: 6631014413115901812}
   - component: {fileID: 9142913767585064290}
   - component: {fileID: 884602007505970509}
-  m_Layer: 13
+  m_Layer: 12
   m_Name: Mesh Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +114,9 @@ Transform:
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4537404642384979482}
+  - {fileID: 205668643603107665}
   m_Father: {fileID: 2037557408494193217}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9142913767585064290
@@ -157,7 +181,7 @@ GameObject:
   - component: {fileID: 8804710966277767333}
   - component: {fileID: 136901232487288665}
   - component: {fileID: -3327878237028296869}
-  m_Layer: 13
+  m_Layer: 12
   m_Name: Weapon HandGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,8 +202,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6631014413115901812}
-  - {fileID: 219992943576979595}
-  - {fileID: 4537404642384979482}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!95 &8804710966277767333
@@ -215,6 +237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79754af5230e79d45a589b9f34cfe181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponType: 0
+  weaponPickup: {fileID: 0}
 --- !u!114 &-3327878237028296869
 MonoBehaviour:
   m_ObjectHideFlags: 0

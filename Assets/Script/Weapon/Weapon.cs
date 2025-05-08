@@ -13,13 +13,20 @@ public abstract class Weapon
     protected int reserveAmmo;
     protected int maxReserveAmmo;
     protected float speed;
+    protected bool isMelee;
+    public bool IsMelee { get { return isMelee; } }
+
     protected float recoilPower;
     public float GetRecoilPower { get { return recoilPower; } }
 
     protected float damage;
     public float GetDamage { get { return damage; } }
+
     protected bool isReloading;
     public bool IsReloading { set { isReloading = value; } }
+
+    protected eWeaponType weaponType;
+    public eWeaponType WeaponType { get { return weaponType; } }
 
 
     //UI 총알
@@ -40,21 +47,30 @@ public abstract class Weapon
     {
         weaponName = _data.WeaponName;
         damage = _data.Damage;
+        weaponPrefeb = _data.Prefab;
+        isMelee = _data.isMelee;
+
         currentAmmo = _data.MaxAmmo;
         maxAmmo = _data.MaxAmmo;
-        speed = _data.Speed;
+
+        reserveAmmo = _data.PullAmmo / 2;
+        maxReserveAmmo = _data.PullAmmo;
+
         automatic = _data.Automatic;
         bulletType = _data.BulletType;
         poolingMuzzle = _data.PoolingMuzzle;
-        weaponPrefeb = _data.Prefab;
-        reserveAmmo = _data.PullAmmo / 2;
-        maxReserveAmmo = _data.PullAmmo;
         recoilPower = _data.RecoilPower;
     }
-    public Weapon(string _name, float _damage)
+    public Weapon(WeaponData _data,bool _melee)
     {
-        this.weaponName = _name;
-        this.damage = _damage;
+        weaponName = _data.WeaponName;
+        damage = _data.Damage;
+        weaponPrefeb = _data.Prefab;
+        isMelee = _data.isMelee;
+        reserveAmmo = _data.PullAmmo / 2;
+        maxReserveAmmo = _data.PullAmmo;
+        currentAmmo = _data.MaxAmmo;
+        maxAmmo = _data.MaxAmmo;
     }
 
     public abstract bool Attack(Transform _muzzlePoint);
@@ -95,6 +111,17 @@ public abstract class Weapon
         _weaponView.UnitReloadAnim();
         Debug.Log("장전 ");
     }
+    public virtual void Reload(Animator _anim)
+    {
+        if (currentAmmo == maxAmmo || reserveAmmo <= 0 || isReloading)
+        {
+            Debug.Log("장전중 또는 총알이 꽉차있거나 부족함");
+            return;
+        }
+        isReloading = true;
+        _anim.SetTrigger("Reload");
+        Debug.Log("장전 ");
+    }
 
     public void ReloadAmmo()
     {
@@ -105,5 +132,7 @@ public abstract class Weapon
     }
 
 }
+
+
 
 

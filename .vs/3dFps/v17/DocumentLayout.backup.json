@@ -3,56 +3,92 @@
   "WorkspaceRootPath": "C:\\Users\\ghfjt\\Documents\\3dFps\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|c:\\users\\ghfjt\\documents\\3dfps\\assets\\script\\player\\unitweaponchange.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\unitweaponchange.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\weaponview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\weaponview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\unitattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\unitattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\weapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\weapon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\unitattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\unitattack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\weapondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\weapondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|c:\\users\\ghfjt\\documents\\3dfps\\assets\\script\\enemy\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\enemy\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\weaponfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\weaponfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|c:\\users\\ghfjt\\documents\\3dfps\\assets\\script\\player\\unit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|c:\\users\\ghfjt\\documents\\3dfps\\assets\\script\\weapon\\weaponview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\weaponview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\unitrotation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\unitrotation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\unitweaponchange.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\unitweaponchange.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\unit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\unit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\enemy\\enemydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\enemy\\enemydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\hammer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\hammer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\poolingmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\poolingmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\weapondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\weapondata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\submachinegun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\submachinegun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\cameramanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\cameramanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\uiammo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\uiammo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\weaponoffest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\weaponoffest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\weapon\\handgun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\weapon\\handgun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\playerinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\playerinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\enemy\\enemydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\enemy\\enemydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\enemy\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\enemy\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\poolingmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\poolingmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\bullethole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\bullethole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\handgun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\handgun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\SubMachineGun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Player\\SubMachineGun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|C:\\Users\\ghfjt\\Documents\\3dFps\\assets\\script\\player\\submachinegun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B4AE4CB-610B-9E65-CE85-2155EA26C9B5}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\player\\submachinegun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\HandGun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Player\\HandGun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -62,73 +98,226 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "Weapon.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\Weapon.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\Weapon.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\Weapon.cs",
+              "RelativeToolTip": "Assets\\Script\\Weapon\\Weapon.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAA0wDkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T03:55:10.402Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Hammer.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\Hammer.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\Hammer.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\Hammer.cs",
+              "RelativeToolTip": "Assets\\Script\\Weapon\\Hammer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T04:10:28.293Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "UnitWeaponChange.cs",
               "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitWeaponChange.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Player\\UnitWeaponChange.cs",
               "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitWeaponChange.cs",
               "RelativeToolTip": "Assets\\Script\\Player\\UnitWeaponChange.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAowEgAAABFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEMAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-25T08:52:56.738Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 4,
+              "Title": "WeaponView.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponView.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\WeaponView.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponView.cs",
+              "RelativeToolTip": "Assets\\Script\\Weapon\\WeaponView.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAD4vy8AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T03:54:55.824Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitAttack.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitAttack.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Player\\UnitAttack.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitAttack.cs",
+              "RelativeToolTip": "Assets\\Script\\Player\\UnitAttack.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAewC0AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T03:55:59.671Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Unit.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\Unit.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Player\\Unit.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\Unit.cs",
+              "RelativeToolTip": "Assets\\Script\\Player\\Unit.cs",
+              "ViewState": "AgIAAIIAAAAAAAAAAAAuwIwAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T08:18:26.088Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "WeaponData.cs",
               "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponData.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\WeaponData.cs",
               "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponData.cs",
               "RelativeToolTip": "Assets\\Script\\Weapon\\WeaponData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwgAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T14:31:26.839Z"
+              "WhenOpened": "2025-04-24T14:31:26.839Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Enemy.cs",
-              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\Enemy.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Enemy\\Enemy.cs",
-              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\Enemy.cs",
-              "RelativeToolTip": "Assets\\Script\\Enemy\\Enemy.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAtwCIAAAAhAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "UnitRotation.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitRotation.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Player\\UnitRotation.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitRotation.cs",
+              "RelativeToolTip": "Assets\\Script\\Player\\UnitRotation.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAMwDIAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T14:14:46.864Z",
+              "WhenOpened": "2025-05-02T10:16:04.683Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WeaponFactory.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponFactory.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\WeaponFactory.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponFactory.cs",
+              "RelativeToolTip": "Assets\\Script\\Weapon\\WeaponFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAD4vy4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-29T13:47:51.018Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "SubMachineGun.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\SubMachineGun.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\SubMachineGun.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\SubMachineGun.cs",
+              "RelativeToolTip": "Assets\\Script\\Weapon\\SubMachineGun.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAADwvw8AAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T04:10:15.075Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\GameManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\GameManager.cs",
               "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\GameManager.cs",
               "RelativeToolTip": "Assets\\Script\\GameManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAIwDoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T08:20:58.704Z"
+              "WhenOpened": "2025-04-24T08:20:58.704Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "PoolingManager.cs",
-              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\PoolingManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\PoolingManager.cs",
-              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\PoolingManager.cs",
-              "RelativeToolTip": "Assets\\Script\\PoolingManager.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAAwA4AAAAPAAAAAAAAAA==",
+              "DocumentIndex": 11,
+              "Title": "CameraManager.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\CameraManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\CameraManager.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\CameraManager.cs",
+              "RelativeToolTip": "Assets\\Script\\CameraManager.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAIwBkAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T08:20:20.424Z"
+              "WhenOpened": "2025-04-25T09:50:16.007Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
+              "Title": "UIAmmo.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\UIAmmo.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\UIAmmo.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\UIAmmo.cs",
+              "RelativeToolTip": "Assets\\Script\\UIAmmo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxQAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-05T17:46:56.011Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "WeaponOffest.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponOffest.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\WeaponOffest.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponOffest.cs",
+              "RelativeToolTip": "Assets\\Script\\Weapon\\WeaponOffest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxMAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T09:33:31.764Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "HandGun.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\HandGun.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\HandGun.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\HandGun.cs",
+              "RelativeToolTip": "Assets\\Script\\Weapon\\HandGun.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T04:18:24.096Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PlayerInput.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\PlayerInput.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Player\\PlayerInput.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\PlayerInput.cs",
+              "RelativeToolTip": "Assets\\Script\\Player\\PlayerInput.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAiwCwAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T04:06:09.225Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "EnemyData.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\EnemyData.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Enemy\\EnemyData.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\EnemyData.cs",
+              "RelativeToolTip": "Assets\\Script\\Enemy\\EnemyData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T14:31:36.521Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
               "Title": "BulletHole.cs",
               "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\BulletHole.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\BulletHole.cs",
@@ -140,71 +329,31 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UnitAttack.cs",
-              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitAttack.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Player\\UnitAttack.cs",
-              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\UnitAttack.cs",
-              "RelativeToolTip": "Assets\\Script\\Player\\UnitAttack.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAuwJsAAAAuAAAAAAAAAA==",
+              "DocumentIndex": 18,
+              "Title": "PoolingManager.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\PoolingManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\PoolingManager.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\PoolingManager.cs",
+              "RelativeToolTip": "Assets\\Script\\PoolingManager.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAwA4AAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T03:55:59.671Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-24T08:20:20.424Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Weapon.cs",
-              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\Weapon.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\Weapon.cs",
-              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\Weapon.cs",
-              "RelativeToolTip": "Assets\\Script\\Weapon\\Weapon.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAADgv18AAAAZAAAAAAAAAA==",
+              "DocumentIndex": 17,
+              "Title": "Enemy.cs",
+              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\Enemy.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Enemy\\Enemy.cs",
+              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\Enemy.cs",
+              "RelativeToolTip": "Assets\\Script\\Enemy\\Enemy.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAtwCIAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T03:55:10.402Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-24T14:14:46.864Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "WeaponView.cs",
-              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponView.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Weapon\\WeaponView.cs",
-              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Weapon\\WeaponView.cs",
-              "RelativeToolTip": "Assets\\Script\\Weapon\\WeaponView.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T03:54:55.824Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Unit.cs",
-              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\Unit.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Player\\Unit.cs",
-              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\Unit.cs",
-              "RelativeToolTip": "Assets\\Script\\Player\\Unit.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAlwIQAAABcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T08:18:26.088Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "EnemyData.cs",
-              "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\EnemyData.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Enemy\\EnemyData.cs",
-              "ToolTip": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Enemy\\EnemyData.cs",
-              "RelativeToolTip": "Assets\\Script\\Enemy\\EnemyData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBMAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T14:31:36.521Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 20,
               "Title": "SubMachineGun.cs",
               "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\SubMachineGun.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Player\\SubMachineGun.cs",
@@ -216,7 +365,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 21,
               "Title": "HandGun.cs",
               "DocumentMoniker": "C:\\Users\\ghfjt\\Documents\\3dFps\\Assets\\Script\\Player\\HandGun.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Player\\HandGun.cs",

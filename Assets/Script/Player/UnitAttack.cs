@@ -31,25 +31,45 @@ public class UnitAttack : MonoBehaviour
     {
         unitRot = _unitRot;
     }
-
-    public void Attack(Weapon gun, WeaponView _weaponView, Transform _unitHead)
+    public void Attack(Weapon _weapon, WeaponView _weaponView, Animator _anim)
     {
-        bool shot = gun.Attack(_weaponView.GetMuzzlePoint);
+
+        if (_weapon.IsMelee)
+        {
+            bool shot = _weapon.Attack(null);
+            if (shot)
+            {
+                _anim.SetTrigger("Attack");
+            }
+            else
+            {
+                _weapon.Reload(_anim);
+                Debug.Log("ÀçÀåÀü");
+            }
+        }
+
+    }
+    public void Attack(Weapon _weapon, WeaponView _weaponView)
+    {
+
+
+        bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
             if (_weaponView != null) _weaponView.UnitAttackAnim();
-            StartCoroutine(gunHit(hitDealyTime, gun.GetDamage));
+            StartCoroutine(gunHit(hitDealyTime, _weapon.GetDamage));
             isRecoil = true;
-            unitRot.unitRecoil(gun.GetRecoilPower);
+            unitRot.unitRecoil(_weapon.GetRecoilPower);
             StartCoroutine(EndSingleRecoil());
         }
         else
         {
-            if (gun.GetReserveAmmo >= 0)
+            if (_weapon.GetReserveAmmo >= 0)
             {
-                gun.Reload(_weaponView);
+                _weapon.Reload(_weaponView);
             }
         }
+
     }
     private IEnumerator EndSingleRecoil()
     {
@@ -58,15 +78,14 @@ public class UnitAttack : MonoBehaviour
     }
 
 
-    public void Attack(Weapon gun, PlayerInput _input, WeaponView _weaponView, Transform _unitHead)
+    public void Attack(Weapon gun, PlayerInput _input, WeaponView _weaponView)
     {
         if (!isAttackAuto)
         {
-            StartCoroutine(attackAuto(gun, _input, _weaponView, _unitHead));
-
+            StartCoroutine(attackAuto(gun, _input, _weaponView));
         }
     }
-    private IEnumerator attackAuto(Weapon gun, PlayerInput _input, WeaponView _weaponView, Transform _unitHead)
+    private IEnumerator attackAuto(Weapon gun, PlayerInput _input, WeaponView _weaponView)
     {
         isAttackAuto = true;
         isRecoil = true;

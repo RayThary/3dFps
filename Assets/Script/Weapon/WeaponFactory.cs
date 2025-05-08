@@ -6,7 +6,7 @@ public enum eWeaponType
 {
     HandGun,
     SubMachineGun,
-
+    Hammer,
 }
 
 
@@ -42,6 +42,9 @@ public static class WeaponFactory
 
             case eWeaponType.SubMachineGun:
                 return new SubMachineGun(data);
+
+            case eWeaponType.Hammer:
+                return new Hammer(data);
 
             default:
                 Debug.LogError($"{type}이(가) 없습니다");

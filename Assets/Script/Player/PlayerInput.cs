@@ -34,11 +34,15 @@ public class PlayerInput
     private bool leftShift;
     public bool GetLeftShift { get { return leftShift; } }
 
+    //무기 관련
     private bool weapon1;
     public bool GetWeapon1 { get { return weapon1; } }
 
     private bool weapon2;
     public bool GetWeapon2 { get { return weapon2; } }
+
+    private bool fCheck;
+    public bool FCheck { get { return fCheck; } }
 
     public void ReadInput()
     {
@@ -55,6 +59,7 @@ public class PlayerInput
 
         weapon1 = Input.GetKeyDown(KeyCode.Alpha1);
         weapon2 = Input.GetKeyDown(KeyCode.Alpha2);
+        fCheck = Input.GetKeyDown(KeyCode.F);
     }
 
 

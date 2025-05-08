@@ -7,33 +7,43 @@ using UnityEngine;
 public class UnitWeaponChange
 {
     private Dictionary<int, Weapon> weaponSlot;
-    private GameObject slot1Obj;
-    private GameObject slot2Obj;
+    private GameObject gunSlot1Obj;
+    private GameObject gunSlot2Obj;
+
+    private GameObject meleeSlot1Obj;
+    private GameObject meleeSlot2Obj;
+
 
     private Dictionary<int, WeaponView> weaponViewSlot = new Dictionary<int, WeaponView>();
     private int currentSlot;
 
-    
+
     public Weapon GetCurrentWeapon()
     {
         return weaponSlot[currentSlot];
     }
-    public UnitWeaponChange(Dictionary<int, Weapon> _weaponSlot, GameObject _slot1Obj, GameObject _slot2Obj, int _defaultSlot = 1)
+    public UnitWeaponChange(Dictionary<int, Weapon> _weaponSlot, GameObject _gunSlot1Obj, GameObject _gunSlot2Obj,
+        GameObject _meleeSlot1Obj, GameObject _meleeSlot2Obj, int _defaultSlot = 1)
     {
         this.weaponSlot = _weaponSlot;
-        this.slot1Obj = _slot1Obj;
-        this.slot2Obj = _slot2Obj;
+        this.gunSlot1Obj = _gunSlot1Obj;
+        this.gunSlot2Obj = _gunSlot2Obj;
+        this.meleeSlot1Obj = _meleeSlot1Obj;
+        this.meleeSlot2Obj = _meleeSlot2Obj;
 
-        currentSlot = _defaultSlot;     
+        currentSlot = _defaultSlot;
 
         slotSwitch();
-        weaponInstantiate(_slot1Obj, _slot2Obj);
+        weaponInstantiate(_gunSlot1Obj, _gunSlot2Obj);
     }
 
     private void slotSwitch()
     {
-        slot1Obj.SetActive(currentSlot == 1);
-        slot2Obj.SetActive(currentSlot == 2);
+        
+        gunSlot1Obj.SetActive(currentSlot == 1);
+        meleeSlot1Obj.SetActive(currentSlot == 1);
+        gunSlot2Obj.SetActive(currentSlot == 2);
+        meleeSlot2Obj.SetActive(currentSlot == 2);
     }
 
     private void weaponInstantiate(GameObject _slot1, GameObject _slot2)
@@ -43,12 +53,14 @@ public class UnitWeaponChange
         var view1 = weapon1Obj.GetComponent<WeaponView>();
         weaponViewSlot[1] = view1;
         view1.Initialize(weapon1);
+        view1.WeaponPickup.GetComponent<BoxCollider>().enabled = false;
 
         var weapon2 = weaponSlot[2];
         var weapon2Obj = GameObject.Instantiate(weapon2.WeaponPrefeb, _slot2.transform);
         var view2 = weapon2Obj.GetComponent<WeaponView>();
         weaponViewSlot[2] = view2;
         view2.Initialize(weapon2);
+        view2.WeaponPickup.GetComponent<BoxCollider>().enabled = false;
 
     }
     public WeaponView GetCurrentWeaponview()
@@ -64,14 +76,88 @@ public class UnitWeaponChange
 
         currentSlot = _slotNum;
 
-       slotSwitch();
+        slotSwitch();
     }
 
-    public void WeaponChange(GameObject _newWeapon)
+    public void WeaponChangeCheck(PlayerInput _playerinput)
     {
-        weaponSlot.Remove(currentSlot);
-        //weaponview.Initialize(해당무기); 웨펀뷰의 웨펀을 새로바꿔줄무기의 웨펀을 여기서지정해주기
-        //weaponSlot.Add()
+        Ray ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
+        RaycastHit hit;
+        int distanceRay = GameManager.instance.FirstPersonCheck ? 10 : 20;
+
+        if (Physics.Raycast(ray, out hit, distanceRay, LayerMask.GetMask("WeaponPickup")))
+        {
+            GameManager.instance.CheckF.SetActive(true);
+            if (_playerinput.FCheck)
+            {
+
+                WeaponChange(hit.transform.GetComponentInParent<WeaponView>());
+            }
+        }
+        else
+        {
+            GameManager.instance.CheckF.SetActive(false);
+        }
+    }
+    public void WeaponChange(WeaponView _pickupWeaponView)
+    {
+
+        var nowView = weaponViewSlot[currentSlot];
+        if (nowView != null)
+        {
+            nowView.transform.SetParent(GameManager.instance.GetWeaponParent, true);
+            nowView.WeaponPickup.GetComponent<BoxCollider>().enabled = true;
+        }
+
+
+
+        var newWeapon = WeaponFactory.CreateWeapon(_pickupWeaponView.WeaponType);
+        weaponSlot[currentSlot] = newWeapon;
+        GameObject parentSlot = null;
+        Vector3 weaponEuler;
+        if (newWeapon.IsMelee)
+        {
+            parentSlot = (currentSlot == 1) ? meleeSlot1Obj : meleeSlot2Obj;
+            weaponEuler = Vector3.zero;
+        }
+        else
+        {
+            parentSlot = (currentSlot == 1) ? gunSlot1Obj : gunSlot2Obj;
+            weaponEuler = new Vector3(0, -90, 0);
+        }
+
+        _pickupWeaponView.transform.SetParent(parentSlot.transform, false);
+        _pickupWeaponView.Initialize(newWeapon);
+
+        _pickupWeaponView.MeshObject.localPosition = Vector3.zero;
+        _pickupWeaponView.transform.localRotation = Quaternion.Euler(weaponEuler);
+
+        weaponViewSlot[currentSlot] = _pickupWeaponView;
 
     }
+
+    //무기소환쪽코드 이건몬스터나 보물상자에서 무기를소환할떄쓰면좋을듯함
+    #region
+    //    var newWeapon = WeaponFactory.CreateWeapon(_pickupWeapon.WeaponType);
+
+    //        if (newWeapon == null)
+    //        {
+    //            Debug.LogError($"WeaponFactory에 타입이없습니다.{_pickupWeapon.WeaponType}");
+    //            return;
+    //        }
+
+
+    //var nowView = weaponViewSlot[currentSlot];
+    //if (nowView != null)
+    //{
+    //    GameObject.Destroy(nowView.gameObject);
+    //}
+
+    //weaponSlot[currentSlot] = newWeapon;
+
+    //GameObject parentSlot = (currentSlot == 1) ? slot1Obj : slot2Obj;
+
+    //GameObject nowWeapon = GameObject.Instantiate(newWeapon.WeaponPrefeb, parentSlot.transform);
+    //WeaponView nowWeaponView = nowWeapon.GetComponent<WeaponView>();
+    #endregion
 }

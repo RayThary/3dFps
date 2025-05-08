@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Scripts\PlayerMoveOnSphere.cs" />
     <Compile Include="Assets\Script\Weapon\WeaponOffest.cs" />
+    <Compile Include="Assets\Script\Player\ChildAnimationEvents.cs" />
     <Compile Include="Assets\Script\Player\UnitWeaponChange.cs" />
     <Compile Include="Assets\Script\Enemy\Enemy.cs" />
     <Compile Include="Assets\Script\Player\UnitRotation.cs" />
@@ -74,7 +75,8 @@
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\Anywhere Door\PlayerMovement.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Scripts\SpawnInCircle.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyData.cs" />
-    <Compile Include="Assets\Script\Player\HandGun.cs" />
+    <Compile Include="Assets\Script\Weapon\SubMachineGun.cs" />
+    <Compile Include="Assets\Script\Weapon\HandGun.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\3rdPersonWithAimMode\ActivateOnKeypress.cs" />
     <Compile Include="Assets\Script\BulletHole.cs" />
     <Compile Include="Assets\Script\PoolingManager.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\Anywhere Door\TagChanger.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\Trigger volumes\GenericTrigger.cs" />
     <Compile Include="Assets\Resources\QuarterView 3D Action BE5\ReadMe\Scripts\ReadmeBE5.cs" />
+    <Compile Include="Assets\Script\Weapon\Hammer.cs" />
     <Compile Include="Assets\Script\Player\UnitMovement.cs" />
     <Compile Include="Assets\Script\Player\Unit.cs" />
     <Compile Include="Assets\Script\Player\Bullet.cs" />
@@ -106,7 +109,6 @@
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Shared\Models\UnityCharacter\Scripts\CharacterMovementNoCamera.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\2D\MouseScrollZoom2D.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\CameraMagnets\CameraMagnetTargetController.cs" />
-    <Compile Include="Assets\Script\Player\SubMachineGun.cs" />
     <Compile Include="Assets\Samples\Cinemachine\2.10.3\Cinemachine Example Scenes\Scenes\Anywhere Door\PlayerLookAt.cs" />
     <Compile Include="Assets\Script\Player\UnitAttack.cs" />
     <Compile Include="Assets\Script\Player\PlayerInput.cs" />

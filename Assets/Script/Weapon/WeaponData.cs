@@ -8,16 +8,23 @@ using UnityEngine;
 )]
 public class WeaponData : ScriptableObject
 {
+    [Header("Basic Settings")]
     public eWeaponType WeaponType;
     public string WeaponName;
-    public int MaxAmmo;
-    public int PullAmmo;
     public float Damage;
     public float Speed;
+    public GameObject Prefab;
+    public Animator Animator;
+    public bool isMelee;
+    public int MaxAmmo;
+    public int PullAmmo;
+
+    [Header("Gun Settings")]
     public float RecoilPower;
     public bool Automatic;
     public PoolingManager.ePoolingObject PoolingMuzzle;
     public Bullet.BulletType BulletType;
-    public GameObject Prefab;
-    public Animator Animator;
+
+    //[Header("Melee Settings")] 근접전용추가할일있으면 넣어줄곳
+
 }
