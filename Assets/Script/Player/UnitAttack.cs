@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static WeaponView;
 
 public class UnitAttack : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class UnitAttack : MonoBehaviour
     [SerializeField] private LayerMask hitHeadRay;
     private bool isAttackAuto = false;
     private UnitRotation unitRot;
+
 
     private bool isRecoil;
     public bool GetIsRecoil { get { return isRecoil; } }
@@ -40,6 +42,7 @@ public class UnitAttack : MonoBehaviour
             if (shot)
             {
                 _anim.SetTrigger("Attack");
+                _weaponView.meleeStart(hitHeadRay, _weapon.GetDamage);
             }
             else
             {
@@ -170,5 +173,13 @@ public class UnitAttack : MonoBehaviour
     private void hitEnemy(Enemy _enemy, float _damage, bool _isCritical)
     {
         _enemy.HitEnemy(_damage, _isCritical);
+    }
+
+    public void HandleMeleeHits(List<HitInfo> hits)
+    {
+        foreach (var hit in hits)
+        {
+            hit.enemy.HitEnemy(hit.Damage, hit.IsCritical);
+        }
     }
 }

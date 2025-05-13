@@ -16,12 +16,13 @@ public class UnitWeaponChange
     private GameObject meleeSlot1Obj;
     private GameObject meleeSlot2Obj;
 
+    private UnitAttack unitAttack;
 
     private Dictionary<int, WeaponView> weaponViewSlot = new Dictionary<int, WeaponView>();
     private int currentSlot;
 
     private bool isChange = true;
-    
+
     private float weaponChangeTimer = 0.0f;
     public float GetWeaponChagneTimer { get { return weaponChangeTimer; } }
 
@@ -35,7 +36,7 @@ public class UnitWeaponChange
     }
 
     public UnitWeaponChange(Dictionary<int, Weapon> _weaponSlot, GameObject _gunSlot1Obj, GameObject _gunSlot2Obj,
-        GameObject _meleeSlot1Obj, GameObject _meleeSlot2Obj, float _weaponChangeTime, int _defaultSlot = 1)
+        GameObject _meleeSlot1Obj, GameObject _meleeSlot2Obj, float _weaponChangeTime, UnitAttack _unitAttack, int _defaultSlot = 1)
     {
         this.weaponSlot = _weaponSlot;
         this.gunSlot1Obj = _gunSlot1Obj;
@@ -48,10 +49,19 @@ public class UnitWeaponChange
         this.weaponChangeTime = _weaponChangeTime;
         this.weaponChangeTimer = 0;
 
+        unitAttack = _unitAttack;
         slotSwitch();
         weaponInstantiate(_gunSlot1Obj, _gunSlot2Obj);
     }
 
+    private void OnWeaponSwapped(WeaponView newView)
+    {
+        if (weaponViewSlot[currentSlot] != null)
+            //weaponViewSlot[currentSlot].OnMeleeHit -= unitAttack.HandleMeleeHits;
+
+            weaponViewSlot[currentSlot] = newView;
+        //weaponViewSlot[currentSlot].OnMeleeHit += unitAttack.HandleMeleeHits;
+    }
     private void slotSwitch()
     {
 
@@ -70,6 +80,7 @@ public class UnitWeaponChange
         weaponViewSlot[1] = view1;
         view1.Initialize(weapon1);
         view1.WeaponPickup.GetComponent<BoxCollider>().enabled = false;
+        view1.OnMeleeHit += unitAttack.HandleMeleeHits;
 
         var weapon2 = weaponSlot[2];
         var weapon2Obj = GameObject.Instantiate(weapon2.WeaponPrefeb, _slot2.transform);
@@ -77,7 +88,7 @@ public class UnitWeaponChange
         weaponViewSlot[2] = view2;
         view2.Initialize(weapon2);
         view2.WeaponPickup.GetComponent<BoxCollider>().enabled = false;
-
+        view2.OnMeleeHit += unitAttack.HandleMeleeHits;
     }
     public WeaponView GetCurrentWeaponview()
     {
@@ -92,12 +103,20 @@ public class UnitWeaponChange
         if (_slotNum == currentSlot) return;
         if (!weaponSlot.ContainsKey(_slotNum)) return;
 
+        WeaponView oldView = weaponViewSlot[currentSlot];
+        if (oldView != null)
+            oldView.OnMeleeHit -= unitAttack.HandleMeleeHits;
+
         isChange = false;
         currentSlot = _slotNum;
 
         slotSwitch();
         OnWeaponSwitched?.Invoke(GetCurrentWeapon());
+
+        WeaponView newView = weaponViewSlot[currentSlot];
+        newView.OnMeleeHit += unitAttack.HandleMeleeHits;
     }
+
 
     public void WeaponChangeCheck(PlayerInput _playerinput)
     {
@@ -129,9 +148,8 @@ public class UnitWeaponChange
         {
             nowView.transform.SetParent(GameManager.instance.GetWeaponParent, true);
             nowView.WeaponPickup.GetComponent<BoxCollider>().enabled = true;
+            nowView.OnMeleeHit -= unitAttack.HandleMeleeHits;
         }
-
-
 
         var newWeapon = WeaponFactory.CreateWeapon(_pickupWeaponView.WeaponType);
         weaponSlot[currentSlot] = newWeapon;
@@ -158,6 +176,8 @@ public class UnitWeaponChange
 
         OnWeaponSwitched?.Invoke(GetCurrentWeapon());
 
+        _pickupWeaponView.OnMeleeHit += unitAttack.HandleMeleeHits;
+
     }
 
     public void WeaponChangeCool()
@@ -171,7 +191,7 @@ public class UnitWeaponChange
                 isChange = true;
                 weaponChangeTimer = 0;
                 ChangeCooldown = 0;
-}
+            }
         }
         else
         {

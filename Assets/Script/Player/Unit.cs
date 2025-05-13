@@ -97,7 +97,7 @@ public class Unit : MonoBehaviour
         unitMeleeSlot1 = unitMeleeSlot.GetChild(0);
         unitMeleeSlot2 = unitMeleeSlot.GetChild(1);
 
-        unitWeaponChange = new UnitWeaponChange(weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject, unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, weaponChangeTime);
+        unitWeaponChange = new UnitWeaponChange(weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject, unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, weaponChangeTime, unitAttack);
         weapon = unitWeaponChange.GetCurrentWeapon();
     }
 
@@ -190,5 +190,10 @@ public class Unit : MonoBehaviour
     {
         weapon.ReloadAmmo();
         weapon.IsReloading = false;
+    }
+
+    public void UnitMeleeEnd()
+    {
+        unitWeaponChange.GetCurrentWeaponview().MeleeEnd();
     }
 }

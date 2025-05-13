@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 2
+  weaponCategory: 1
 --- !u!1 &6958928671521601921
 GameObject:
   m_ObjectHideFlags: 0
