@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,6 +7,8 @@ using UnityEngine;
 
 public class UnitWeaponChange
 {
+    public event Action<Weapon> OnWeaponSwitched;
+
     private Dictionary<int, Weapon> weaponSlot;
     private GameObject gunSlot1Obj;
     private GameObject gunSlot2Obj;
@@ -17,13 +20,22 @@ public class UnitWeaponChange
     private Dictionary<int, WeaponView> weaponViewSlot = new Dictionary<int, WeaponView>();
     private int currentSlot;
 
+    private bool isChange = true;
+    
+    private float weaponChangeTimer = 0.0f;
+    public float GetWeaponChagneTimer { get { return weaponChangeTimer; } }
+
+    private float weaponChangeTime = 2;
+
+    public float ChangeCooldown;
 
     public Weapon GetCurrentWeapon()
     {
         return weaponSlot[currentSlot];
     }
+
     public UnitWeaponChange(Dictionary<int, Weapon> _weaponSlot, GameObject _gunSlot1Obj, GameObject _gunSlot2Obj,
-        GameObject _meleeSlot1Obj, GameObject _meleeSlot2Obj, int _defaultSlot = 1)
+        GameObject _meleeSlot1Obj, GameObject _meleeSlot2Obj, float _weaponChangeTime, int _defaultSlot = 1)
     {
         this.weaponSlot = _weaponSlot;
         this.gunSlot1Obj = _gunSlot1Obj;
@@ -33,15 +45,19 @@ public class UnitWeaponChange
 
         currentSlot = _defaultSlot;
 
+        this.weaponChangeTime = _weaponChangeTime;
+        this.weaponChangeTimer = 0;
+
         slotSwitch();
         weaponInstantiate(_gunSlot1Obj, _gunSlot2Obj);
     }
 
     private void slotSwitch()
     {
-        
+
         gunSlot1Obj.SetActive(currentSlot == 1);
         meleeSlot1Obj.SetActive(currentSlot == 1);
+
         gunSlot2Obj.SetActive(currentSlot == 2);
         meleeSlot2Obj.SetActive(currentSlot == 2);
     }
@@ -71,12 +87,16 @@ public class UnitWeaponChange
 
     public void WeaponSwitch(int _slotNum)
     {
+        if (!isChange) return;
+
         if (_slotNum == currentSlot) return;
         if (!weaponSlot.ContainsKey(_slotNum)) return;
 
+        isChange = false;
         currentSlot = _slotNum;
 
         slotSwitch();
+        OnWeaponSwitched?.Invoke(GetCurrentWeapon());
     }
 
     public void WeaponChangeCheck(PlayerInput _playerinput)
@@ -101,7 +121,9 @@ public class UnitWeaponChange
     }
     public void WeaponChange(WeaponView _pickupWeaponView)
     {
+        if (!isChange) return;
 
+        isChange = false;
         var nowView = weaponViewSlot[currentSlot];
         if (nowView != null)
         {
@@ -133,6 +155,28 @@ public class UnitWeaponChange
         _pickupWeaponView.transform.localRotation = Quaternion.Euler(weaponEuler);
 
         weaponViewSlot[currentSlot] = _pickupWeaponView;
+
+        OnWeaponSwitched?.Invoke(GetCurrentWeapon());
+
+    }
+
+    public void WeaponChangeCool()
+    {
+        if (!isChange)
+        {
+            weaponChangeTimer += Time.deltaTime;
+            ChangeCooldown = 1f - (weaponChangeTimer / weaponChangeTime);
+            if (weaponChangeTimer >= weaponChangeTime)
+            {
+                isChange = true;
+                weaponChangeTimer = 0;
+                ChangeCooldown = 0;
+}
+        }
+        else
+        {
+            ChangeCooldown = 0;
+        }
 
     }
 

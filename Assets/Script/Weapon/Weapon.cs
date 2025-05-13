@@ -45,6 +45,7 @@ public abstract class Weapon
     //ÃÑ, ±ÙÁ¢ ¼ø¼­
     public Weapon(WeaponData _data)
     {
+        weaponType = _data.WeaponType;
         weaponName = _data.WeaponName;
         damage = _data.Damage;
         weaponPrefeb = _data.Prefab;
@@ -63,6 +64,7 @@ public abstract class Weapon
     }
     public Weapon(WeaponData _data,bool _melee)
     {
+        weaponType = _data.WeaponType;
         weaponName = _data.WeaponName;
         damage = _data.Damage;
         weaponPrefeb = _data.Prefab;

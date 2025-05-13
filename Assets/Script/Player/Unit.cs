@@ -12,8 +12,11 @@ public class Unit : MonoBehaviour
     private UnitRotation unitRotation;
     private UnitAttack unitAttack;
     private UnitDodge unitDodge;
-    private UnitWeaponChange unitWeaponChange;
     private Weapon weapon;
+    private UnitWeaponChange unitWeaponChange;
+    public UnitWeaponChange GetUnitWeaponChange { get { return unitWeaponChange; } }
+
+    public Weapon GetWeapon { get { return weapon; } }
 
     //대시
     private bool isDodge = false;
@@ -38,6 +41,8 @@ public class Unit : MonoBehaviour
     private Transform unitSlot1;
     private Transform unitSlot2;
     private Dictionary<int, Weapon> weaponSlot = new Dictionary<int, Weapon>();
+
+    [SerializeField] private float weaponChangeTime = 2;
 
     //마우스감도
     [SerializeField] private float sensitivity = 0.8f;
@@ -69,7 +74,6 @@ public class Unit : MonoBehaviour
         unitMovement.SetUp(transform, anim, rigid, playerInput);
 
         unitRotation = new UnitRotation();
-        unitRotation.SetUnitRotation(unitHead, minPitch, maxPitch, maxRecoilAngle, recoilRecoverSpeed);
 
         unitAttack = GetComponent<UnitAttack>();
         unitAttack.SetUnitRot(unitRotation);
@@ -77,8 +81,9 @@ public class Unit : MonoBehaviour
         unitDodge = GetComponent<UnitDodge>();
 
         //cImpulse = GetComponentInChildren<CinemachineImpulseSource>();
-
         addWeapon();
+
+        unitRotation.SetUnitRotation(unitHead, neck, minPitch, maxPitch, maxRecoilAngle, recoilRecoverSpeed);
     }
 
     private void addWeapon()
@@ -92,7 +97,7 @@ public class Unit : MonoBehaviour
         unitMeleeSlot1 = unitMeleeSlot.GetChild(0);
         unitMeleeSlot2 = unitMeleeSlot.GetChild(1);
 
-        unitWeaponChange = new UnitWeaponChange(weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject, unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject);
+        unitWeaponChange = new UnitWeaponChange(weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject, unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, weaponChangeTime);
         weapon = unitWeaponChange.GetCurrentWeapon();
     }
 
@@ -101,13 +106,12 @@ public class Unit : MonoBehaviour
         playerInput.ReadInput();
         unitMovement.UnitMove(speed, isDodge, dodgeVec);
         unitMovement.jump(jumpPower, playerInput);
-        unitRotation.unitMouseLook(transform, neck, playerInput.GetMouseX, playerInput.GetMouseY, sensitivity);
+        unitRotation.unitMouseLook(transform, playerInput.GetMouseX, playerInput.GetMouseY, sensitivity);
         unitDodge.dodge(playerInput, this, unitMovement, speed, unitMovement.GetMoveVec);
         unitWeaponChange.WeaponChangeCheck(playerInput);
-
+        unitWeaponChange.WeaponChangeCool();
         attack();
         weaponChange();
-
         //테스트
         if (Input.GetKeyDown(KeyCode.R))
         {

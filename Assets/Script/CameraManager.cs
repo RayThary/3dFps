@@ -22,8 +22,14 @@ public class CameraManager : MonoBehaviour
     {
         mainCamera = Camera.main.GetComponent<CinemachineBrain>();
         GameManager.instance.FirstPersonCheck = isFirstPerson;
+
+        ChangeCam.Priority = 5;
+        Camera.main.cullingMask = firstPersonMask.value;
+        POVCam.Priority = 11;
+        isFirstPerson = !isFirstPerson;
+        GameManager.instance.FirstPersonCheck = isFirstPerson;
         //1¿Œƒ™ Ω√¿€
-        StartCoroutine(camChange());
+        //StartCoroutine(camChange());
     }
 
     void Update()
