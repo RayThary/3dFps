@@ -20,7 +20,8 @@ public class EnemyData : ScriptableObject
     public float Hp;
     public float Damage;
     public float Speed;
-    
+    public float chaseStopDistance;
+
     public PoolingManager.ePoolingObject PoolingEnemy;
     public GameObject Prefab;
     public Animator Animator;

@@ -10,12 +10,19 @@ public class Bullet : MonoBehaviour
         SubMachine,
     }
     [SerializeField] private BulletType bulletType;
+    private bool isCreate = true;
 
-
-
-    void Start()
+    private void OnEnable()
     {
+        if (isCreate)
+        {
+            isCreate = false;
+            return;
+        }
         Invoke("removePooling", 0.1f);
+    }
+    void Start()
+    {        
     }
 
     // Update is called once per frame

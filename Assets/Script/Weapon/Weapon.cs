@@ -113,6 +113,7 @@ public abstract class Weapon
         _weaponView.UnitReloadAnim();
         Debug.Log("장전 ");
     }
+
     public virtual void Reload(Animator _anim)
     {
         if (currentAmmo == maxAmmo || reserveAmmo <= 0 || isReloading)
@@ -122,7 +123,6 @@ public abstract class Weapon
         }
         isReloading = true;
         _anim.SetTrigger("Reload");
-        Debug.Log("장전 ");
     }
 
     public void ReloadAmmo()

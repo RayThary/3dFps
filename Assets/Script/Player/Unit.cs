@@ -1,11 +1,13 @@
 using Cinemachine;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    public event Action<float> OnUnitChangeHp;
+
     //클래스
     private PlayerInput playerInput;
     private UnitMovement unitMovement;
@@ -13,6 +15,7 @@ public class Unit : MonoBehaviour
     private UnitAttack unitAttack;
     private UnitDodge unitDodge;
     private Weapon weapon;
+    private UnitHandMotion unitHandMotion;
     private UnitWeaponChange unitWeaponChange;
     public UnitWeaponChange GetUnitWeaponChange { get { return unitWeaponChange; } }
 
@@ -24,10 +27,13 @@ public class Unit : MonoBehaviour
     private Vector3 dodgeVec;
     public Vector3 DodgeVec { set { dodgeVec = value; } }
 
+    [SerializeField] private float unitMaxHp;
+    private float unitCurrentHp;
+
     //이동
-    [SerializeField] private float speed;
-    public float SetSpeed { get { return speed; } set { speed = value; } }
-    [SerializeField] private float jumpPower;
+    [SerializeField] private float unitSpeed;
+    public float SetSpeed { get { return unitSpeed; } set { unitSpeed = value; } }
+    [SerializeField] private float unitJumpPower;
 
 
     //플레이어 오브젝트
@@ -62,25 +68,24 @@ public class Unit : MonoBehaviour
     private Animator anim;
     private Rigidbody rigid;
 
-    private CinemachineImpulseSource cImpulse;//게임매니저에 카메라 매니저자식으로넣어둠 나중에필요할때 참조해서넣어줘야함
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
+        unitHandMotion = GetComponent<UnitHandMotion>();
+        unitDodge = GetComponent<UnitDodge>();
 
+        unitRotation = new UnitRotation();
         playerInput = new PlayerInput();
-
         unitMovement = new UnitMovement();
         unitMovement.SetUp(transform, anim, rigid, playerInput);
 
-        unitRotation = new UnitRotation();
+        unitCurrentHp = unitMaxHp;
 
         unitAttack = GetComponent<UnitAttack>();
         unitAttack.SetUnitRot(unitRotation);
 
-        unitDodge = GetComponent<UnitDodge>();
 
-        //cImpulse = GetComponentInChildren<CinemachineImpulseSource>();
         addWeapon();
 
         unitRotation.SetUnitRotation(unitHead, neck, minPitch, maxPitch, maxRecoilAngle, recoilRecoverSpeed);
@@ -104,24 +109,26 @@ public class Unit : MonoBehaviour
     void Update()
     {
         playerInput.ReadInput();
-        unitMovement.UnitMove(speed, isDodge, dodgeVec);
-        unitMovement.jump(jumpPower, playerInput);
+        unitMovement.UnitMove(unitSpeed, isDodge, dodgeVec);
+        unitMovement.jump(unitJumpPower, playerInput);
         unitRotation.unitMouseLook(transform, playerInput.GetMouseX, playerInput.GetMouseY, sensitivity);
-        unitDodge.dodge(playerInput, this, unitMovement, speed, unitMovement.GetMoveVec);
+        unitDodge.dodge(playerInput, this, unitMovement, unitSpeed, unitMovement.GetMoveVec);
         unitWeaponChange.WeaponChangeCheck(playerInput);
         unitWeaponChange.WeaponChangeCool();
         attack();
         weaponChange();
+
+
         //테스트
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (!weapon.IsMelee)
+            if (weapon.IsMelee)
             {
-                weapon.Reload(unitWeaponChange.GetCurrentWeaponview());
+                weapon.Reload(anim);
             }
             else
             {
-                weapon.Reload(anim);
+                weapon.Reload(unitWeaponChange.GetCurrentWeaponview());
             }
 
         }
@@ -139,7 +146,7 @@ public class Unit : MonoBehaviour
     }
     void LateUpdate()
     {
-        unitRotation.ApplyRotation(unitAttack.GetIsRecoil);
+        unitRotation.ApplyRotation(unitAttack.GetIsRecoil, weapon.IsMelee);
     }
 
 
@@ -177,13 +184,32 @@ public class Unit : MonoBehaviour
     {
         if (playerInput.GetWeapon1)
         {
-            unitWeaponChange.WeaponSwitch(1);
+            unitHandMotion.handMotion(unitWeaponChange, 1);
+            weapon = unitWeaponChange.GetCurrentWeapon();
         }
         else if (playerInput.GetWeapon2)
         {
-            unitWeaponChange.WeaponSwitch(2);
+            unitHandMotion.handMotion(unitWeaponChange, 2);
+            weapon = unitWeaponChange.GetCurrentWeapon();
         }
-        weapon = unitWeaponChange.GetCurrentWeapon();
+    }
+
+    public void TakeDamge(float _damage)
+    {
+        unitCurrentHp -= _damage;
+        Debug.Log("hit Player");
+        OnUnitChangeHp?.Invoke(unitCurrentHp);
+
+        if (unitCurrentHp <= 0)
+        {
+            death();
+        }
+    }
+
+    private void death()
+    {
+        //아직안만듬
+        anim.SetTrigger("Death");
     }
 
     public void ReloadEnd()

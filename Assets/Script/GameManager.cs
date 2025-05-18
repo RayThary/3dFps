@@ -12,17 +12,18 @@ public class GameManager : MonoBehaviour
     private Unit unit;
     public Unit GetUnit { get { return unit; } }
 
+    private CameraManager cameraManager;
+    public CameraManager GetCameraManager { get { return cameraManager; } }
+
     [SerializeField]
     private Transform tempParent;
     public Transform TempParent { get { return tempParent; } }
-
-    private bool isFirstPerson;
-    public bool FirstPersonCheck { get { return isFirstPerson; } set { isFirstPerson = value; } }
 
     //일단 체크f부분만 리턴나중에 많이쓸경우에 캔버스로두고 따로자식으로 개개인별로찾아주는게좋을거같음
     [SerializeField] private GameObject checkF;
     public GameObject CheckF { get { return checkF; } }
     [SerializeField] private Transform weaponParent;
+
     public Transform GetWeaponParent;
 
 
@@ -37,8 +38,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         unit = FindObjectOfType<Unit>();
+        cameraManager = GetComponentInChildren<CameraManager>();
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)

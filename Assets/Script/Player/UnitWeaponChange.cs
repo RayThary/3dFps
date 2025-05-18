@@ -20,8 +20,10 @@ public class UnitWeaponChange
 
     private Dictionary<int, WeaponView> weaponViewSlot = new Dictionary<int, WeaponView>();
     private int currentSlot;
+    public int GetCurrentSlot { get { return currentSlot; } }
 
     private bool isChange = true;
+    public bool IsChange { get { return isChange; } }
 
     private float weaponChangeTimer = 0.0f;
     public float GetWeaponChagneTimer { get { return weaponChangeTimer; } }
@@ -54,14 +56,7 @@ public class UnitWeaponChange
         weaponInstantiate(_gunSlot1Obj, _gunSlot2Obj);
     }
 
-    private void OnWeaponSwapped(WeaponView newView)
-    {
-        if (weaponViewSlot[currentSlot] != null)
-            //weaponViewSlot[currentSlot].OnMeleeHit -= unitAttack.HandleMeleeHits;
 
-            weaponViewSlot[currentSlot] = newView;
-        //weaponViewSlot[currentSlot].OnMeleeHit += unitAttack.HandleMeleeHits;
-    }
     private void slotSwitch()
     {
 
@@ -115,6 +110,9 @@ public class UnitWeaponChange
 
         WeaponView newView = weaponViewSlot[currentSlot];
         newView.OnMeleeHit += unitAttack.HandleMeleeHits;
+
+        CameraManager camMger = GameManager.instance.GetCameraManager;
+        camMger.weaponSwitched(weaponSlot[currentSlot]);
     }
 
 
@@ -122,14 +120,13 @@ public class UnitWeaponChange
     {
         Ray ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
         RaycastHit hit;
-        int distanceRay = GameManager.instance.FirstPersonCheck ? 10 : 20;
+        int distanceRay = weaponSlot[currentSlot].IsMelee ? 20 : 10;
 
         if (Physics.Raycast(ray, out hit, distanceRay, LayerMask.GetMask("WeaponPickup")))
         {
             GameManager.instance.CheckF.SetActive(true);
             if (_playerinput.FCheck)
             {
-
                 WeaponChange(hit.transform.GetComponentInParent<WeaponView>());
             }
         }
@@ -178,6 +175,8 @@ public class UnitWeaponChange
 
         _pickupWeaponView.OnMeleeHit += unitAttack.HandleMeleeHits;
 
+        CameraManager camMger = GameManager.instance.GetCameraManager;
+        camMger.weaponSwitched(weaponSlot[currentSlot]);
     }
 
     public void WeaponChangeCool()

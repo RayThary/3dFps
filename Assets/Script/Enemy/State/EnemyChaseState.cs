@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyChaseState : IEnemyState
+{
+    private Enemy enemy;
+    private Transform playerTrs;
+    private Transform enemyTrs;
+    private float speed;
+    private float stopDistance;
+
+    private bool wasChasing = false;
+
+    public EnemyChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs, float _speed, float _stopDistance)
+    {
+        enemy = _enemy;
+        enemyTrs = _enemyTrs;
+        playerTrs = _playerTrs;
+        speed = _speed;
+        stopDistance = _stopDistance;
+    }
+
+    public void Enter()
+    {
+        enemy.NavMesh.speed = speed;
+        enemy.NavMesh.ResetPath();
+        enemy.NavMesh.SetDestination(playerTrs.position);
+    }
+
+
+    public void Update()
+    {
+
+
+        if (chase() != wasChasing)
+        {
+            wasChasing = chase();
+        }
+
+        if (chase() == false)
+        {
+            enemy.NavMesh.SetDestination(playerTrs.position);
+        }
+
+    }
+
+    private bool chase()
+    {
+        if (enemy.EnemyStop)
+        {
+            return true;
+        }
+
+        float dis = Vector3.Distance(playerTrs.position, enemyTrs.position);
+        if (dis <= stopDistance)
+        {
+            enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
+            enemy.EnemyStop = true;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+    public void Exit()
+    {
+        wasChasing = false;
+    }
+}

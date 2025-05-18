@@ -138,7 +138,6 @@ public class WeaponView : MonoBehaviour
     private void meleeEnd()
     {
         OnMeleeHit?.Invoke(hitList);
-        Debug.Log(hitList.Count);
 
         hitList.Clear();
         box.enabled = false;
@@ -146,6 +145,7 @@ public class WeaponView : MonoBehaviour
 
     }
 
+    //애니메이션
     private void reloadEnd()
     {
         weapon.ReloadAmmo();

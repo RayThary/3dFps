@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static WeaponView;
@@ -118,6 +119,7 @@ public class UnitAttack : MonoBehaviour
 
         //이초뒤에 피격판정을준다.
         yield return new WaitForSeconds(_hitDealyTime);
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 100f, Color.red, 0.1f);
 
         Ray ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
         RaycastHit hit;
@@ -125,13 +127,15 @@ public class UnitAttack : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100, hitRay))
         {
             Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
+            Debug.Log($"Hit {hit.collider.gameObject.name}, enabled={hit.collider.enabled}, activeInHierarchy={hit.collider.gameObject.activeInHierarchy}");
+
             if (enemy != null)
             {
                 int iHitLayer = 1 << hit.collider.gameObject.layer;
                 bool isCritical = ((hitHeadRay & iHitLayer) != 0) ? true : false;
 
                 //히트머즐 
-                StartCoroutine(hitMuzzle(hit.point, isCritical));
+                StartCoroutine(hitMuzzle(isCritical));
 
                 //적관련 대미지부분
                 hitEnemy(enemy, _damage, isCritical);
@@ -145,7 +149,7 @@ public class UnitAttack : MonoBehaviour
         }
 
     }
-    private IEnumerator hitMuzzle(Vector3 _hitPoint, bool _criticalHit)
+    private IEnumerator hitMuzzle(bool _criticalHit)
     {
         if (_criticalHit)
             crosshair.color = criticalCrossColor;
@@ -175,11 +179,16 @@ public class UnitAttack : MonoBehaviour
         _enemy.HitEnemy(_damage, _isCritical);
     }
 
-    public void HandleMeleeHits(List<HitInfo> hits)
+    public void HandleMeleeHits(List<HitInfo> _hits)
     {
-        foreach (var hit in hits)
+        bool criticalCheck = _hits.Any(x => x.IsCritical);
+        foreach (var hit in _hits)
         {
-            hit.enemy.HitEnemy(hit.Damage, hit.IsCritical);
+            if (hit.enemy != null)
+            {
+                hit.enemy.HitEnemy(hit.Damage, hit.IsCritical);
+            }
         }
+        StartCoroutine(hitMuzzle(criticalCheck));
     }
 }

@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,49 +9,48 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private LayerMask firstPersonMask;
     [SerializeField] private LayerMask thirdPersonMask;
 
-    //3¿Œƒ™Ω√¿€¿œ∂© false
-    private bool isFirstPerson = false;
+    //true∏È 1¿Œƒ™ false¿œ∂© 3¿Œƒ™
+    private bool isFirstPerson = true;
     private bool isSwitching = false;
 
-    public CinemachineVirtualCamera POVCam;
 
-    public CinemachineVirtualCamera ChangeCam;
 
-    public CinemachineBrain mainCamera;
+    [SerializeField] private CinemachineVirtualCamera POVCam;
+
+    [SerializeField] private CinemachineVirtualCamera ChangeCam;
+
+    private CinemachineBrain mainCamera;
 
     void Start()
     {
         mainCamera = Camera.main.GetComponent<CinemachineBrain>();
-        GameManager.instance.FirstPersonCheck = isFirstPerson;
 
         ChangeCam.Priority = 5;
         Camera.main.cullingMask = firstPersonMask.value;
         POVCam.Priority = 11;
-        isFirstPerson = !isFirstPerson;
-        GameManager.instance.FirstPersonCheck = isFirstPerson;
-        //1¿Œƒ™ Ω√¿€
-        //StartCoroutine(camChange());
+
+
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.B) && !isSwitching)
         {
-            StartCoroutine(camChange());
+            //StartCoroutine(camChange());
 
         }
     }
 
-    private IEnumerator camChange()
+    private IEnumerator camChange(bool _isMelee)
     {
         isSwitching = true;
 
-        if (isFirstPerson)
+        if (_isMelee)
         {
             ChangeCam.Priority = 13;
             Camera.main.cullingMask = thirdPersonMask.value;
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.8f);
 
             ChangeCam.Priority = 5;
             POVCam.Priority = 9;
@@ -59,7 +59,7 @@ public class CameraManager : MonoBehaviour
         {
             ChangeCam.Priority = 13;
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.3f);
 
             ChangeCam.Priority = 5;
             Camera.main.cullingMask = firstPersonMask.value;
@@ -67,8 +67,17 @@ public class CameraManager : MonoBehaviour
         }
 
         isFirstPerson = !isFirstPerson;
-        GameManager.instance.FirstPersonCheck = isFirstPerson;
         isSwitching = false;
     }
+
+    public void weaponSwitched(Weapon _weapon)
+    {
+        bool isMelee = _weapon.IsMelee;
+        if (isMelee == isFirstPerson)
+        {
+            StartCoroutine(camChange(isMelee));
+        }
+    }
+
 
 }

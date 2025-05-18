@@ -123,11 +123,15 @@ public class UnitRotation
     private float minPitch;
     private float maxPitch;
 
+    private float minMeleePitch;
+    private float maxMeleePitch;
+
+
     private bool mouseMoveAttack;//마우스가 공격도중움직였는가?
 
     private Transform playerHead;
     private Transform playerNeck;
-    
+
     public void SetUnitRotation(Transform _head, Transform _neck, float _minP, float _maxP, float _maxRecoilAngle, float recoverSpd)
     {
         playerHead = _head;
@@ -137,6 +141,8 @@ public class UnitRotation
         recoilRecoverSpeed = recoverSpd;
         playerNeck = _neck;
 
+        minMeleePitch = minMeleePitch / 2;
+        maxMeleePitch = maxPitch * 2;
     }
 
     public void unitMouseLook(Transform unit, float _mouseX, float _mouseY, float _sensitivity)
@@ -165,7 +171,7 @@ public class UnitRotation
 
 
     //반동후되돌아가는부분
-    public void ApplyRotation(bool _isRecoil)
+    public void ApplyRotation(bool _isRecoil,bool _isMelee)
     {
 
         if (!_isRecoil && !mouseMoveAttack)
@@ -174,10 +180,20 @@ public class UnitRotation
         }
 
         float finalPitch = basePitch - recoilPitch;
-        finalPitch = Mathf.Clamp(finalPitch, minPitch, maxPitch);
+
+
+        if (_isMelee)
+        {
+            finalPitch = Mathf.Clamp(finalPitch, minMeleePitch, maxMeleePitch);
+        }
+        else
+        {
+            finalPitch = Mathf.Clamp(finalPitch, minPitch, maxPitch);
+            playerNeck.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
+        }
+
         playerHead.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
-        playerNeck.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
-        
+
 
         mouseMoveAttack = false;
     }
