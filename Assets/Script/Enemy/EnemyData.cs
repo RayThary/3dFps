@@ -5,6 +5,7 @@ using UnityEngine;
 public enum EnemyType
 {
     EnemyA,
+    EnemyB,
 }
 
 [CreateAssetMenu(
@@ -22,8 +23,5 @@ public class EnemyData : ScriptableObject
     public float Speed;
     public float chaseStopDistance;
 
-    public PoolingManager.ePoolingObject PoolingEnemy;
-    public GameObject Prefab;
-    public Animator Animator;
 }
 

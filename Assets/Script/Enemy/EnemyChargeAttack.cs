@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyChargeAttack : MonoBehaviour
 {
     private Enemy enemy;
     private BoxCollider box;
@@ -11,6 +11,7 @@ public class EnemyAttack : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            if (enemy.IsDead) return;
             other.GetComponent<Unit>().TakeDamge(enemy.Damage);
         }
     }
@@ -22,14 +23,20 @@ public class EnemyAttack : MonoBehaviour
         box.enabled = false;
     }
 
+
+    //애니메이션 이벤트추가용 
+
     private void AttackStart()
     {
-        enemy.EnemyAttackStart(box);
+        enemy.EnemyAttackStart();
     }
     private void AttackEnd()
     {
-        enemy.EnemyAttackEnd(box);
+        enemy.EnemyAttackEnd();
     }
 
-
+    private void DeathEnd()
+    {
+        enemy.EnemyDeath();
+    }
 }

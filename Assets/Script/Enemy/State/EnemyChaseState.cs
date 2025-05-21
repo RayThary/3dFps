@@ -12,6 +12,8 @@ public class EnemyChaseState : IEnemyState
 
     private bool wasChasing = false;
 
+    public bool CanEnter => true;
+
     public EnemyChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs, float _speed, float _stopDistance)
     {
         enemy = _enemy;
@@ -31,14 +33,14 @@ public class EnemyChaseState : IEnemyState
 
     public void Update()
     {
+        bool isChasingNow = chase();
 
-
-        if (chase() != wasChasing)
+        if (isChasingNow != wasChasing)
         {
-            wasChasing = chase();
+            wasChasing = isChasingNow;
         }
 
-        if (chase() == false)
+        if (isChasingNow == false)
         {
             enemy.NavMesh.SetDestination(playerTrs.position);
         }
@@ -53,10 +55,9 @@ public class EnemyChaseState : IEnemyState
         }
 
         float dis = Vector3.Distance(playerTrs.position, enemyTrs.position);
-        if (dis <= stopDistance)
+        if (enemy.EnemyAttackState.CanEnter && dis <= stopDistance)
         {
             enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
-            enemy.EnemyStop = true;
             return true;
         }
         else
@@ -67,6 +68,7 @@ public class EnemyChaseState : IEnemyState
     }
     public void Exit()
     {
+        enemy.EnemyStop = true;
         wasChasing = false;
     }
 }

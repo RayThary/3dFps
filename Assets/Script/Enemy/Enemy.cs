@@ -6,10 +6,19 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    public enum eEnemyType
+    {
+        Melee,
+        Charger,
+        Ranger,
+        Boss,
+    }
+    [SerializeField] private eEnemyType enemyType;
     [SerializeField] private EnemyData enemyData;
 
+
     private Transform playerTrs;
-    [SerializeField]
+
     private float hp;
     private float speed;
     private float damage;
@@ -17,6 +26,9 @@ public class Enemy : MonoBehaviour
     private float stopDistance;
     private bool enemyStop = false;
     public bool EnemyStop { get { return enemyStop; } set { enemyStop = value; } }
+
+    private bool isDead = false;
+    public bool IsDead { get { return isDead; } }
 
     private EnemyStateMachine stateMachine;
     public EnemyStateMachine StateMachine { get { return stateMachine; } }
@@ -34,16 +46,17 @@ public class Enemy : MonoBehaviour
 
     private Animator animator;
     public Animator Animator { get { return animator; } }
-    [SerializeField]
+
     private BoxCollider box;
 
+    [SerializeField] private BoxCollider unitHitBox;
 
 
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
         navMesh = GetComponent<NavMeshAgent>();
-
+        box = GetComponent<BoxCollider>();
         playerTrs = GameManager.instance.GetUnit.GetComponent<Transform>();
 
         hp = enemyData.Hp;
@@ -53,17 +66,44 @@ public class Enemy : MonoBehaviour
 
         stateMachine = new EnemyStateMachine();
         enemyChaseState = new EnemyChaseState(this, playerTrs, transform, speed, stopDistance);
-        enemyAttackState = new EnemyAttackState(this, speed);
+
+        SetupAttackState();
+
+
 
         stateMachine.ChangeState(enemyChaseState);
+
+    }
+    private void SetupAttackState()
+    {
+        switch (enemyType)
+        {
+            case eEnemyType.Melee:
+                enemyAttackState = new EnemyMeleeState(this, speed);
+                return;
+
+            case eEnemyType.Charger:
+                enemyAttackState = new EnemyChargerState(this, transform, playerTrs, speed);
+
+                return;
+
+            case eEnemyType.Ranger:
+
+                return;
+
+        }
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        stateMachine.Update();
-
+        Debug.Log($"{enemyAttackState.CanEnter} , {enemyStop}");
+        if (!isDead)
+        {
+            stateMachine.Update();
+        }
+        
 
     }
 
@@ -78,17 +118,36 @@ public class Enemy : MonoBehaviour
         {
             hp -= _damage;
         }
+
+        if (hp <= 0)
+        {
+            animator.SetTrigger("Death");
+            box.enabled = false;
+            isDead = true;
+        }
     }
 
-    public void EnemyAttackEnd(BoxCollider _box)
+    //애니메이션 부분
+    public void EnemyAttackEnd()
     {
-        //animator.SetBool("Attack", false);
-        _box.enabled = false;
+        enemyStop = false;
+        unitHitBox.enabled = false;
         StateMachine.ChangeState(enemyChaseState);
     }
 
-    public void EnemyAttackStart(BoxCollider _box)
+    public void EnemyAttackStart()
     {
-        _box.enabled = true;
+        unitHitBox.enabled = true;
+    }
+
+    public void EnemyDeath()
+    {
+        PoolingManager.Instance.RemovePoolingObject(gameObject);
+        animator.SetTrigger("Reset");
+        unitHitBox.enabled = false;
+        box.enabled = true;
+        enemyStop = false;
+        hp = enemyData.Hp;
+        isDead = false;
     }
 }

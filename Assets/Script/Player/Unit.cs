@@ -105,7 +105,7 @@ public class Unit : MonoBehaviour
         unitWeaponChange = new UnitWeaponChange(weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject, unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, weaponChangeTime, unitAttack);
         weapon = unitWeaponChange.GetCurrentWeapon();
     }
-
+    
     void Update()
     {
         playerInput.ReadInput();

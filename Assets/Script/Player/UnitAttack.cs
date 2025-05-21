@@ -127,7 +127,6 @@ public class UnitAttack : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100, hitRay))
         {
             Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
-            Debug.Log($"Hit {hit.collider.gameObject.name}, enabled={hit.collider.enabled}, activeInHierarchy={hit.collider.gameObject.activeInHierarchy}");
 
             if (enemy != null)
             {

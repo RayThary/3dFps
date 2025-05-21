@@ -2,21 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttackState : IEnemyState
+public class EnemyMeleeState : IEnemyState
 {
 
     private Enemy enemy;
     private float speed;
 
-    public EnemyAttackState(Enemy _enemy, float _speed)
+    public bool CanEnter => true;
+
+    public EnemyMeleeState(Enemy _enemy, float _speed)
     {
         enemy = _enemy;
         speed = _speed;
     }
     public void Enter()
     {
-        //enemy.Animator.SetBool("Attack", true);
-        enemy.Animator.SetTrigger("Att");
+        enemy.Animator.SetTrigger("Attack");
     }
 
     public void Update()

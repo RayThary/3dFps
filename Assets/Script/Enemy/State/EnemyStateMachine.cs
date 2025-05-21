@@ -6,7 +6,7 @@ public class EnemyStateMachine
 {
     private IEnemyState _currentState;
 
-    public void     ChangeState(IEnemyState _nextState)
+    public void ChangeState(IEnemyState _nextState)
     {
         _currentState?.Exit();
 
