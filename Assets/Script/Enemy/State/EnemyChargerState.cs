@@ -35,8 +35,8 @@ public class EnemyChargerState : IEnemyState
         enemy.NavMesh.speed = chargerSpeed;
         enemy.NavMesh.SetDestination(targetTrs.position);
         targetVec = targetTrs.position;
-        Debug.Log(targetVec);
         lastUesdTime = Time.time;
+        isEnd = false;
     }
 
 
@@ -49,28 +49,20 @@ public class EnemyChargerState : IEnemyState
     private void chargerAttack()
     {
         float dis = Vector3.Distance(enemyTrs.position, targetVec);
-        if (dis <= 0.2f && !isEnd)
+        if (dis <= 1 && !isEnd)
         {
             enemy.StateMachine.ChangeState(enemy.EnemyChaseState);
-            enemy.EnemyStop = false;
             isEnd = true;
         }
 
-        if (!isAttack && dis <= 8)
-        {
-            enemy.Animator.SetBool("Attack", true);
-            isAttack = true;
-        }
+
     }
     public void Exit()
     {
-        
-        enemy.Animator.SetBool("Attack", false);
-        
         lastUesdTime = Time.time;
         enemy.NavMesh.speed = speed;
+        enemy.EnemyStop = false;
         isAttack = false;
-        isEnd = false;
 
     }
 }

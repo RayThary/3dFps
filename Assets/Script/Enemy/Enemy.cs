@@ -130,7 +130,6 @@ public class Enemy : MonoBehaviour
     //애니메이션 부분
     public void EnemyAttackEnd()
     {
-        enemyStop = false;
         unitHitBox.enabled = false;
         StateMachine.ChangeState(enemyChaseState);
     }

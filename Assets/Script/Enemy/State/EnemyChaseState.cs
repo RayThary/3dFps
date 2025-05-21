@@ -49,6 +49,11 @@ public class EnemyChaseState : IEnemyState
 
     private bool chase()
     {
+        if (enemy.EnemyStop && enemy.EnemyAttackState.CanEnter)
+        {
+            Debug.Log("?");
+            enemy.EnemyStop = false;
+        }
         if (enemy.EnemyStop)
         {
             return true;
@@ -57,7 +62,9 @@ public class EnemyChaseState : IEnemyState
         float dis = Vector3.Distance(playerTrs.position, enemyTrs.position);
         if (enemy.EnemyAttackState.CanEnter && dis <= stopDistance)
         {
+            Debug.Log("¸ØÃã");
             enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
+            enemy.EnemyStop = true;
             return true;
         }
         else
@@ -68,7 +75,6 @@ public class EnemyChaseState : IEnemyState
     }
     public void Exit()
     {
-        enemy.EnemyStop = true;
         wasChasing = false;
     }
 }
