@@ -167,7 +167,7 @@ public class UnitAttack : MonoBehaviour
 
     private void spawnBulletHole(Vector3 _point, Vector3 _nomal)
     {
-        GameObject bulletHole = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.BulletHole, GameManager.instance.TempParent);
+        GameObject bulletHole = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.BulletHole, GameManager.instance.PoolingParents["BulletHole"]);
         bulletHole.transform.position = _point + _nomal * 0.02f;
         bulletHole.transform.rotation = Quaternion.LookRotation(-_nomal);
     }

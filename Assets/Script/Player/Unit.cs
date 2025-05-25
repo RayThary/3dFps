@@ -15,6 +15,7 @@ public class Unit : MonoBehaviour
     private UnitAttack unitAttack;
     private UnitDodge unitDodge;
     private Weapon weapon;
+    public Weapon UnitWeapon { get { return weapon; } set { weapon = value; } }
     private UnitHandMotion unitHandMotion;
     private UnitWeaponChange unitWeaponChange;
     public UnitWeaponChange GetUnitWeaponChange { get { return unitWeaponChange; } }
@@ -102,10 +103,11 @@ public class Unit : MonoBehaviour
         unitMeleeSlot1 = unitMeleeSlot.GetChild(0);
         unitMeleeSlot2 = unitMeleeSlot.GetChild(1);
 
-        unitWeaponChange = new UnitWeaponChange(weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject, unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, weaponChangeTime, unitAttack);
+        unitWeaponChange = new UnitWeaponChange(this, weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject,
+            unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, weaponChangeTime, unitAttack);
         weapon = unitWeaponChange.GetCurrentWeapon();
     }
-    
+
     void Update()
     {
         playerInput.ReadInput();
@@ -185,12 +187,16 @@ public class Unit : MonoBehaviour
         if (playerInput.GetWeapon1)
         {
             unitHandMotion.handMotion(unitWeaponChange, 1);
-            weapon = unitWeaponChange.GetCurrentWeapon();
+
         }
         else if (playerInput.GetWeapon2)
         {
             unitHandMotion.handMotion(unitWeaponChange, 2);
-            weapon = unitWeaponChange.GetCurrentWeapon();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log(weapon.WeaponType);
         }
     }
 

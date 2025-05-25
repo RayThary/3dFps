@@ -17,7 +17,7 @@ public class UnitHandMotion : MonoBehaviour
         unit = GetComponent<Unit>();
     }
 
-    public void handMotion(UnitWeaponChange _weaponChange, int _num)
+    public void handMotion(UnitWeaponChange _weaponChange, int _num  )
     {
         if (_num == _weaponChange.GetCurrentSlot)
             return;
@@ -27,10 +27,10 @@ public class UnitHandMotion : MonoBehaviour
 
         isHand = true;
 
-        StartCoroutine(handMotions(_weaponChange, _num));
+        StartCoroutine(handMotions(_weaponChange, _num ));
     }
 
-    IEnumerator handMotions(UnitWeaponChange _weaponChange, int _num)
+    IEnumerator handMotions(UnitWeaponChange _weaponChange, int _num )
     {
 
         float downLimit = -1.4f;
@@ -44,6 +44,7 @@ public class UnitHandMotion : MonoBehaviour
 
 
         _weaponChange.WeaponSwitch(_num);
+        unit.UnitWeapon = _weaponChange.GetCurrentWeapon();
 
         while (unitHand.localPosition.y < upLimit)
         {

@@ -15,20 +15,22 @@ public class GameManager : MonoBehaviour
     private CameraManager cameraManager;
     public CameraManager GetCameraManager { get { return cameraManager; } }
 
-    [SerializeField]
-    private Transform tempParent;
-    public Transform TempParent { get { return tempParent; } }
-
     //일단 체크f부분만 리턴나중에 많이쓸경우에 캔버스로두고 따로자식으로 개개인별로찾아주는게좋을거같음
     [SerializeField] private GameObject checkF;
     public GameObject CheckF { get { return checkF; } }
     [SerializeField] private Transform weaponParent;
 
-    public Transform GetWeaponParent;
+    public Transform GetWeaponParent { get { return weaponParent; } }
 
+    private Dictionary<string, Transform> poolingParents = new();
+    public Dictionary<string, Transform> PoolingParents { get { return poolingParents; } }
+
+    [SerializeField]private Transform poolingRoot;
+    public Transform GetPoolinRoot { get { return poolingRoot; } }
 
     private void Awake()
     {
+
         if (instance == null)
         {
             instance = this;
@@ -37,17 +39,23 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        DontDestroyOnLoad(gameObject);
+
         unit = FindObjectOfType<Unit>();
         cameraManager = GetComponentInChildren<CameraManager>();
-        DontDestroyOnLoad(gameObject);
+
         SceneManager.sceneLoaded += OnSceneLoaded;
 
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+  //초기화될때마다 새로해줄것들
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //무기부모정해주는곳 
+        GameObject worldObject = GameObject.Find("WorldObjects");
+        weaponParent = worldObject.transform.Find("weaponParent");
     }
+
+
     void Start()
     {
 

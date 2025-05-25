@@ -28,11 +28,11 @@ public class EnemyMeleeAttack : MonoBehaviour
 
     private void AttackStart()
     {
-        enemy.EnemyAttackStart();
+        enemy.EnemyMeleeAttackStart();
     }
     private void AttackEnd()
     {
-        enemy.EnemyAttackEnd();
+        enemy.EnemyMeleeAttackEnd();
     }
 
     private void DeathEnd()

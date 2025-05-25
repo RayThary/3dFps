@@ -5,6 +5,9 @@ using UnityEngine;
 public class enemyTest : MonoBehaviour
 {
     public bool testSpawn = false;
+
+    public bool testD;
+    public Transform testDistance;
     void Start()
     {
         
@@ -18,6 +21,13 @@ public class enemyTest : MonoBehaviour
             GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, transform);
             obj.transform.position = Vector3.zero;
             testSpawn = false;
+        }
+
+        if (testD)
+        {
+            float a = Vector3.Distance(transform.position, testDistance.position);
+            Debug.Log(a);
+
         }
     }
 }

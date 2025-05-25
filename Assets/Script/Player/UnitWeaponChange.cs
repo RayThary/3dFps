@@ -9,6 +9,7 @@ public class UnitWeaponChange
 {
     public event Action<Weapon> OnWeaponSwitched;
 
+    private Unit unit;
     private Dictionary<int, Weapon> weaponSlot;
     private GameObject gunSlot1Obj;
     private GameObject gunSlot2Obj;
@@ -37,9 +38,10 @@ public class UnitWeaponChange
         return weaponSlot[currentSlot];
     }
 
-    public UnitWeaponChange(Dictionary<int, Weapon> _weaponSlot, GameObject _gunSlot1Obj, GameObject _gunSlot2Obj,
+    public UnitWeaponChange(Unit _unit, Dictionary<int, Weapon> _weaponSlot, GameObject _gunSlot1Obj, GameObject _gunSlot2Obj,
         GameObject _meleeSlot1Obj, GameObject _meleeSlot2Obj, float _weaponChangeTime, UnitAttack _unitAttack, int _defaultSlot = 1)
     {
+        this.unit = _unit;
         this.weaponSlot = _weaponSlot;
         this.gunSlot1Obj = _gunSlot1Obj;
         this.gunSlot2Obj = _gunSlot2Obj;
@@ -113,6 +115,8 @@ public class UnitWeaponChange
 
         CameraManager camMger = GameManager.instance.GetCameraManager;
         camMger.weaponSwitched(weaponSlot[currentSlot]);
+
+
     }
 
 
@@ -135,7 +139,8 @@ public class UnitWeaponChange
             GameManager.instance.CheckF.SetActive(false);
         }
     }
-    public void WeaponChange(WeaponView _pickupWeaponView)
+
+    private void WeaponChange(WeaponView _pickupWeaponView)
     {
         if (!isChange) return;
 
@@ -172,6 +177,7 @@ public class UnitWeaponChange
         weaponViewSlot[currentSlot] = _pickupWeaponView;
 
         OnWeaponSwitched?.Invoke(GetCurrentWeapon());
+        unit.UnitWeapon = weaponSlot[currentSlot];
 
         _pickupWeaponView.OnMeleeHit += unitAttack.HandleMeleeHits;
 

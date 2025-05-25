@@ -6,6 +6,7 @@ public enum EnemyType
 {
     EnemyA,
     EnemyB,
+    EnemyC,
 }
 
 [CreateAssetMenu(
@@ -16,12 +17,19 @@ public class EnemyData : ScriptableObject
 {
 
     public EnemyType enemyType;
+    [Tooltip("enum 이름을 표시합니다")]
     public string EnemyName;
 
     public float Hp;
     public float Damage;
     public float Speed;
     public float chaseStopDistance;
+    private void OnValidate()
+    {
+        EnemyName = enemyType.ToString();
+    }
 
 }
+
+
 

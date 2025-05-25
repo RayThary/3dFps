@@ -13,12 +13,15 @@ public class PoolingManager : MonoBehaviour
         SubMachineMuzzle,
         BulletHole,
         EnemyA,
+        EnemyB,
+        EnemyC,
+        Missile,
     }
 
     [System.Serializable]
     public class cPoolingObject
     {
-        public GameObject clip;
+        public GameObject poolingObject;
         public int count;
         [TextArea] public string description;
     }
@@ -46,6 +49,7 @@ public class PoolingManager : MonoBehaviour
         }
         initPoolingParents();
         initPoolingChild();
+        initGameManagerPoolingParets();//게임매니저자식으로있을경우
     }
 
     private void initPoolingParents()
@@ -63,14 +67,14 @@ public class PoolingManager : MonoBehaviour
         pCount = m_listPoolingObject.Count;
         for (int iNum = 0; iNum < pCount; ++iNum)
         {
-            if (m_listPoolingObject[iNum].clip == null)
+            if (m_listPoolingObject[iNum].poolingObject == null)
             {
                 continue;
             }
 
             cPoolingObject data = m_listPoolingObject[iNum];
 
-            string name = data.clip.name;
+            string name = data.poolingObject.name;
             bool exist = listParentName.Exists(x => x == name);
             if (exist == true)
             {
@@ -100,13 +104,13 @@ public class PoolingManager : MonoBehaviour
         int pCount = m_listPoolingObject.Count;
         for (int iNum = 0; iNum < pCount; ++iNum)
         {
-            if (m_listPoolingObject[iNum].clip == null)
+            if (m_listPoolingObject[iNum].poolingObject == null)
             {
                 continue;
             }
 
             cPoolingObject objPooing = m_listPoolingObject[iNum];
-            GameObject obj = m_listPoolingObject[iNum].clip;
+            GameObject obj = m_listPoolingObject[iNum].poolingObject;
             string name = obj.name;
             Transform parent = transform.Find(name);
 
@@ -114,7 +118,7 @@ public class PoolingManager : MonoBehaviour
 
             for (int idNum = objCount - 1; idNum > -1; --idNum)
             {
-                Destroy(transform.GetChild(idNum).gameObject);
+                Destroy(parent.GetChild(idNum).gameObject);
             }
 
             if (objCount < objPooing.count)
@@ -129,9 +133,33 @@ public class PoolingManager : MonoBehaviour
         }
     }
 
+    private void initGameManagerPoolingParets()
+    {
+        Transform parent = GameManager.instance.GetPoolinRoot;
+        foreach (cPoolingObject obj in m_listPoolingObject)
+        {
+            string name = obj.poolingObject.name;
+
+            if (parent != null)
+            {
+                if (!GameManager.instance.PoolingParents.ContainsKey(name))
+                {
+                    GameObject newObj = new GameObject(name);
+                    newObj.transform.SetParent(parent);
+                    GameManager.instance.PoolingParents[name] = newObj.transform;
+                }
+            }
+            else
+            {
+                Debug.LogError("GameManager -> PoolingObjectParent is missing");
+            }
+        }
+
+    }
+
     private GameObject createObject(string _name)
     {
-        GameObject obj = m_listPoolingObject.Find(x => x.clip.name == _name).clip;
+        GameObject obj = m_listPoolingObject.Find(x => x.poolingObject.name == _name).poolingObject;
         GameObject iobj = Instantiate(obj);
         iobj.SetActive(false);
         iobj.name = _name;
@@ -180,7 +208,7 @@ public class PoolingManager : MonoBehaviour
         string name = _obj.name;
         Transform parent = transform.Find(name);
 
-        cPoolingObject poolingObj = m_listPoolingObject.Find(x => x.clip.name == name);
+        cPoolingObject poolingObj = m_listPoolingObject.Find(x => x.poolingObject.name == name);
 
         int poolingCount = poolingObj.count;
 
@@ -212,7 +240,7 @@ public class PoolingManager : MonoBehaviour
 
             Transform parent = transform.Find(name);
 
-            cPoolingObject poolingObj = m_listPoolingObject.Find(x => x.clip.name == name);
+            cPoolingObject poolingObj = m_listPoolingObject.Find(x => x.poolingObject.name == name);
 
             int poolingCount = poolingObj.count;
 

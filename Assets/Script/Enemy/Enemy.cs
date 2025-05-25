@@ -48,8 +48,7 @@ public class Enemy : MonoBehaviour
     public Animator Animator { get { return animator; } }
 
     private BoxCollider box;
-
-    [SerializeField] private BoxCollider unitHitBox;
+    [Tooltip("근거리만 필요함")][SerializeField] private BoxCollider unitHitBox;
 
 
     void Start()
@@ -65,7 +64,6 @@ public class Enemy : MonoBehaviour
         stopDistance = enemyData.chaseStopDistance;
 
         stateMachine = new EnemyStateMachine();
-        enemyChaseState = new EnemyChaseState(this, playerTrs, transform, speed, stopDistance);
 
         SetupAttackState();
 
@@ -80,15 +78,18 @@ public class Enemy : MonoBehaviour
         {
             case eEnemyType.Melee:
                 enemyAttackState = new EnemyMeleeState(this, speed);
+                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, speed, stopDistance);
                 return;
 
             case eEnemyType.Charger:
-                enemyAttackState = new EnemyChargerState(this, transform, playerTrs, speed);
+                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyAttackState = new EnemyChargerState(this, transform, playerTrs, unitHitBox, speed);
 
                 return;
 
             case eEnemyType.Ranger:
-
+                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyAttackState = new EnemyRangerState(this, transform, playerTrs);
                 return;
 
         }
@@ -98,12 +99,11 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log($"{enemyAttackState.CanEnter} , {enemyStop}");
         if (!isDead)
         {
             stateMachine.Update();
         }
-        
+
 
     }
 
@@ -128,16 +128,30 @@ public class Enemy : MonoBehaviour
     }
 
     //애니메이션 부분
-    public void EnemyAttackEnd()
+    public void EnemyMeleeAttackStart()
+    {
+        unitHitBox.enabled = true;
+    }
+
+    public void EnemyMeleeAttackEnd()
     {
         unitHitBox.enabled = false;
         StateMachine.ChangeState(enemyChaseState);
     }
 
-    public void EnemyAttackStart()
+
+    public void EnemyRangerAttackStart(PoolingManager.ePoolingObject _poolingObject,Transform _RangerTrs)
     {
-        unitHitBox.enabled = true;
+        GameObject obj = PoolingManager.Instance.CreateObject(_poolingObject, GameManager.instance.PoolingParents[_poolingObject.ToString()]);
+        obj.transform.localRotation = transform.rotation;
+        obj.transform.position = _RangerTrs.position;
     }
+
+    public void EnemyRangerAttackEnd()
+    {
+        StateMachine.ChangeState(enemyChaseState);
+    }
+
 
     public void EnemyDeath()
     {

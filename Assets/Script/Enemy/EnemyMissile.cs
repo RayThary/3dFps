@@ -2,31 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyChargeAttack : MonoBehaviour
+public class EnemyMissile : MonoBehaviour
 {
+
     private Enemy enemy;
-    private BoxCollider box;
+
+    [SerializeField]private float missileSpeed;
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if (enemy.IsDead) return;
             other.GetComponent<Unit>().TakeDamge(enemy.Damage);
         }
     }
 
     void Start()
     {
-        enemy = GetComponentInParent<Enemy>();
-        box = GetComponent<BoxCollider>();
-        box.enabled = false;
+        
     }
 
-
-    //애니메이션 이벤트추가용 
-    private void DeathEnd()
+    // Update is called once per frame
+    void Update()
     {
-        enemy.EnemyDeath();
+        transform.position += transform.forward * Time.deltaTime * missileSpeed;
     }
 }

@@ -15,19 +15,23 @@ public class EnemyChargerState : IEnemyState
     private bool isAttack = false;
     private bool isEnd = false;
 
+    private BoxCollider attackBox;
+
     //쿨타임 
-    private float chargerCooltime = 2;
+    private float chargerCooltime = 5;
     private float lastUesdTime = 0;
     public bool CanEnter => Time.time >= lastUesdTime + chargerCooltime;
 
     //밥먹기전적음 추적은 navmesh를받아서 속도를한순간올려주고 exit나갈때 줄여주는걸로 update로 목표까지갔다면 return또는 시간만큼추적으로고민중
-    public EnemyChargerState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs, float _speed)
+    public EnemyChargerState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs, BoxCollider _attackBox, float _speed)
     {
         enemy = _enemy;
         enemyTrs = _enemyTrs;
         targetTrs = _targetTrs;
         speed = _speed;
+        attackBox = _attackBox;
         chargerSpeed = 20;
+        lastUesdTime = -chargerCooltime;
     }
     public void Enter()
     {
@@ -37,23 +41,32 @@ public class EnemyChargerState : IEnemyState
         targetVec = targetTrs.position;
         lastUesdTime = Time.time;
         isEnd = false;
+        isAttack = false;
     }
 
 
     public void Update()
     {
-
         chargerAttack();
     }
 
     private void chargerAttack()
     {
         float dis = Vector3.Distance(enemyTrs.position, targetVec);
-        if (dis <= 1 && !isEnd)
+        if (dis <= 8 && !isAttack)
         {
+            enemy.Animator.SetBool("Attack", true);
+            attackBox.enabled = true;
+            isAttack = true;
+        }
+        else if (dis <= 1 && !isEnd)
+        {
+            enemy.Animator.SetBool("Attack", false);
+            attackBox.enabled = false;
             enemy.StateMachine.ChangeState(enemy.EnemyChaseState);
             isEnd = true;
         }
+
 
 
     }
