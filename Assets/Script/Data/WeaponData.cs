@@ -2,10 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(
-  menuName = "Game/WeaponData",
-  fileName = "NewWeaponData"
-)]
+[CreateAssetMenu(menuName = "Game/WeaponData", fileName = "NewWeaponData")]
 public class WeaponData : ScriptableObject
 {
     [Header("Basic Settings")]

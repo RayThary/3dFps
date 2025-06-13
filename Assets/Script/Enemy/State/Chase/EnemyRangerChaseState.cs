@@ -45,7 +45,7 @@ public class EnemyRangerChaseState : IEnemyState
             enemy.NavMesh.updateRotation = !isChasingNow;
         }
 
-        if (Mathf.Abs(dis - stopDistance) <= 1f)
+        if (Mathf.Abs(dis - (stopDistance - 0.5f)) <= 0.5f)
         {
             enemy.NavMesh.ResetPath();
             enemy.Animator.SetBool("Idle", true);

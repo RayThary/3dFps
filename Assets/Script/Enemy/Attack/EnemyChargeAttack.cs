@@ -12,7 +12,7 @@ public class EnemyChargeAttack : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             if (enemy.IsDead) return;
-            other.GetComponent<Unit>().TakeDamge(enemy.Damage);
+            other.GetComponent<Unit>().TakeDamge(enemy.Damage);   
         }
     }
 
@@ -23,6 +23,10 @@ public class EnemyChargeAttack : MonoBehaviour
         box.enabled = false;
     }
 
+    private void attackEnd()
+    {
+        enemy.EnemyChargeAttackEnd();
+    }
 
     //애니메이션 이벤트추가용 
     private void DeathEnd()

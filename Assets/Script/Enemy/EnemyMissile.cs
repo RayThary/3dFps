@@ -9,6 +9,10 @@ public class EnemyMissile : MonoBehaviour
 
     [SerializeField]private float missileSpeed;
 
+    public void SetEnemy(Enemy _enemy)
+    {
+        enemy = _enemy;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

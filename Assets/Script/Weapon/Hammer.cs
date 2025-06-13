@@ -10,9 +10,6 @@ public class Hammer : Weapon
     {
         if (currentAmmo > 0 && !base.isReloading)
         {
-            
-
-
             currentAmmo--;
             return true;
         }

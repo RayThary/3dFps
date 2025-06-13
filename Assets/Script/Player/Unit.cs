@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Unit;
 
 public class Unit : MonoBehaviour
 {
     public event Action<float> OnUnitChangeHp;
 
+    [SerializeField] private UnitData unitData;
     //클래스
     private PlayerInput playerInput;
     private UnitMovement unitMovement;
@@ -28,13 +30,7 @@ public class Unit : MonoBehaviour
     private Vector3 dodgeVec;
     public Vector3 DodgeVec { set { dodgeVec = value; } }
 
-    [SerializeField] private float unitMaxHp;
-    private float unitCurrentHp;
 
-    //이동
-    [SerializeField] private float unitSpeed;
-    public float SetSpeed { get { return unitSpeed; } set { unitSpeed = value; } }
-    [SerializeField] private float unitJumpPower;
 
 
     //플레이어 오브젝트
@@ -49,18 +45,69 @@ public class Unit : MonoBehaviour
     private Transform unitSlot2;
     private Dictionary<int, Weapon> weaponSlot = new Dictionary<int, Weapon>();
 
-    [SerializeField] private float weaponChangeTime = 2;
 
-    //마우스감도
-    [SerializeField] private float sensitivity = 0.8f;
-    //총반동관련
-    // 반동 복귀 속도
-    [SerializeField] private float recoilRecoverSpeed = 5f;
-    //최대 누적반동
-    [SerializeField] private float maxRecoilAngle = 15f;
-    //위아래 최소 최대값
-    [SerializeField] private float minPitch = -45f;
-    [SerializeField] private float maxPitch = 45f;
+    //유닛 설정 
+    private bool statChange = false;
+    public bool SetStatChange { set { statChange = value; } }
+
+
+    public class UnitStat
+    {
+        //마우스감도 이건 유닛데이터가아닌다른곳에 넣어줄필요있음
+        public float sensitivity = 0.8f;
+
+        public float unitMaxHp;
+
+        // 이동
+        public float unitSpeed;
+        public float unitJumpPower;
+        // 무기 교체 시간
+        public float weaponChangeTime = 2f;
+
+        // 총 반동 관련
+        public float recoilRecoverSpeed = 5f;
+        public float maxRecoilAngle = 15f;
+        public float minPitch = -45f;
+        public float maxPitch = 45f;
+
+        // 크리티컬 관련
+        public float criticalChance;
+        public float criticalDamage;
+        public UnitStat Clone()
+        {
+            return (UnitStat)MemberwiseClone();
+        }
+
+        public void setUnitStat(UnitData unitData)
+        {
+            sensitivity = unitData.Sensitivity;//임시
+
+            unitMaxHp = unitData.UnitMaxHp;
+            unitSpeed = unitData.UnitSpeed;
+            unitJumpPower = unitData.UnitJumpPower;
+            weaponChangeTime = unitData.WeaponChangeTime;
+            recoilRecoverSpeed = unitData.RecoilRecoverSpeed;
+            maxRecoilAngle = unitData.MaxRecoilAngle;
+            maxPitch = unitData.MaxPitch;
+            minPitch = unitData.MinPitch;
+
+            criticalChance = unitData.CriticalChance;
+            criticalDamage = unitData.CriticalDamage;
+
+        }
+    }
+    private UnitStat unitStat = new UnitStat();
+    private UnitStat unitStatBasic;
+
+
+    private float unitCurrentHp;
+
+    //이동
+    private float unitSpeed;
+    public float SetSpeed { get { return unitSpeed; } set { unitSpeed = value; } }
+
+
+
 
     [SerializeField] private Transform neck;
     public int CurrentAmmo { get { return weapon.GetCurrentAmmo; } }
@@ -71,6 +118,12 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
+        unitStat.setUnitStat(unitData);
+        unitCurrentHp = unitStat.unitMaxHp;
+        unitSpeed = unitStat.unitSpeed;
+
+        unitStatBasic = unitStat.Clone();
+
         rigid = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         unitHandMotion = GetComponent<UnitHandMotion>();
@@ -81,16 +134,16 @@ public class Unit : MonoBehaviour
         unitMovement = new UnitMovement();
         unitMovement.SetUp(transform, anim, rigid, playerInput);
 
-        unitCurrentHp = unitMaxHp;
 
         unitAttack = GetComponent<UnitAttack>();
-        unitAttack.SetUnitRot(unitRotation);
+        unitAttack.SetUnitAttack(unitRotation, unitStat.criticalChance, unitStat.criticalDamage);
 
 
         addWeapon();
 
-        unitRotation.SetUnitRotation(unitHead, neck, minPitch, maxPitch, maxRecoilAngle, recoilRecoverSpeed);
+        unitRotation.SetUnitRotation(unitHead, neck, unitStat.minPitch, unitStat.maxPitch, unitStat.maxRecoilAngle, unitStat.recoilRecoverSpeed);
     }
+
 
     private void addWeapon()
     {
@@ -104,7 +157,7 @@ public class Unit : MonoBehaviour
         unitMeleeSlot2 = unitMeleeSlot.GetChild(1);
 
         unitWeaponChange = new UnitWeaponChange(this, weaponSlot, unitSlot1.gameObject, unitSlot2.gameObject,
-            unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, weaponChangeTime, unitAttack);
+            unitMeleeSlot1.gameObject, unitMeleeSlot2.gameObject, unitStat.weaponChangeTime, unitAttack);
         weapon = unitWeaponChange.GetCurrentWeapon();
     }
 
@@ -112,14 +165,14 @@ public class Unit : MonoBehaviour
     {
         playerInput.ReadInput();
         unitMovement.UnitMove(unitSpeed, isDodge, dodgeVec);
-        unitMovement.jump(unitJumpPower, playerInput);
-        unitRotation.unitMouseLook(transform, playerInput.GetMouseX, playerInput.GetMouseY, sensitivity);
+        unitMovement.jump(unitStat.unitJumpPower, playerInput);
+        unitRotation.unitMouseLook(transform, playerInput.GetMouseX, playerInput.GetMouseY, unitStat.sensitivity);
         unitDodge.dodge(playerInput, this, unitMovement, unitSpeed, unitMovement.GetMoveVec);
         unitWeaponChange.WeaponChangeCheck(playerInput);
         unitWeaponChange.WeaponChangeCool();
         attack();
         weaponChange();
-
+        changeUnitStat();
 
         //테스트
         if (Input.GetKeyDown(KeyCode.R))
@@ -194,10 +247,30 @@ public class Unit : MonoBehaviour
             unitHandMotion.handMotion(unitWeaponChange, 2);
         }
 
-        if (Input.GetKeyDown(KeyCode.Z))
+    }
+
+    //
+    private void changeUnitStat()
+    {
+        if (statChange)
         {
-            Debug.Log(weapon.WeaponType);
+            if (!Mathf.Approximately(unitStatBasic.criticalChance, unitStat.criticalChance))
+            {
+                unitAttack.SetUnitAttack(unitRotation, unitStat.criticalChance, unitStat.criticalDamage);
+            }
+
+            if (!Mathf.Approximately(unitStatBasic.criticalDamage, unitStat.criticalDamage))
+            {
+                unitAttack.SetUnitAttack(unitRotation, unitStat.criticalChance, unitStat.criticalDamage);
+            }
+
+
+
+
+
+                unitStatBasic = unitStat.Clone();
         }
+
     }
 
     public void TakeDamge(float _damage)

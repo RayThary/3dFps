@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
         Melee,
         Charger,
         Ranger,
+        Sniper,
         Boss,
     }
     [SerializeField] private eEnemyType enemyType;
@@ -49,6 +50,7 @@ public class Enemy : MonoBehaviour
 
     private BoxCollider box;
     [Tooltip("근거리만 필요함")][SerializeField] private BoxCollider unitHitBox;
+    private LineRenderer lineR;
 
 
     void Start()
@@ -65,20 +67,18 @@ public class Enemy : MonoBehaviour
 
         stateMachine = new EnemyStateMachine();
 
-        SetupAttackState();
-
-
+        SetupState();
 
         stateMachine.ChangeState(enemyChaseState);
 
     }
-    private void SetupAttackState()
+    private void SetupState()
     {
         switch (enemyType)
         {
             case eEnemyType.Melee:
-                enemyAttackState = new EnemyMeleeState(this, speed);
                 enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyAttackState = new EnemyMeleeState(this, speed);
                 return;
 
             case eEnemyType.Charger:
@@ -89,7 +89,14 @@ public class Enemy : MonoBehaviour
 
             case eEnemyType.Ranger:
                 enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, speed, stopDistance);
-                enemyAttackState = new EnemyRangerState(this, transform, playerTrs);
+                enemyAttackState = new EnemyRangerState(this);
+                return;
+            case eEnemyType.Sniper:
+                lineR = GetComponentInChildren<LineRenderer>();
+                lineR.enabled = false;
+
+                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage);
                 return;
 
         }
@@ -103,22 +110,19 @@ public class Enemy : MonoBehaviour
         {
             stateMachine.Update();
         }
-
-
     }
 
 
-    public void HitEnemy(float _damage, bool _hitDamage)
+    public void HitEnemy(float _damage,float _criticalDamage, bool _hitDamage)
     {
         if (_hitDamage)
         {
-            hp -= _damage * 1.5f;
+            hp -= _damage * _criticalDamage;
         }
         else
         {
             hp -= _damage;
         }
-
         if (hp <= 0)
         {
             animator.SetTrigger("Death");
@@ -138,13 +142,18 @@ public class Enemy : MonoBehaviour
         unitHitBox.enabled = false;
         StateMachine.ChangeState(enemyChaseState);
     }
+    public void EnemyChargeAttackEnd()
+    {
+        unitHitBox.enabled = false;
+        stateMachine.ChangeState(enemyChaseState);
+    }
 
-
-    public void EnemyRangerAttackStart(PoolingManager.ePoolingObject _poolingObject,Transform _RangerTrs)
+    public void EnemyRangerAttackStart(PoolingManager.ePoolingObject _poolingObject, Transform _RangerTrs)
     {
         GameObject obj = PoolingManager.Instance.CreateObject(_poolingObject, GameManager.instance.PoolingParents[_poolingObject.ToString()]);
         obj.transform.localRotation = transform.rotation;
         obj.transform.position = _RangerTrs.position;
+        obj.GetComponent<EnemyMissile>().SetEnemy(this);
     }
 
     public void EnemyRangerAttackEnd()
@@ -152,15 +161,27 @@ public class Enemy : MonoBehaviour
         StateMachine.ChangeState(enemyChaseState);
     }
 
+    public void EnemySniperAttack()
+    {
+        if (enemyAttackState is IEnemySniperState sniper)
+        {
+            sniper.SniperShot = true;
+            animator.speed = 0;
+        }
+    }
+
 
     public void EnemyDeath()
     {
-        PoolingManager.Instance.RemovePoolingObject(gameObject);
         animator.SetTrigger("Reset");
-        unitHitBox.enabled = false;
+
         box.enabled = true;
         enemyStop = false;
         hp = enemyData.Hp;
         isDead = false;
+        stateMachine.ChangeState(enemyChaseState);
+
+        if (unitHitBox != null) unitHitBox.enabled = false;
+        PoolingManager.Instance.RemovePoolingObject(gameObject);
     }
 }

@@ -6,10 +6,7 @@ public class EnemyRangerState : IEnemyState
 {
 
     private Enemy enemy;
-    private Transform targetTrs;
-    private Transform enemyTrs;
-    private Vector3 targetVec;
-    private float speed;
+
 
 
     //쿨타임 
@@ -18,17 +15,14 @@ public class EnemyRangerState : IEnemyState
     public bool CanEnter => Time.time >= lastUesdTime + rangeCooltime;
 
     //밥먹기전적음 추적은 navmesh를받아서 속도를한순간올려주고 exit나갈때 줄여주는걸로 update로 목표까지갔다면 return또는 시간만큼추적으로고민중
-    public EnemyRangerState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs)
+    public EnemyRangerState(Enemy _enemy)
     {
         enemy = _enemy;
-        enemyTrs = _enemyTrs;
-        targetTrs = _targetTrs;
         lastUesdTime = -rangeCooltime;
     }
 
     public void Enter()
     {
-        targetVec = targetTrs.position;
         lastUesdTime = Time.time;
         enemy.Animator.SetTrigger("Attack");
     }

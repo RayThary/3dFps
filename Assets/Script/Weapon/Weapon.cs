@@ -76,32 +76,6 @@ public abstract class Weapon
     }
 
     public abstract bool Attack(Transform _muzzlePoint);
-
-    #region
-    //public virtual void Fire(Transform _parent)
-    //{
-    //    if (currentAmmo > 0)
-    //    {
-    //        GameObject bullet = PoolingManager.Instance.CreateObject(poolingMuzzle, _parent);
-
-    //        bullet.transform.position = _parent.position;
-    //        bullet.transform.SetParent(_parent);
-
-    //        Bullet bulletTemp = bullet.GetComponent<Bullet>();
-    //        if (bulletTemp != null)
-    //        {
-
-    //            bulletTemp.Setup(damage, speed, bulletType);
-    //        }
-
-    //        currentAmmo--;
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("ÃÑ¾Ë´Ù¾¸");
-    //    }
-    //}
-    #endregion
     public virtual void Reload(WeaponView _weaponView)
     {
         if (currentAmmo == maxAmmo || reserveAmmo <= 0 || isReloading)
@@ -133,6 +107,7 @@ public abstract class Weapon
         reserveAmmo -= ammoLoad;
     }
 
+    
 }
 
 

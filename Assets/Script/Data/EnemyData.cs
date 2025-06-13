@@ -7,12 +7,10 @@ public enum EnemyType
     EnemyA,
     EnemyB,
     EnemyC,
+    EnemyF,
 }
 
-[CreateAssetMenu(
- menuName = "Game/EnemyData",
- fileName = "NewEnemyData"
-)]
+[CreateAssetMenu(menuName = "Game/EnemyData", fileName = "NewEnemyData")]
 public class EnemyData : ScriptableObject
 {
 

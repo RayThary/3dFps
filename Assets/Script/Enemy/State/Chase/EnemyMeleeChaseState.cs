@@ -44,7 +44,6 @@ public class EnemyMeleeChaseState : IEnemyState
         {
             enemy.NavMesh.SetDestination(playerTrs.position);
         }
-
     }
 
     private bool chase()

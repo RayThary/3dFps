@@ -16,6 +16,7 @@ public class PoolingManager : MonoBehaviour
         EnemyB,
         EnemyC,
         Missile,
+        Temp,
     }
 
     [System.Serializable]
@@ -207,6 +208,11 @@ public class PoolingManager : MonoBehaviour
     {
         string name = _obj.name;
         Transform parent = transform.Find(name);
+        if (parent == null)
+        {
+            Destroy(_obj);
+            return;
+        }
 
         cPoolingObject poolingObj = m_listPoolingObject.Find(x => x.poolingObject.name == name);
 

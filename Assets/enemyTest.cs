@@ -5,12 +5,12 @@ using UnityEngine;
 public class enemyTest : MonoBehaviour
 {
     public bool testSpawn = false;
+    public bool a, b, c;
 
-    public bool testD;
-    public Transform testDistance;
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -18,16 +18,23 @@ public class enemyTest : MonoBehaviour
     {
         if (testSpawn)
         {
-            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, transform);
+            GameObject obj;
+            if (a)
+            {
+                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, transform);
+            }
+            else if (b)
+            {
+                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyB, transform);
+            }
+            else
+            {
+                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyC, transform);
+            }
             obj.transform.position = Vector3.zero;
             testSpawn = false;
         }
 
-        if (testD)
-        {
-            float a = Vector3.Distance(transform.position, testDistance.position);
-            Debug.Log(a);
 
-        }
     }
 }

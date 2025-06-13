@@ -23,17 +23,29 @@ public class UnitAttack : MonoBehaviour
     private bool isAttackAuto = false;
     private UnitRotation unitRot;
 
-
     private bool isRecoil;
     public bool GetIsRecoil { get { return isRecoil; } }
+
+    //크리티컬관련  확정크리티컬 / 확정크리티컬시간
+    private bool forceCritical;
+    private bool forceCriticalTime;
+    private float forceCriticalUntilTime;
+
+    private float criticalChance;
+    private float criticalDamage;
+
     private void Awake()
     {
         defaultScale = crosshair.rectTransform.localScale;
     }
-    public void SetUnitRot(UnitRotation _unitRot)
+    public void SetUnitAttack(UnitRotation _unitRot, float _criticalChance, float _criticalDamage)
     {
         unitRot = _unitRot;
+        criticalChance = _criticalChance;
+        criticalDamage = _criticalDamage;
     }
+  
+    //근접공격부분 이렇게 모션이긴공격은 모션끝에 자동장전을넣어놓을것
     public void Attack(Weapon _weapon, WeaponView _weaponView, Animator _anim)
     {
 
@@ -43,6 +55,7 @@ public class UnitAttack : MonoBehaviour
             if (shot)
             {
                 _anim.SetTrigger("Attack");
+
                 _weaponView.meleeStart(hitHeadRay, _weapon.GetDamage);
             }
             else
@@ -62,6 +75,10 @@ public class UnitAttack : MonoBehaviour
             isRecoil = true;
             unitRot.unitRecoil(_weapon.GetRecoilPower);
             StartCoroutine(EndSingleRecoil());
+            if (_weapon.GetCurrentAmmo == 0)
+            {
+                _weapon.Reload(_weaponView);
+            }
         }
         else
         {
@@ -99,6 +116,12 @@ public class UnitAttack : MonoBehaviour
                 unitRot.unitRecoil(gun.GetRecoilPower);
                 StartCoroutine(gunHit(hitDealyTime, gun.GetDamage));
                 yield return new WaitForSeconds(0.1f);
+                if (gun.GetCurrentAmmo == 0)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    gun.Reload(_weaponView);
+                    break;
+                }
             }
             else
             {
@@ -112,6 +135,78 @@ public class UnitAttack : MonoBehaviour
         isRecoil = false;
         isAttackAuto = false;
         unitRot.ResetMouseRecoil();
+    }
+
+    private bool forceCriticalCheck(RaycastHit _hit)
+    {
+        if (forceCriticalTime)
+        {
+            if (Time.time >= forceCriticalUntilTime)
+            {
+                forceCriticalTime = false;
+            }
+            return true;
+        }
+        else if (forceCritical)
+        {
+            forceCritical = false;
+            return true;
+        }
+        else
+        {
+
+            if (Random.value < criticalChance * 0.01f)
+            {
+                return true;
+            }
+            else
+            {
+                int iHitLayer = 1 << _hit.collider.gameObject.layer;
+                return ((hitHeadRay & iHitLayer) != 0) ? true : false;
+            }
+        }
+
+    }
+    private bool forceCriticalCheck(bool _isCritical)
+    {
+        if (_isCritical)
+        {
+            return true;
+        }
+
+        if (forceCriticalTime)
+        {
+            if (Time.time >= forceCriticalUntilTime)
+            {
+                forceCriticalTime = false;
+            }
+            return true;
+        }
+
+        if (forceCritical)
+        {
+            forceCritical = false;
+            return true;
+        }
+
+        if (Random.value < criticalChance * 0.01f)
+        {
+            return true;
+        }
+
+        return false;
+
+    }
+    // 1회용 확정크리티컬 
+    public void SetforceCritical()
+    {
+        forceCritical = true;
+    }
+    // 지속시간동안 크리티컬이뜨게하는것
+    public void SetforceCritical(float _criticalDuration)
+    {
+        forceCriticalTime = true;
+        forceCriticalUntilTime = Time.time + _criticalDuration;
     }
 
     private IEnumerator gunHit(float _hitDealyTime, float _damage)
@@ -130,14 +225,14 @@ public class UnitAttack : MonoBehaviour
 
             if (enemy != null)
             {
-                int iHitLayer = 1 << hit.collider.gameObject.layer;
-                bool isCritical = ((hitHeadRay & iHitLayer) != 0) ? true : false;
+
+                //적관련 대미지부분
+                bool isCritical = forceCriticalCheck(hit);
+
+                hitEnemy(enemy, _damage, isCritical);
 
                 //히트머즐 
                 StartCoroutine(hitMuzzle(isCritical));
-
-                //적관련 대미지부분
-                hitEnemy(enemy, _damage, isCritical);
             }
             else
             {
@@ -175,19 +270,30 @@ public class UnitAttack : MonoBehaviour
 
     private void hitEnemy(Enemy _enemy, float _damage, bool _isCritical)
     {
-        _enemy.HitEnemy(_damage, _isCritical);
+        _enemy.HitEnemy(_damage, criticalDamage, _isCritical);
     }
 
     public void HandleMeleeHits(List<HitInfo> _hits)
     {
+        if (_hits == null || !_hits.Any(x => x.enemy != null))
+        {
+            return;
+        }
         bool criticalCheck = _hits.Any(x => x.IsCritical);
         foreach (var hit in _hits)
         {
             if (hit.enemy != null)
             {
-                hit.enemy.HitEnemy(hit.Damage, hit.IsCritical);
+                bool ciriticalCheck = forceCriticalCheck(hit.IsCritical);
+                hit.enemy.HitEnemy(hit.Damage, criticalDamage, ciriticalCheck);
             }
         }
         StartCoroutine(hitMuzzle(criticalCheck));
+    }
+
+    public void SetUnitCritical(float _criticalChance, float _criticalDamage)
+    {
+        criticalChance = _criticalChance;
+        criticalDamage = _criticalDamage;
     }
 }
