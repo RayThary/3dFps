@@ -24,15 +24,19 @@ public class UnitSkillThrowSlash
     private Transform spawnPoint1;
     private Transform spawnPoint2;
 
+    //제외할 인식안할레이어
+    private int outLayer;
 
-    public void SetUp(UnitSkill _unitSkill, float _damage,   float _coolTime, Transform _spawnPoint1,Transform _spawnPoint2)
+
+    public void SetUp(UnitSkill _unitSkill, float _damage, float _coolTime, Transform _spawnPoint1, Transform _spawnPoint2, int _outLayer)
     {
         unitSkill = _unitSkill;
         damage = _damage;
-        
+
         coolTime = _coolTime;
         spawnPoint1 = _spawnPoint1;
         spawnPoint2 = _spawnPoint2;
+        outLayer = _outLayer;
     }
 
     public void TryUesSkill()
@@ -47,8 +51,22 @@ public class UnitSkillThrowSlash
 
     IEnumerator spwanThrow()
     {
-        Ray ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
-        Vector3 shootDir = ray.direction;
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.5f));
+        Vector3 targetPoint;
+        Vector3 dir;
+
+        float maxDistance = 100;
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, outLayer))
+        {
+            targetPoint = hit.point;
+            Debug.Log(hit.transform.name);
+        }
+        else
+        {
+            targetPoint = ray.GetPoint(maxDistance);
+
+        }
+
         int count = 0;
         while (count < 8)
         {
@@ -62,13 +80,14 @@ public class UnitSkillThrowSlash
                 spawnPoint = spawnPoint2.position;
             }
 
-            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.Temp, GameManager.instance.GetPoolinRoot);
+            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.Temp, GameManager.instance.PoolingParents["Temp"]);
             obj.transform.position = spawnPoint;
-            obj.transform.rotation = Quaternion.LookRotation(shootDir);
-            obj.GetComponent<ThrowSlash>().SetUp(damage);
+            dir = (targetPoint - spawnPoint).normalized;
 
+            obj.transform.rotation = Quaternion.LookRotation(dir);
+            obj.GetComponent<ThrowSlash>().SetUp(damage, dir);
             count++;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 

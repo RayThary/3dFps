@@ -16,10 +16,12 @@ public class UnitSkill : MonoBehaviour
     private Unit unit;
     private UnitSkillThrowSlash throwSlash;
 
+    [SerializeField] private LayerMask outLayer;
 
     [SerializeField] private Transform skillSpawnTrs;
-    [SerializeField]private Transform spawnL;
-    [SerializeField]private Transform spawnR;
+    private Transform spawnL;
+    private Transform spawnR;
+
 
 
     void Start()
@@ -29,11 +31,12 @@ public class UnitSkill : MonoBehaviour
         unit = GetComponent<Unit>();
         spawnL = skillSpawnTrs.GetChild(0);
         spawnR = skillSpawnTrs.GetChild(1);
+        int nowOutLayer = ~outLayer.value;
         switch (skillName)
         {
             case eSkillName.ThrowSlash:
                 throwSlash = new UnitSkillThrowSlash();
-                throwSlash.SetUp(this, currentSkillData.SkillDamage, currentSkillData.SkillCoolTime, spawnR, spawnL);
+                throwSlash.SetUp(this, currentSkillData.SkillDamage, currentSkillData.SkillCoolTime, spawnR, spawnL, nowOutLayer);
                 break;
 
         }
