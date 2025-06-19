@@ -16,17 +16,24 @@ public class UnitSkill : MonoBehaviour
     private Unit unit;
     private UnitSkillThrowSlash throwSlash;
 
+    //부딪히지않아야할레이어
     [SerializeField] private LayerMask outLayer;
 
     [SerializeField] private Transform skillSpawnTrs;
     private Transform spawnL;
     private Transform spawnR;
 
+    private float coolTime;
+    public float GetCoolTime { get { return coolTime; } }
+    [SerializeField]
+    private bool useSkill = false;
+    public bool UseSkill { get { return useSkill; } set { useSkill = value; } }
 
 
     void Start()
     {
         currentSkillData = skillData.Find(x => x.SkillName == skillName.ToString());
+        coolTime = currentSkillData.SkillCoolTime;
 
         unit = GetComponent<Unit>();
         spawnL = skillSpawnTrs.GetChild(0);
@@ -36,7 +43,7 @@ public class UnitSkill : MonoBehaviour
         {
             case eSkillName.ThrowSlash:
                 throwSlash = new UnitSkillThrowSlash();
-                throwSlash.SetUp(this, currentSkillData.SkillDamage, currentSkillData.SkillCoolTime, spawnR, spawnL, nowOutLayer);
+                throwSlash.SetUp(this, currentSkillData.SkillDamage, coolTime, spawnR, spawnL, nowOutLayer);
                 break;
 
         }
@@ -52,9 +59,12 @@ public class UnitSkill : MonoBehaviour
             switch (skillName)
             {
                 case eSkillName.ThrowSlash:
-                    throwSlash.TryUesSkill();
+                    useSkill = throwSlash.TryUesSkill();
                     break;
             }
+
         }
+
+
     }
 }

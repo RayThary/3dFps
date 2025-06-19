@@ -15,6 +15,10 @@ public class UIManager : MonoBehaviour
 
 
     private UnitWeaponChange unitWeaponChange;
+    private UnitSkill unitSkill;
+    //스킬
+    private float skillCoolTime;
+    private bool uesSkill = false;
 
     //대시
     [SerializeField]
@@ -41,6 +45,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Image iconImage;
     [SerializeField] private Image weaponCool;
+    [SerializeField] private Image skillCool;
 
     [SerializeField] private List<WeaponIcon> weaponIcon = new List<WeaponIcon>();
 
@@ -52,12 +57,15 @@ public class UIManager : MonoBehaviour
     {
         unit = GameManager.instance.GetUnit;
         unitDodge = unit.GetComponent<UnitDodge>();
-        dodgeCoolTime = unitDodge.GetDodgeCool;
+        unitSkill = unit.GetComponent<UnitSkill>();
 
+        dodgeCoolTime = unitDodge.GetDodgeCool;
         unitWeaponChange = unit.GetUnitWeaponChange;
 
         onUIWeaponIcon(unit.GetWeapon);
         unitWeaponChange.OnWeaponSwitched += onUIWeaponIcon;
+
+        skillCoolTime = unitSkill.GetCoolTime;
     }
 
     void OnDestroy()
@@ -83,6 +91,7 @@ public class UIManager : MonoBehaviour
     {
         uiDodge();
         uiAmmo();
+        uiSkillCool();
         uiWeaponChange();
 
     }
@@ -112,8 +121,27 @@ public class UIManager : MonoBehaviour
     }
 
     private void uiWeaponChange()
-    {        
+    {
         weaponCool.fillAmount = unitWeaponChange.ChangeCooldown;
 
+    }
+
+    private void uiSkillCool()
+    {
+        if (!uesSkill && unitSkill.UseSkill == true)
+        {
+            uesSkill = true;
+            unitSkill.UseSkill = false;
+            skillCool.fillAmount = 1;
+        }
+
+        if (uesSkill)
+        {
+            skillCool.fillAmount -= Time.deltaTime / skillCoolTime;
+            if (skillCool.fillAmount <= 0)
+            {
+                uesSkill = false;
+            }
+        }
     }
 }

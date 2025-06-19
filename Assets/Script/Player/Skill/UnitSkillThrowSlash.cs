@@ -39,14 +39,14 @@ public class UnitSkillThrowSlash
         outLayer = _outLayer;
     }
 
-    public void TryUesSkill()
+    public bool TryUesSkill()
     {
         if (Time.time < lastUsedTime + coolTime)
-            return;
+            return false;
 
         lastUsedTime = Time.time;
         unitSkill.StartCoroutine(spwanThrow());
-
+        return true;
     }
 
     IEnumerator spwanThrow()
@@ -59,7 +59,6 @@ public class UnitSkillThrowSlash
         if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, outLayer))
         {
             targetPoint = hit.point;
-            Debug.Log(hit.transform.name);
         }
         else
         {
@@ -80,7 +79,7 @@ public class UnitSkillThrowSlash
                 spawnPoint = spawnPoint2.position;
             }
 
-            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.Temp, GameManager.instance.PoolingParents["Temp"]);
+            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.TempSkillMissle, GameManager.instance.PoolingParents["TempSkillMissle"]);
             obj.transform.position = spawnPoint;
             dir = (targetPoint - spawnPoint).normalized;
 

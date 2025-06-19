@@ -11,22 +11,21 @@ public class ThrowSlash : MonoBehaviour
     [SerializeField] private float speed = 30;
     private void OnTriggerEnter(Collider other)
     {
+        int layer = other.gameObject.layer;
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             other.GetComponent<Enemy>().HitEnemy(damage, 1, false);
         }
-
-
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        
-        if (collision.gameObject.layer == hitObject)
+        else if ((hitObject.value & (1 << layer)) != 0)
         {
             PoolingManager.Instance.RemovePoolingObject(gameObject);
         }
+
+       
+
     }
+
+ 
     public void SetUp(float _damage,Vector3 _shootDir)
     {
         damage = _damage;

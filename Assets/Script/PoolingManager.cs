@@ -16,7 +16,7 @@ public class PoolingManager : MonoBehaviour
         EnemyB,
         EnemyC,
         Missile,
-        Temp,
+        TempSkillMissle,
     }
 
     [System.Serializable]
