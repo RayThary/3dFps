@@ -33,9 +33,23 @@ public class WeaponView : MonoBehaviour
 
     public event Action<List<HitInfo>> OnMeleeHit;
 
+    [SerializeField] private float weaponLevel = 1;
+    public float WeaponLevel { get { return weaponLevel; } set { weaponLevel = value; } }
+    private int weaponMaxLevel;
+    private float weaponLevelUpDamage;
+    private float gunDamage;
+    public float GunDamage { get { return gunDamage; } }
+
     private LayerMask headMask;
     private List<HitInfo> hitList = new List<HitInfo>();
-    private float damage;
+    private float meleeDamage;
+
+
+    public float GetWeaponLevel()
+    {
+        float addDamage = weaponLevel * 0.5f;
+        return addDamage;
+    }
 
     public struct HitInfo
     {
@@ -66,7 +80,7 @@ public class WeaponView : MonoBehaviour
 
             int layerMask = 1 << other.gameObject.layer;
             bool crit = (headMask & layerMask) != 0;
-            hitList.Add(new HitInfo(enemy, crit, damage));
+            hitList.Add(new HitInfo(enemy, crit, meleeDamage));
 
         }
     }
@@ -90,6 +104,7 @@ public class WeaponView : MonoBehaviour
 
     }
 
+
     public void Initialize(Weapon _weapon)
     {
         this.weapon = _weapon;
@@ -99,6 +114,20 @@ public class WeaponView : MonoBehaviour
             weaponPickup = transform.Find("Mesh Object/WeaponPickup");
         }
         weaponPickup.GetComponent<BoxCollider>().enabled = false;
+        gunDamage = _weapon.GetDamage;
+        weaponMaxLevel = _weapon.WeaponMaxLevel;
+        weaponLevelUpDamage = _weapon.WeaponLevelUpDamage;
+    }
+
+    public bool WeaponUpgrade()
+    {
+        if (weaponLevel >= weaponMaxLevel)
+        {
+            return false;
+        }
+        gunDamage *= (1 + weaponLevelUpDamage);
+        weaponLevel++;
+        return true;
     }
 
     public void UnitAttackAnim()
@@ -123,7 +152,7 @@ public class WeaponView : MonoBehaviour
         {
             box.enabled = true;
             headMask = _headMask;
-            damage = _damage;
+            meleeDamage = _damage;
         }
         else
         {
@@ -141,7 +170,7 @@ public class WeaponView : MonoBehaviour
 
         hitList.Clear();
         box.enabled = false;
-        damage = 0;
+        meleeDamage = 0;
 
     }
 

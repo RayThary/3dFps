@@ -100,6 +100,7 @@ public class UIManager : MonoBehaviour
     {
         if (!isDodge && unit.IsDodge)
         {
+
             dodgeCool.fillAmount = 1;
             isDodge = true;
         }

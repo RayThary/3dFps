@@ -13,6 +13,11 @@ public abstract class Weapon
     protected int reserveAmmo;
     protected int maxReserveAmmo;
     protected float speed;
+
+    protected int weaponMaxLevel;
+    public int WeaponMaxLevel { get { return weaponMaxLevel; } }
+    protected float weaponLevelUpDamage;
+    public float WeaponLevelUpDamage { get { return weaponLevelUpDamage; } }
     protected bool isMelee;
     public bool IsMelee { get { return isMelee; } }
 
@@ -27,7 +32,6 @@ public abstract class Weapon
 
     protected eWeaponType weaponType;
     public eWeaponType WeaponType { get { return weaponType; } }
-
 
     //UI ÃÑ¾Ë
     public int GetCurrentAmmo { get { return currentAmmo; } }
@@ -50,6 +54,8 @@ public abstract class Weapon
         damage = _data.Damage;
         weaponPrefeb = _data.Prefab;
         isMelee = _data.isMelee;
+        weaponMaxLevel = _data.weaponMaxLevel;
+        weaponLevelUpDamage = _data.weaponLevelUpDamage;
 
         currentAmmo = _data.MaxAmmo;
         maxAmmo = _data.MaxAmmo;
@@ -107,7 +113,15 @@ public abstract class Weapon
         reserveAmmo -= ammoLoad;
     }
 
-    
+    public void GetGunDamage(int _weaponLevel)
+    {
+        damage = damage + (_weaponLevel * 5);
+    }
+
+    //public (int maxLevel,float ) SetWeaponUpgrade()
+    //{
+        
+    //}
 }
 
 

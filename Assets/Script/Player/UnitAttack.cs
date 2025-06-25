@@ -71,7 +71,7 @@ public class UnitAttack : MonoBehaviour
         if (shot)
         {
             if (_weaponView != null) _weaponView.UnitAttackAnim();
-            StartCoroutine(gunHit(hitDealyTime, _weapon.GetDamage));
+            StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage));
             isRecoil = true;
             unitRot.unitRecoil(_weapon.GetRecoilPower);
             StartCoroutine(EndSingleRecoil());
@@ -114,7 +114,7 @@ public class UnitAttack : MonoBehaviour
             {
                 if (_weaponView != null) _weaponView.UnitAttackAnim();
                 unitRot.unitRecoil(gun.GetRecoilPower);
-                StartCoroutine(gunHit(hitDealyTime, gun.GetDamage));
+                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage));
                 yield return new WaitForSeconds(0.1f);
                 if (gun.GetCurrentAmmo == 0)
                 {
@@ -136,6 +136,8 @@ public class UnitAttack : MonoBehaviour
         isAttackAuto = false;
         unitRot.ResetMouseRecoil();
     }
+
+   
 
     private bool forceCriticalCheck(RaycastHit _hit)
     {

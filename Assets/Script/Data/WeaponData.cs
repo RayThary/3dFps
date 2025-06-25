@@ -15,6 +15,8 @@ public class WeaponData : ScriptableObject
     public bool isMelee;
     public int MaxAmmo;
     public int PullAmmo;
+    public int weaponMaxLevel;
+    public float weaponLevelUpDamage;
 
     [Header("Gun Settings")]
     public float RecoilPower;
