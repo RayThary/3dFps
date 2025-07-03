@@ -27,9 +27,13 @@ public class enemyTest : MonoBehaviour
             {
                 obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyB, transform);
             }
-            else
+            else if(c)
             {
                 obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyC, transform);
+            }
+            else
+            {
+                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyF, transform);
             }
             obj.transform.position = Vector3.zero;
             testSpawn = false;

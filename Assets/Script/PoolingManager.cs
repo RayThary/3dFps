@@ -15,6 +15,7 @@ public class PoolingManager : MonoBehaviour
         EnemyA,
         EnemyB,
         EnemyC,
+        EnemyF,
         Missile,
         TempSkillMissle,
     }

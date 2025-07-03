@@ -37,6 +37,7 @@ public class WeaponView : MonoBehaviour
     public float WeaponLevel { get { return weaponLevel; } set { weaponLevel = value; } }
     private int weaponMaxLevel;
     private float weaponLevelUpDamage;
+    private float basicDamage;
     private float gunDamage;
     public float GunDamage { get { return gunDamage; } }
 
@@ -64,7 +65,20 @@ public class WeaponView : MonoBehaviour
             Damage = _damage;
         }
     }
+    public void Initialize(Weapon _weapon)
+    {
+        this.weapon = _weapon;
 
+        if (weaponPickup == null)
+        {
+            weaponPickup = transform.Find("Mesh Object/WeaponPickup");
+        }
+        weaponPickup.GetComponent<BoxCollider>().enabled = false;
+        gunDamage = _weapon.GetDamage;
+        basicDamage = gunDamage;
+        weaponMaxLevel = _weapon.WeaponMaxLevel;
+        weaponLevelUpDamage = _weapon.WeaponLevelUpDamage;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -105,19 +119,7 @@ public class WeaponView : MonoBehaviour
     }
 
 
-    public void Initialize(Weapon _weapon)
-    {
-        this.weapon = _weapon;
 
-        if (weaponPickup == null)
-        {
-            weaponPickup = transform.Find("Mesh Object/WeaponPickup");
-        }
-        weaponPickup.GetComponent<BoxCollider>().enabled = false;
-        gunDamage = _weapon.GetDamage;
-        weaponMaxLevel = _weapon.WeaponMaxLevel;
-        weaponLevelUpDamage = _weapon.WeaponLevelUpDamage;
-    }
 
     public bool WeaponUpgrade()
     {
@@ -125,7 +127,8 @@ public class WeaponView : MonoBehaviour
         {
             return false;
         }
-        gunDamage *= (1 + weaponLevelUpDamage);
+        gunDamage = basicDamage * Mathf.Pow(1 + weaponLevelUpDamage, WeaponLevel);
+        
         weaponLevel++;
         return true;
     }
