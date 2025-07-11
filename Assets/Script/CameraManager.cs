@@ -15,9 +15,10 @@ public class CameraManager : MonoBehaviour
 
 
 
+    
     [SerializeField] private CinemachineVirtualCamera POVCam;
-
     [SerializeField] private CinemachineVirtualCamera ChangeCam;
+    [SerializeField] private CinemachineVirtualCamera V3Cam;
 
     private CinemachineBrain mainCamera;
 
@@ -77,6 +78,25 @@ public class CameraManager : MonoBehaviour
         {
             StartCoroutine(camChange(isMelee));
         }
+    }
+
+    public void InitializeCamera(Unit _player,Transform _playerTrs)
+    {
+
+        Debug.Log(POVCam);
+        Debug.Log( ChangeCam);
+        Debug.Log(V3Cam);
+        Transform head = _player.GetUnitHead;
+        POVCam.Follow = head;
+
+        ChangeCam.Follow = _playerTrs;
+        ChangeCam.LookAt = head;
+
+        V3Cam.Follow = _playerTrs;
+        V3Cam.LookAt = head;
+
+
+
     }
 
 

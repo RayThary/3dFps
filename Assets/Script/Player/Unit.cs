@@ -35,6 +35,7 @@ public class Unit : MonoBehaviour
 
     //플레이어 오브젝트
     [SerializeField] private Transform unitHead;
+    public Transform GetUnitHead { get { return unitHead; } }
     [SerializeField] private Transform unitHandSlot;
     [SerializeField] private Transform unitMeleeSlot;
 
@@ -118,6 +119,8 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
         unitStat.setUnitStat(unitData);
         unitCurrentHp = unitStat.unitMaxHp;
         unitSpeed = unitStat.unitSpeed;
@@ -142,6 +145,17 @@ public class Unit : MonoBehaviour
         addWeapon();
 
         unitRotation.SetUnitRotation(unitHead, neck, unitStat.minPitch, unitStat.maxPitch, unitStat.maxRecoilAngle, unitStat.recoilRecoverSpeed);
+        if (GameManager.instance.GetUnit == null)
+        {
+            GameManager.instance.SetUnit = this;
+        }
+        else
+        {
+            if (GameManager.instance.GetUnit != this)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
 
@@ -268,7 +282,7 @@ public class Unit : MonoBehaviour
 
 
 
-                unitStatBasic = unitStat.Clone();
+            unitStatBasic = unitStat.Clone();
         }
 
     }

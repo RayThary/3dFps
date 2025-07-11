@@ -6646,12 +6646,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstPersonMask:
     serializedVersion: 2
-    m_Bits: 13943
+    m_Bits: 14071
   thirdPersonMask:
     serializedVersion: 2
     m_Bits: 4294967295
   POVCam: {fileID: 1897615346}
   ChangeCam: {fileID: 1584238502}
+  V3Cam: {fileID: 1232872913}
 --- !u!4 &974365193 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8729277937569101202, guid: 8bfc632848519d0489b10e0b41325fb0, type: 3}
@@ -6862,7 +6863,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 2045050757}
+  m_LookAt: {fileID: 6976007163887778063}
   m_Follow: {fileID: 5903297865283463405}
   m_Lens:
     FieldOfView: 60.000004
@@ -6891,8 +6892,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1232872912}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38709706, y: 0.045920186, z: -0.01930676, w: 0.9206924}
-  m_LocalPosition: {x: 9.120542, y: 15, z: -1.9895744}
+  m_LocalRotation: {x: 0.4405428, y: -0.000000004095819, z: 0.0000000036307461, w: 0.8977316}
+  m_LocalPosition: {x: 10, y: 15, z: -17.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11794,7 +11795,7 @@ GameObject:
   - component: {fileID: 1307145383}
   - component: {fileID: 1307145382}
   - component: {fileID: 1307145386}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12162,7 +12163,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1376675455}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d88582abd6610f40bd985c1c090fa3d, type: 3}
   m_Name: 
@@ -12811,7 +12812,7 @@ Transform:
   m_GameObject: {fileID: 1584238500}
   serializedVersion: 2
   m_LocalRotation: {x: 0.21253563, y: 3.9178086e-15, z: -1.2703741e-15, w: 0.97715336}
-  m_LocalPosition: {x: 9.120542, y: 4.47, z: 4.5904255}
+  m_LocalPosition: {x: 10, y: 4.47, z: -10.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13197,9 +13198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69fc6be4122ace4da8909b265867dc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkF: {fileID: 2076731934}
+  checkF: {fileID: 0}
   weaponParent: {fileID: 0}
   poolingRoot: {fileID: 1450849620}
+  stageChange: 0
+  stageNum: 1
 --- !u!4 &1788339592
 Transform:
   m_ObjectHideFlags: 0
@@ -13306,7 +13309,7 @@ Transform:
   m_GameObject: {fileID: 1798003088}
   serializedVersion: 2
   m_LocalRotation: {x: 0.21253566, y: 3.8223243e-15, z: -8.3137427e-16, w: 0.97715336}
-  m_LocalPosition: {x: 9.120542, y: 4.47, z: 4.5904255}
+  m_LocalPosition: {x: 10, y: 4.47, z: -10.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14864,7 +14867,7 @@ Transform:
   m_GameObject: {fileID: 5461052778827383642}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.120542, y: 0, z: 10.010426}
+  m_LocalPosition: {x: 10, y: 0, z: -5.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

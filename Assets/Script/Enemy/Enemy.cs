@@ -31,6 +31,9 @@ public class Enemy : MonoBehaviour
     private bool isDead = false;
     public bool IsDead { get { return isDead; } }
 
+    private bool isStarted = false;
+    private bool hasActivated = false;
+
     private EnemyStateMachine stateMachine;
     public EnemyStateMachine StateMachine { get { return stateMachine; } }
 
@@ -113,7 +116,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void HitEnemy(float _damage,float _criticalDamage, bool _hitDamage)
+    public void HitEnemy(float _damage, float _criticalDamage, bool _hitDamage)
     {
         if (_hitDamage)
         {
