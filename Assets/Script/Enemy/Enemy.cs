@@ -32,7 +32,6 @@ public class Enemy : MonoBehaviour
     public bool IsDead { get { return isDead; } }
 
     private bool isStarted = false;
-    private bool hasActivated = false;
 
     private EnemyStateMachine stateMachine;
     public EnemyStateMachine StateMachine { get { return stateMachine; } }
@@ -70,9 +69,6 @@ public class Enemy : MonoBehaviour
 
         stateMachine = new EnemyStateMachine();
 
-        SetupState();
-
-        stateMachine.ChangeState(enemyChaseState);
 
     }
     private void SetupState()
@@ -109,7 +105,14 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isDead)
+        if (!isStarted && GameManager.instance.IsStageStarted)
+        {
+            isStarted = true;
+            SetupState();
+            stateMachine.ChangeState(enemyChaseState);
+        }
+
+        if (!isDead && isStarted)
         {
             stateMachine.Update();
         }
@@ -131,6 +134,7 @@ public class Enemy : MonoBehaviour
             animator.SetTrigger("Death");
             box.enabled = false;
             isDead = true;
+            isStarted = false;
         }
     }
 
