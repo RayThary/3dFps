@@ -14,13 +14,14 @@ public class EnemyMeleeChaseState : IEnemyState
     private float roamRadius;
     private LayerMask obstacleMask;
     private Vector3 targetVec;
+    private Vector3 lastTargetVec;
 
     private bool wasChasing = false;
 
     public bool CanEnter => true;
 
     public EnemyMeleeChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
-        LayerMask _obstacleMask,float _roamRadius, EnemyData _enemyData)
+        LayerMask _obstacleMask, float _roamRadius, EnemyData _enemyData)
     {
         enemy = _enemy;
         enemyTrs = _enemyTrs;
@@ -37,17 +38,19 @@ public class EnemyMeleeChaseState : IEnemyState
     {
         enemy.NavMesh.speed = speed;
         enemy.NavMesh.ResetPath();
-        enemy.NavMesh.SetDestination(playerTrs.position);
+        nextPoint();
+        lastTargetVec = targetVec;
     }
 
 
     public void Update()
     {
+        enemy.testVec = targetVec;
         bool checkChase = Vector3.Distance(enemyTrs.position, playerTrs.position) < chaseDistance;
         if (checkChase)
         {
             bool isAttackCheck = chase();
-
+            targetVec = enemyTrs.position;
             if (isAttackCheck != wasChasing)
             {
                 wasChasing = isAttackCheck;
@@ -92,43 +95,59 @@ public class EnemyMeleeChaseState : IEnemyState
     private void RoamTarget()
     {
         float dis = Vector3.Distance(enemyTrs.position, targetVec);
-        if (dis < 0.1f)
+        if (dis > 1.25f)
         {
-            for (int i = 0; i < 20; i++)
-            {
-
-                //Vector3 randomOffset = Random.insideUnitSphere * roamRadius;
-                //randomOffset.y = 0;
-                //Vector3 tempPoint = enemyTrs.position + randomOffset;
-                Vector3 tempPoint = targetPoint(5);
-
-                NavMeshHit navHit;
-                if (!NavMesh.SamplePosition(tempPoint, out navHit, roamRadius, NavMesh.AllAreas))
-                {
-                    continue;
-                }
-
-                tempPoint = navHit.position;
-
-                float checkRadius = enemy.NavMesh.radius * 1.1f;
-                if (!Physics.CheckSphere(tempPoint, checkRadius, obstacleMask))
-                {
-                    continue;
-                }
-
-                NavMeshPath path = new NavMeshPath();
-                enemy.NavMesh.CalculatePath(tempPoint, path);
-                if (path.status != NavMeshPathStatus.PathComplete)
-                {
-                    continue;
-                }
-                targetVec = tempPoint;
-                enemy.NavMesh.SetDestination(targetVec);
-                break;
-            }
+            enemy.NavMesh.SetDestination(targetVec);
+            
+            return;
+        }
+        else
+        {
+            nextPoint();
         }
     }
 
+    private void nextPoint()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            if (i == 19)
+            {
+                Debug.Log("½ÇÆÐ");
+                enemy.NavMesh.SetDestination(targetVec);
+                break;
+            }
+            Vector3 tempPoint = targetPoint(5);
+
+            NavMeshHit navHit;
+            if (!NavMesh.SamplePosition(tempPoint, out navHit, roamRadius, NavMesh.AllAreas))
+            {
+                Debug.Log("1");
+                continue;
+            }
+
+            tempPoint = navHit.position;
+
+            float checkRadius = enemy.NavMesh.radius * 1.1f;
+            if (Physics.CheckSphere(tempPoint, checkRadius, obstacleMask))
+            {
+                Debug.Log("2");
+                continue;
+            }
+
+            NavMeshPath path = new NavMeshPath();
+            enemy.NavMesh.CalculatePath(tempPoint, path);
+            if (path.status != NavMeshPathStatus.PathComplete)
+            {
+                Debug.Log("3");
+                continue;
+            }
+            lastTargetVec = targetVec;
+            targetVec = tempPoint;
+            enemy.NavMesh.SetDestination(targetVec);
+            break;
+        }
+    }
     private Vector3 targetPoint(float _inner)
     {
         float inner2 = _inner * _inner;

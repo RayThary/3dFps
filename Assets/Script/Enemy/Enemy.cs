@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour
     [Tooltip("근거리만 필요함")][SerializeField] private BoxCollider unitHitBox;
     private LineRenderer lineR;
 
-
+    public Vector3 testVec;
     void Start()
     {
         animator = GetComponentInChildren<Animator>();

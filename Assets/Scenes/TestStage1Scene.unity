@@ -16160,7 +16160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7434765725150492066, guid: 8a2e649865d63ac4b8d25be530e07984, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7434765725150492066, guid: 8a2e649865d63ac4b8d25be530e07984, type: 3}
       propertyPath: m_LocalPosition.y
@@ -16168,7 +16168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7434765725150492066, guid: 8a2e649865d63ac4b8d25be530e07984, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 62
       objectReference: {fileID: 0}
     - target: {fileID: 7434765725150492066, guid: 8a2e649865d63ac4b8d25be530e07984, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16204,7 +16204,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8110579295852768534, guid: 8a2e649865d63ac4b8d25be530e07984, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17695,6 +17695,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   unitHitBox: {fileID: 0}
+  testVec: {x: 0, y: 0, z: 0}
 --- !u!1 &7722161122646360824
 GameObject:
   m_ObjectHideFlags: 0

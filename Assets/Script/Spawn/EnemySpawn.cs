@@ -77,7 +77,6 @@ public class EnemySpawn : MonoBehaviour
             GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, GameManager.instance.PoolingParents["EnemyA"]);
             obj.transform.position = Vector3.zero * -200;
             float objR = obj.GetComponent<BoxCollider>().bounds.extents.magnitude;
-            Debug.Log(objR);
             while (!spawnCheck && retry < 50)
             {
 
