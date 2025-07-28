@@ -82,10 +82,6 @@ public class CameraManager : MonoBehaviour
 
     public void InitializeCamera(Unit _player,Transform _playerTrs)
     {
-
-        Debug.Log(POVCam);
-        Debug.Log( ChangeCam);
-        Debug.Log(V3Cam);
         Transform head = _player.GetUnitHead;
         POVCam.Follow = head;
 
@@ -94,9 +90,6 @@ public class CameraManager : MonoBehaviour
 
         V3Cam.Follow = _playerTrs;
         V3Cam.LookAt = head;
-
-
-
     }
 
 

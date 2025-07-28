@@ -3,6 +3,7 @@ using System.Collections.Generic;
 //using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,6 +33,13 @@ public class GameManager : MonoBehaviour
     private bool isStageStart = false;
     public bool IsStageStarted { get { return isStageStart; } set { isStageStart = value; } }
 
+    private Image loadingBar;
+    private bool isLoading = false;
+    public bool GetisLoading { get { return isLoading; } }
+
+    private int nextStageNum = 0;
+    private int stageNum = 0;
+    public int GetStageNum { get { return stageNum; } }
     private void Awake()
     {
 
@@ -69,7 +77,8 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
+        isStageStart = false;
+        nextStageNum++;
         Initialize();
     }
 
@@ -93,16 +102,50 @@ public class GameManager : MonoBehaviour
     }
 
     public bool stageChange = false;
-    public int stageNum = 1;
+    
     // Update is called once per frame
     void Update()
     {
         if (stageChange)
         {
-            SceneManager.LoadScene(stageNum);
-            AsyncOperation op;
+            StartCoroutine(loadSceneWithLoading(nextStageNum));
             stageChange = false;
         }
+    }
+    IEnumerator loadSceneWithLoading(int _stageNum)
+    {
+        GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.LoadingCanvas, null);
+        loadingBar = obj.transform.Find("Loading/LoadingBar").GetComponent<Image>();
+        isLoading = true;
+        AsyncOperation op = SceneManager.LoadSceneAsync(_stageNum);
+        op.allowSceneActivation = false;
+        Debug.Log(op);
+
+        while (op.progress < 0.89f)
+        {
+
+            //게임자체적으로 로딩이늘어나면 op.progress로 로딩바를 바꿔줘야함
+            Debug.Log(op.progress);
+            yield return null;
+        }
+
+        float timer = 0;
+        float fakeDuration = 3;
+        float startFill = loadingBar.fillAmount == 0 ? 0 : op.progress;
+
+        while (timer < fakeDuration)
+        {
+            timer += Time.deltaTime;
+            loadingBar.fillAmount = Mathf.Lerp(startFill, 1, timer / fakeDuration);
+            yield return null;
+        }
+
+        isLoading = false;
+        stageNum++;
+        
+        loadingBar.fillAmount = 0;
+        PoolingManager.Instance.RemovePoolingObject(obj);
+        op.allowSceneActivation = true;
     }
 
 }

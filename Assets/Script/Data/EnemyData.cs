@@ -21,7 +21,8 @@ public class EnemyData : ScriptableObject
     public float Hp;
     public float Damage;
     public float Speed;
-    public float chaseStopDistance;
+    public float AttackStopRange;//공격 직전멈추는거리
+    public float chaseDistance;//추격범위
     private void OnValidate()
     {
         EnemyName = enemyType.ToString();

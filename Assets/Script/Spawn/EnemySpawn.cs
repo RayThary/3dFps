@@ -13,15 +13,20 @@ public class EnemySpawn : MonoBehaviour
 
 
     [SerializeField]//나중에 지워주고 외부에서 시작을알려줘야함
-    private bool waveStart = false;
+    private bool spawnStart = false;
+    public bool SpawnStart { set { spawnStart = value; } }
     [SerializeField] private LayerMask obstacleMask;
 
     private float inner;
     private float outer;
+    public bool ShowGizmo = false;
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, spawnRange);
+        if (ShowGizmo)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, spawnRange);
+        }
     }
     void Start()
     {
@@ -32,10 +37,10 @@ public class EnemySpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (waveStart)
+        if (spawnStart)
         {
             spawn();
-            waveStart = false;
+            spawnStart = false;
         }
     }
 
@@ -55,7 +60,7 @@ public class EnemySpawn : MonoBehaviour
 
         Vector3 offset = new Vector3(Mathf.Cos(theta) * r, 0f, Mathf.Sin(theta) * r);
 
-        // 6) 최종 소환 위치
+        //최종소환 위치
         Vector3 spawnPos = transform.position + offset;
         return spawnPos;
     }
@@ -68,7 +73,8 @@ public class EnemySpawn : MonoBehaviour
             spawnCheck = false;
 
             int retry = 0;
-            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, GameManager.instance.GetPoolinRoot);
+            //임시로 a만소환해놓음 이건나중에바꿔줄필요가있음 부모위치도 루트에서 소환될몬스터의이름을가져오고 그걸넣어주어야함
+            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, GameManager.instance.PoolingParents["EnemyA"]);
             obj.transform.position = Vector3.zero * -200;
             float objR = obj.GetComponent<BoxCollider>().bounds.extents.magnitude;
             Debug.Log(objR);
@@ -80,11 +86,17 @@ public class EnemySpawn : MonoBehaviour
                 if (!Physics.CheckSphere(spawnPos, objR, obstacleMask))
                 {
                     obj.transform.position = spawnPos;
+                    obj.GetComponent<Enemy>().SetUpStat();
                     spawnCheck = true;
                 }
 
                 retry++;
 
+            }
+            if (!spawnCheck)
+            {
+                Debug.Log("스폰실패 위치찾지못함");
+                PoolingManager.Instance.RemovePoolingObject(obj);
             }
         }
     }

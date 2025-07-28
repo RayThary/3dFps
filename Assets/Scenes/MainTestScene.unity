@@ -13201,8 +13201,10 @@ MonoBehaviour:
   checkF: {fileID: 0}
   weaponParent: {fileID: 0}
   poolingRoot: {fileID: 1450849620}
+  loadingBar: {fileID: 0}
   stageChange: 0
-  stageNum: 1
+  nextStageNum: 0
+  stageNum: 0
 --- !u!4 &1788339592
 Transform:
   m_ObjectHideFlags: 0
@@ -13451,6 +13453,9 @@ MonoBehaviour:
     count: 50
     description: 
   - poolingObject: {fileID: 4751198236314622854, guid: b9963e9fafcc187448bd6abfbee756e5, type: 3}
+    count: 50
+    description: 
+  - poolingObject: {fileID: 6180432871062195912, guid: cb60ff05870ffb24ba378531fd40956a, type: 3}
     count: 50
     description: 
 --- !u!1 &1897615345

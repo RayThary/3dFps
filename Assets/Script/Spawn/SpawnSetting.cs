@@ -11,6 +11,14 @@ public class SpawnSetting : MonoBehaviour
 
     void Start()
     {
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            EnemySpawn eSpawn = transform.GetChild(i).GetComponent<EnemySpawn>();
+            if (eSpawn != null)
+            {
+                eSpawn.SpawnStart = true;
+            }
+        }
         
     }
 

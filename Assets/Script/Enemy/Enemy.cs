@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private eEnemyType enemyType;
     [SerializeField] private EnemyData enemyData;
 
+    [SerializeField] private float roamRadius;
+    [SerializeField] private LayerMask obstacleMask;
 
     private Transform playerTrs;
 
@@ -62,26 +64,36 @@ public class Enemy : MonoBehaviour
         box = GetComponent<BoxCollider>();
         playerTrs = GameManager.instance.GetUnit.GetComponent<Transform>();
 
-        hp = enemyData.Hp;
+        SetUpStat();
+
         speed = enemyData.Speed;
-        damage = enemyData.Damage;
-        stopDistance = enemyData.chaseStopDistance;
+        stopDistance = enemyData.AttackStopRange;
 
         stateMachine = new EnemyStateMachine();
 
 
+    }
+    public void SetUpStat()
+    {
+        int stage = GameManager.instance.GetStageNum;
+        if (stage == 0) stage = 1;
+
+        float damageMultiplier = 1 + (stage - 1) * 0.4f;
+        float hpMultiplier = 1 + (stage - 1) * 0.25f;
+        damage = enemyData.Damage + damageMultiplier;
+        hp = enemyData.Hp + hpMultiplier;
     }
     private void SetupState()
     {
         switch (enemyType)
         {
             case eEnemyType.Melee:
-                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyMeleeState(this, speed);
                 return;
 
             case eEnemyType.Charger:
-                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyChargerState(this, transform, playerTrs, unitHitBox, speed);
 
                 return;
