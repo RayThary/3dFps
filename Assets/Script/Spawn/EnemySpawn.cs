@@ -7,8 +7,7 @@ public class EnemySpawn : MonoBehaviour
 {
     private float spawnCoolTime;
     [SerializeField] private float spawnRange;// 몬스터 소환범위
-    [SerializeField] //몬스터소환개수 나중에지정해줄지 따로설정필요
-    private int spawnEnemyCount;
+    private int spawnEnemyCount = 50;
     private int spawnWave;
 
 
@@ -16,8 +15,9 @@ public class EnemySpawn : MonoBehaviour
     private bool spawnStart = false;
     public bool SpawnStart { set { spawnStart = value; } }
     [SerializeField] private LayerMask obstacleMask;
-
+    [SerializeField]
     private float inner;
+    [SerializeField]
     private float outer;
     public bool ShowGizmo = false;
     void OnDrawGizmos()
@@ -28,30 +28,33 @@ public class EnemySpawn : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, spawnRange);
         }
     }
-    void Start()
+    private void Awake()
     {
         inner = transform.localScale.x / 2;
         outer = spawnRange / 2;
     }
 
+
+
     // Update is called once per frame
     void Update()
     {
-        if (spawnStart)
-        {
-            spawn();
-            spawnStart = false;
-        }
+
     }
 
     private Vector3 spawnPoint()
     {
+        if (inner == 0 || outer == 0)
+        {
+            Debug.Log("문제");
+        }
         float inner2 = inner * inner;
         float outer2 = outer * outer;
 
         float pointU = Random.value;
 
-        float r2 = pointU * (outer2 + inner2) + inner2;
+        //float r2 = pointU * (outer2 + inner2) + inner2;
+        float r2 = inner2 + pointU * (outer2 - inner2);
 
         float r = Mathf.Sqrt(r2);
 
@@ -65,38 +68,45 @@ public class EnemySpawn : MonoBehaviour
         return spawnPos;
     }
 
-    private void spawn()
+    public void spawn(PoolingManager.ePoolingObject _Enemy)
     {
+
         bool spawnCheck = false;
-        for (int i = 0; i < spawnEnemyCount; i++)
+
+        int retry = 0;
+        string enemyName = _Enemy.ToString();
+        GameObject obj = PoolingManager.Instance.CreateObject(_Enemy, GameManager.instance.PoolingParents[enemyName]);
+        obj.transform.position = Vector3.zero * -200;
+        float objR = obj.GetComponent<BoxCollider>().bounds.extents.magnitude;
+        objR += 1;
+
+        Vector3 spawnPos;
+        while (!spawnCheck && retry < 50)
         {
-            spawnCheck = false;
 
-            int retry = 0;
-            //임시로 a만소환해놓음 이건나중에바꿔줄필요가있음 부모위치도 루트에서 소환될몬스터의이름을가져오고 그걸넣어주어야함
-            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, GameManager.instance.PoolingParents["EnemyA"]);
-            obj.transform.position = Vector3.zero * -200;
-            float objR = obj.GetComponent<BoxCollider>().bounds.extents.magnitude;
-            while (!spawnCheck && retry < 50)
+            spawnPos = spawnPoint();
+            if (!Physics.CheckSphere(spawnPos, objR, obstacleMask))
             {
-
-                Vector3 spawnPos;
-                spawnPos = spawnPoint();
-                if (!Physics.CheckSphere(spawnPos, objR, obstacleMask))
-                {
-                    obj.transform.position = spawnPos;
-                    obj.GetComponent<Enemy>().SetUpStat();
-                    spawnCheck = true;
-                }
-
-                retry++;
-
+                obj.transform.position = spawnPos;
+                obj.GetComponent<Enemy>().SetUpStat();
+                spawnCheck = true;
+                break;
             }
-            if (!spawnCheck)
+
+            retry++;
+
+
+            if (retry == 50 || transform.position == spawnPos)
             {
-                Debug.Log("스폰실패 위치찾지못함");
-                PoolingManager.Instance.RemovePoolingObject(obj);
+                Debug.Log($"타워 {transform.name}실패:{spawnPos}");
             }
         }
+
+        if (!spawnCheck)
+        {
+            Debug.Log("스폰실패 위치찾지못함");
+            PoolingManager.Instance.RemovePoolingObject(obj);
+        }
+
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 //using UnityEditor.SearchService;
@@ -53,9 +54,9 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
 
-
         unit = FindObjectOfType<Unit>();
         cameraManager = GetComponentInChildren<CameraManager>();
+        UnityEngine.Random.InitState(Environment.TickCount);
 
     }
     private void OnEnable()

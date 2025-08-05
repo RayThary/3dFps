@@ -56,7 +56,6 @@ public class Enemy : MonoBehaviour
     [Tooltip("근거리만 필요함")][SerializeField] private BoxCollider unitHitBox;
     private LineRenderer lineR;
 
-    public Vector3 testVec;
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -99,14 +98,14 @@ public class Enemy : MonoBehaviour
                 return;
 
             case eEnemyType.Ranger:
-                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyRangerState(this);
                 return;
             case eEnemyType.Sniper:
                 lineR = GetComponentInChildren<LineRenderer>();
                 lineR.enabled = false;
 
-                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, speed, stopDistance);
+                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage);
                 return;
 

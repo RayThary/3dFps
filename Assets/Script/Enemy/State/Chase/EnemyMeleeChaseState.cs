@@ -45,7 +45,6 @@ public class EnemyMeleeChaseState : IEnemyState
 
     public void Update()
     {
-        enemy.testVec = targetVec;
         bool checkChase = Vector3.Distance(enemyTrs.position, playerTrs.position) < chaseDistance;
         if (checkChase)
         {
@@ -113,7 +112,7 @@ public class EnemyMeleeChaseState : IEnemyState
         {
             if (i == 19)
             {
-                Debug.Log("실패");
+                Debug.Log("추격실패");
                 enemy.NavMesh.SetDestination(targetVec);
                 break;
             }
@@ -122,7 +121,6 @@ public class EnemyMeleeChaseState : IEnemyState
             NavMeshHit navHit;
             if (!NavMesh.SamplePosition(tempPoint, out navHit, roamRadius, NavMesh.AllAreas))
             {
-                Debug.Log("1");
                 continue;
             }
 
@@ -131,7 +129,6 @@ public class EnemyMeleeChaseState : IEnemyState
             float checkRadius = enemy.NavMesh.radius * 1.1f;
             if (Physics.CheckSphere(tempPoint, checkRadius, obstacleMask))
             {
-                Debug.Log("2");
                 continue;
             }
 
@@ -139,7 +136,6 @@ public class EnemyMeleeChaseState : IEnemyState
             enemy.NavMesh.CalculatePath(tempPoint, path);
             if (path.status != NavMeshPathStatus.PathComplete)
             {
-                Debug.Log("3");
                 continue;
             }
             lastTargetVec = targetVec;

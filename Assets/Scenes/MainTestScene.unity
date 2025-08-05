@@ -13201,10 +13201,7 @@ MonoBehaviour:
   checkF: {fileID: 0}
   weaponParent: {fileID: 0}
   poolingRoot: {fileID: 1450849620}
-  loadingBar: {fileID: 0}
-  stageChange: 0
-  nextStageNum: 0
-  stageNum: 0
+  stageChange: 1
 --- !u!4 &1788339592
 Transform:
   m_ObjectHideFlags: 0

@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 95218482}
   - component: {fileID: 95218486}
   m_Layer: 7
-  m_Name: SpawnTower (3)
+  m_Name: SpawnTower3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -245,12 +245,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3050f58e590edf44fa537f57763d7c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRange: 15
-  spawnEnemyCount: 2
+  spawnRange: 20
   spawnStart: 0
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 32896
+    m_Bits: 33408
+  inner: 0
+  outer: 0
   ShowGizmo: 0
 --- !u!136 &95218483
 CapsuleCollider:
@@ -6322,8 +6323,8 @@ GameObject:
   - component: {fileID: 679169692}
   - component: {fileID: 679169691}
   - component: {fileID: 679169690}
-  - component: {fileID: 679169689}
   - component: {fileID: 679169688}
+  - component: {fileID: 679169689}
   - component: {fileID: 679169693}
   m_Layer: 7
   m_Name: SpawnTower
@@ -6344,13 +6345,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3050f58e590edf44fa537f57763d7c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRange: 15
-  spawnEnemyCount: 2
+  spawnRange: 20
   spawnStart: 0
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 32896
-  ShowGizmo: 0
+    m_Bits: 33408
+  inner: 0
+  outer: 0
+  ShowGizmo: 1
 --- !u!136 &679169689
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6845,10 +6847,10 @@ GameObject:
   - component: {fileID: 870326442}
   - component: {fileID: 870326443}
   - component: {fileID: 870326441}
-  - component: {fileID: 870326440}
   - component: {fileID: 870326439}
+  - component: {fileID: 870326440}
   m_Layer: 7
-  m_Name: SpawnTower (4)
+  m_Name: SpawnTower1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6881,12 +6883,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3050f58e590edf44fa537f57763d7c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRange: 15
-  spawnEnemyCount: 2
+  spawnRange: 20
   spawnStart: 0
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 32896
+    m_Bits: 33408
+  inner: 0
+  outer: 0
   ShowGizmo: 0
 --- !u!136 &870326440
 CapsuleCollider:
@@ -14497,7 +14500,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnTower: []
+  spawnData: {fileID: 11400000, guid: d0bc9aa9c2f274a418339dc2b1f98334, type: 2}
   spawnStart: 0
+  testStageNum: 3
 --- !u!1 &1802250850
 GameObject:
   m_ObjectHideFlags: 0
@@ -14513,7 +14518,7 @@ GameObject:
   - component: {fileID: 1802250852}
   - component: {fileID: 1802250856}
   m_Layer: 7
-  m_Name: SpawnTower (1)
+  m_Name: SpawnTower2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14546,12 +14551,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3050f58e590edf44fa537f57763d7c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRange: 15
-  spawnEnemyCount: 2
+  spawnRange: 20
   spawnStart: 0
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 32896
+    m_Bits: 33408
+  inner: 0
+  outer: 0
   ShowGizmo: 0
 --- !u!136 &1802250853
 CapsuleCollider:
@@ -15124,7 +15130,7 @@ GameObject:
   - component: {fileID: 1921058615}
   - component: {fileID: 1921058619}
   m_Layer: 7
-  m_Name: SpawnTower (5)
+  m_Name: SpawnTower5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15157,12 +15163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3050f58e590edf44fa537f57763d7c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRange: 15
-  spawnEnemyCount: 2
+  spawnRange: 20
   spawnStart: 0
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 32896
+    m_Bits: 33408
+  inner: 0
+  outer: 0
   ShowGizmo: 0
 --- !u!136 &1921058616
 CapsuleCollider:
@@ -15268,7 +15275,7 @@ GameObject:
   - component: {fileID: 1937802477}
   - component: {fileID: 1937802481}
   m_Layer: 7
-  m_Name: SpawnTower (2)
+  m_Name: SpawnTower4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15301,12 +15308,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3050f58e590edf44fa537f57763d7c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRange: 15
-  spawnEnemyCount: 2
+  spawnRange: 20
   spawnStart: 0
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 32896
+    m_Bits: 33408
+  inner: 0
+  outer: 0
   ShowGizmo: 0
 --- !u!136 &1937802478
 CapsuleCollider:
@@ -16204,7 +16212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8110579295852768534, guid: 8a2e649865d63ac4b8d25be530e07984, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17695,7 +17703,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   unitHitBox: {fileID: 0}
-  testVec: {x: 0, y: 0, z: 0}
 --- !u!1 &7722161122646360824
 GameObject:
   m_ObjectHideFlags: 0

@@ -397,6 +397,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 3
   enemyData: {fileID: 11400000, guid: 2b1deb64dd8ab5b4690375f280092cd5, type: 2}
+  roamRadius: 5
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
   unitHitBox: {fileID: 0}
 --- !u!195 &4906620408175711579
 NavMeshAgent:
