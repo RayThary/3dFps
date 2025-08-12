@@ -16,8 +16,9 @@ public class WeaponView : MonoBehaviour
         Melee,
     }
     [SerializeField] private WeaponCategory weaponCategory;
-    //무기에넣어둘것
+    
     private Animator animator;
+    public Animator Anim { get { return animator; } }
     private Weapon weapon;
     private BoxCollider box;
 
@@ -27,8 +28,9 @@ public class WeaponView : MonoBehaviour
 
     private Transform muzzlePoint;
     public Transform GetMuzzlePoint { get { return muzzlePoint; } }
-
-    private Transform meshObject;
+    
+    //어웨이크끼리의 충돌경우방지
+    [SerializeField]private Transform meshObject;
     public Transform MeshObject { get { return meshObject; } }
 
     public event Action<List<HitInfo>> OnMeleeHit;
@@ -78,6 +80,10 @@ public class WeaponView : MonoBehaviour
         basicDamage = gunDamage;
         weaponMaxLevel = _weapon.WeaponMaxLevel;
         weaponLevelUpDamage = _weapon.WeaponLevelUpDamage;
+        if (animator != null)
+            animator.enabled = true;
+
+        transform.position = Vector3.zero;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -102,7 +108,9 @@ public class WeaponView : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        meshObject = transform.GetChild(0);
+        if (animator != null)
+            animator.enabled = false;
+
         muzzlePoint = meshObject.Find("MuzzlePoint");
 
         if (weaponPickup == null)
@@ -118,8 +126,13 @@ public class WeaponView : MonoBehaviour
 
     }
 
+    public void WeaponPicupLayer(bool _value)
+    {
 
-
+        meshObject.gameObject.layer = _value ?
+            LayerMask.NameToLayer("FirstPersonWeapon") : LayerMask.NameToLayer("Weapon");
+      
+    }
 
     public bool WeaponUpgrade()
     {
@@ -128,7 +141,7 @@ public class WeaponView : MonoBehaviour
             return false;
         }
         gunDamage = basicDamage * Mathf.Pow(1 + weaponLevelUpDamage, WeaponLevel);
-        
+
         weaponLevel++;
         return true;
     }
@@ -162,6 +175,7 @@ public class WeaponView : MonoBehaviour
             Debug.Log("카테고리 설정잘못");
         }
     }
+
 
     public void MeleeEnd()
     {

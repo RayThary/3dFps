@@ -153,6 +153,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponType: 2
   weaponCategory: 1
+  animator: {fileID: 0}
+  meshObject: {fileID: 3814535712929847867}
+  weaponLevel: 1
 --- !u!1 &6958928671521601921
 GameObject:
   m_ObjectHideFlags: 0

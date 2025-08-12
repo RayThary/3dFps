@@ -44,8 +44,9 @@ public class UnitWeaponChange
         this.unit = _unit;
         this.weaponSlot = _weaponSlot;
         this.gunSlot1Obj = _gunSlot1Obj;
-        this.gunSlot2Obj = _gunSlot2Obj;
         this.meleeSlot1Obj = _meleeSlot1Obj;
+
+        this.gunSlot2Obj = _gunSlot2Obj;
         this.meleeSlot2Obj = _meleeSlot2Obj;
 
         currentSlot = _defaultSlot;
@@ -76,6 +77,7 @@ public class UnitWeaponChange
         var view1 = weapon1Obj.GetComponent<WeaponView>();
         weaponViewSlot[1] = view1;
         view1.Initialize(weapon1);
+        view1.WeaponPicupLayer(true);
         view1.WeaponPickup.GetComponent<BoxCollider>().enabled = false;
         view1.OnMeleeHit += unitAttack.HandleMeleeHits;
 
@@ -84,6 +86,7 @@ public class UnitWeaponChange
         var view2 = weapon2Obj.GetComponent<WeaponView>();
         weaponViewSlot[2] = view2;
         view2.Initialize(weapon2);
+        view2.WeaponPicupLayer(true);
         view2.WeaponPickup.GetComponent<BoxCollider>().enabled = false;
         view2.OnMeleeHit += unitAttack.HandleMeleeHits;
     }
@@ -150,6 +153,8 @@ public class UnitWeaponChange
         {
             nowView.transform.SetParent(GameManager.instance.GetWeaponParent, true);
             nowView.WeaponPickup.GetComponent<BoxCollider>().enabled = true;
+            nowView.WeaponPicupLayer(false);
+            nowView.Anim.enabled = false;
             nowView.OnMeleeHit -= unitAttack.HandleMeleeHits;
         }
 
@@ -169,10 +174,14 @@ public class UnitWeaponChange
         }
 
         _pickupWeaponView.transform.SetParent(parentSlot.transform, false);
+
         _pickupWeaponView.Initialize(newWeapon);
+        _pickupWeaponView.WeaponPicupLayer(true);
 
         _pickupWeaponView.MeshObject.localPosition = Vector3.zero;
         _pickupWeaponView.transform.localRotation = Quaternion.Euler(weaponEuler);
+
+
 
         weaponViewSlot[currentSlot] = _pickupWeaponView;
 
@@ -183,6 +192,7 @@ public class UnitWeaponChange
 
         CameraManager camMger = GameManager.instance.GetCameraManager;
         camMger.weaponSwitched(weaponSlot[currentSlot]);
+        Debug.Log(_pickupWeaponView.gameObject.transform.position);
     }
 
     public void WeaponChangeCool()
