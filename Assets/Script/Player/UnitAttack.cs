@@ -44,7 +44,7 @@ public class UnitAttack : MonoBehaviour
         criticalChance = _criticalChance;
         criticalDamage = _criticalDamage;
     }
-  
+
     //근접공격부분 이렇게 모션이긴공격은 모션끝에 자동장전을넣어놓을것
     public void Attack(Weapon _weapon, WeaponView _weaponView, Animator _anim)
     {
@@ -137,7 +137,7 @@ public class UnitAttack : MonoBehaviour
         unitRot.ResetMouseRecoil();
     }
 
-   
+
 
     private bool forceCriticalCheck(RaycastHit _hit)
     {
@@ -211,6 +211,14 @@ public class UnitAttack : MonoBehaviour
         forceCriticalUntilTime = Time.time + _criticalDuration;
     }
 
+    private Vector3 bulletSpread(Ray _ray, float _maxAngle)
+    {
+        float angle = Random.Range(0, _maxAngle);
+        float azimuth = Random.Range(0f, 360f);
+        Vector3 dir = Quaternion.AngleAxis(angle, Random.insideUnitSphere) * _ray.direction;
+
+        return dir;
+    }
     private IEnumerator gunHit(float _hitDealyTime, float _damage)
     {
 
@@ -219,9 +227,11 @@ public class UnitAttack : MonoBehaviour
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 100f, Color.red, 0.1f);
 
         Ray ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 100, hitRay))
+        RaycastHit hit;
+        Vector3 dir = bulletSpread(ray, 3);
+        //if (Physics.Raycast(ray, out hit, 100, hitRay))
+        if (Physics.Raycast(ray.origin, dir, out hit, 100f, hitRay))
         {
             Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
 

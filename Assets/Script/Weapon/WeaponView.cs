@@ -82,8 +82,7 @@ public class WeaponView : MonoBehaviour
         weaponLevelUpDamage = _weapon.WeaponLevelUpDamage;
         if (animator != null)
             animator.enabled = true;
-
-        transform.position = Vector3.zero;
+        transform.localPosition = Vector3.zero;
     }
 
     private void OnTriggerEnter(Collider other)
