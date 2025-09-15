@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    public enum eEnemyType
+    public enum eEnemyCategory
     {
         Melee,
         Charger,
@@ -14,7 +14,9 @@ public class Enemy : MonoBehaviour
         Sniper,
         Boss,
     }
-    [SerializeField] private eEnemyType enemyType;
+    [SerializeField] private eEnemyCategory enemyCategory;
+    public eEnemyCategory Type { get { return enemyCategory; } set { enemyCategory = value; } }
+
     [SerializeField] private EnemyData enemyData;
 
     [SerializeField] private float roamRadius;
@@ -56,6 +58,20 @@ public class Enemy : MonoBehaviour
     [Tooltip("근거리만 필요함")][SerializeField] private BoxCollider unitHitBox;
     private LineRenderer lineR;
 
+    [HideInInspector][SerializeField] private Transform missilePort1;
+    public Transform MissilePort1 { get { return missilePort1; } set { missilePort1 = value; } }
+    [HideInInspector][SerializeField] private Transform missilePort2;
+    public Transform MissilePort2 { get { return missilePort2; } set { missilePort2 = value; } }
+
+
+    private void OnEnable()
+    {
+        if (enemyCategory == eEnemyCategory.Boss)
+        {
+            EnemyBossAttack bossAttack = GetComponentInChildren<EnemyBossAttack>();
+            bossAttack.SetUp(this, missilePort1, missilePort2);
+        }
+    }
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -84,29 +100,32 @@ public class Enemy : MonoBehaviour
     }
     private void SetupState()
     {
-        switch (enemyType)
+        switch (enemyCategory)
         {
-            case eEnemyType.Melee:
+            case eEnemyCategory.Melee:
                 enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyMeleeState(this, speed);
                 return;
 
-            case eEnemyType.Charger:
+            case eEnemyCategory.Charger:
                 enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyChargerState(this, transform, playerTrs, unitHitBox, speed);
 
                 return;
 
-            case eEnemyType.Ranger:
+            case eEnemyCategory.Ranger:
                 enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyRangerState(this);
                 return;
-            case eEnemyType.Sniper:
+            case eEnemyCategory.Sniper:
                 lineR = GetComponentInChildren<LineRenderer>();
                 lineR.enabled = false;
 
                 enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage);
+                return;
+            case eEnemyCategory.Boss:
+                enemyChaseState = new EnemyBossState(this, missilePort1, missilePort2);
                 return;
 
         }
@@ -171,7 +190,7 @@ public class Enemy : MonoBehaviour
         GameObject obj = PoolingManager.Instance.CreateObject(_poolingObject, GameManager.instance.PoolingParents[_poolingObject.ToString()]);
         obj.transform.localRotation = transform.rotation;
         obj.transform.position = _RangerTrs.position;
-        obj.GetComponent<EnemyMissile>().SetEnemy(this);
+        obj.GetComponent<EnemyMissile>().SetDamage(damage);
     }
 
     public void EnemyRangerAttackEnd()
@@ -189,6 +208,8 @@ public class Enemy : MonoBehaviour
     }
 
 
+
+
     public void EnemyDeath()
     {
         animator.SetTrigger("Reset");
@@ -202,4 +223,5 @@ public class Enemy : MonoBehaviour
         if (unitHitBox != null) unitHitBox.enabled = false;
         PoolingManager.Instance.RemovePoolingObject(gameObject);
     }
+
 }

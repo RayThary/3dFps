@@ -23,6 +23,8 @@ public class Unit : MonoBehaviour
     public UnitWeaponChange GetUnitWeaponChange { get { return unitWeaponChange; } }
 
     public Weapon GetWeapon { get { return weapon; } }
+    private UnitZoom unitZoom;
+
 
     //대시
     private bool isDodge = false;
@@ -45,6 +47,8 @@ public class Unit : MonoBehaviour
     private Transform unitSlot1;
     private Transform unitSlot2;
     private Dictionary<int, Weapon> weaponSlot = new Dictionary<int, Weapon>();
+
+    private bool zoomCheck = false;
 
 
     //유닛 설정 
@@ -117,6 +121,8 @@ public class Unit : MonoBehaviour
     private Animator anim;
     private Rigidbody rigid;
 
+    [SerializeField] private CinemachineVirtualCamera povCamera;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -141,8 +147,9 @@ public class Unit : MonoBehaviour
         unitAttack = GetComponent<UnitAttack>();
         unitAttack.SetUnitAttack(unitRotation, unitStat.criticalChance, unitStat.criticalDamage);
 
-
         addWeapon();
+        unitZoom = new UnitZoom();
+        unitZoom.SetUp(playerInput, povCamera);
 
         unitRotation.SetUnitRotation(unitHead, neck, unitStat.minPitch, unitStat.maxPitch, unitStat.maxRecoilAngle, unitStat.recoilRecoverSpeed);
         if (GameManager.instance.GetUnit == null)
@@ -180,7 +187,8 @@ public class Unit : MonoBehaviour
         playerInput.ReadInput();
         unitMovement.UnitMove(unitSpeed, isDodge, dodgeVec);
         unitMovement.jump(unitStat.unitJumpPower, playerInput);
-        unitRotation.unitMouseLook(transform, playerInput.GetMouseX, playerInput.GetMouseY, unitStat.sensitivity);
+        unitRotation.unitMouseLook(transform, playerInput.GetAxis[InputAction.MouseX],
+            playerInput.GetAxis[InputAction.MouseY], unitStat.sensitivity);
         unitDodge.dodge(playerInput, this, unitMovement, unitSpeed, unitMovement.GetMoveVec);
         unitWeaponChange.WeaponChangeCheck(playerInput);
         unitWeaponChange.WeaponChangeCool();
@@ -188,6 +196,17 @@ public class Unit : MonoBehaviour
         weaponChange();
         changeUnitStat();
 
+        //나중에모아줄것
+        if (playerInput.ButtonDown[InputAction.Zoom])
+        {
+            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);
+            zoomCheck = true;
+        }
+        if (playerInput.ButtonUp[InputAction.Zoom])
+        {
+            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, false);
+            zoomCheck = false;
+        }
         //테스트
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -219,13 +238,13 @@ public class Unit : MonoBehaviour
     }
 
 
-
     private void attack()
     {
         if (weapon.IsMelee)
         {
-            if (playerInput.GetFireDown)
+            if (playerInput.ButtonDown[InputAction.Fire])
             {
+
                 unitAttack.Attack(weapon, unitWeaponChange.GetCurrentWeaponview(), anim);
             }
         }
@@ -233,14 +252,14 @@ public class Unit : MonoBehaviour
         {
             if (!weapon.Automatic)
             {
-                if (playerInput.GetFireDown)
+                if (playerInput.ButtonDown[InputAction.Fire])
                 {
-                    unitAttack.Attack(weapon, unitWeaponChange.GetCurrentWeaponview());
+                    unitAttack.Attack(weapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
                 }
             }
             else
             {
-                if (playerInput.GetFireHold)
+                if (playerInput.ButtonHold[InputAction.Fire])
                 {
                     unitAttack.Attack(weapon, playerInput, unitWeaponChange.GetCurrentWeaponview());
                 }
@@ -251,12 +270,12 @@ public class Unit : MonoBehaviour
 
     private void weaponChange()
     {
-        if (playerInput.GetWeapon1)
+        if (playerInput.ButtonDown[InputAction.Weapon1])
         {
             unitHandMotion.handMotion(unitWeaponChange, 1);
 
         }
-        else if (playerInput.GetWeapon2)
+        else if (playerInput.ButtonDown[InputAction.Weapon2])
         {
             unitHandMotion.handMotion(unitWeaponChange, 2);
         }

@@ -8,6 +8,7 @@ public enum EnemyType
     EnemyB,
     EnemyC,
     EnemyF,
+    EnemyBoss,
 }
 
 [CreateAssetMenu(menuName = "Game/EnemyData", fileName = "NewEnemyData")]

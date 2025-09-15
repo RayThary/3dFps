@@ -460,14 +460,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c62467647f24a54dbeaee0cfdf3e44a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 1
+  enemyCategory: 1
   enemyData: {fileID: 11400000, guid: a18022c24536e69489677540003a2567, type: 2}
   roamRadius: 5
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   unitHitBox: {fileID: 442048744210062834}
-  testVec: {x: 0, y: 0, z: 0}
+  missilePort1: {fileID: 0}
+  missilePort2: {fileID: 0}
 --- !u!195 &7996336368760384727
 NavMeshAgent:
   m_ObjectHideFlags: 0

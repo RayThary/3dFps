@@ -1,67 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using static UnityEditor.Searcher.SearcherWindow.Alignment;
+
+public enum InputAction
+{
+    Horizontal,
+    Vertical,
+    MouseX,
+    MouseY,
+    LeftShift,
+    Jump,
+    Fire,
+    Reload,
+    Zoom,
+    Weapon1,
+    Weapon2,
+    CursorToggle,
+    FCheck,
+}
 
 public class PlayerInput
 {
+    private Dictionary<InputAction, float> axisValues = new();
+    public Dictionary<InputAction, float> GetAxis { get { return axisValues; } }
 
-    // 이동 관련
-    private float horizontal;
-    public float GetHorizontal { get { return horizontal; } }
+    private Dictionary<InputAction, bool> buttonDown = new();
+    public Dictionary<InputAction, bool> ButtonDown { get { return buttonDown; } }
 
-    private float vertical;
-    public float GetVertical { get { return vertical; } }
+    private Dictionary<InputAction, bool> buttonHold = new();
+    public Dictionary<InputAction, bool> ButtonHold { get { return buttonHold; } }
 
-    // 점프
-    private bool jumpCheck;
-    public bool JumpCheck { get { return jumpCheck; } set { jumpCheck = value; } }
-
-    // 마우스 관련
-    private float mouseX;
-    public float GetMouseX { get { return mouseX; } }
-
-    private float mouseY;
-    public float GetMouseY { get { return mouseY; } }
-
-    // 공격 관련
-    private bool fireDown;
-    public bool GetFireDown { get { return fireDown; } }
-
-    private bool fireHold;
-    public bool GetFireHold { get { return fireHold; } }
-
-    private bool leftShift;
-    public bool GetLeftShift { get { return leftShift; } }
-
-    //무기 관련
-    private bool weapon1;
-    public bool GetWeapon1 { get { return weapon1; } }
-
-    private bool weapon2;
-    public bool GetWeapon2 { get { return weapon2; } }
-
-    private bool fCheck;
-    public bool FCheck { get { return fCheck; } }
+    private Dictionary<InputAction, bool> buttonUp = new();
+    public Dictionary<InputAction, bool> ButtonUp { get { return buttonUp; } }
 
     public void ReadInput()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
-        mouseX = Input.GetAxis("Mouse X");
-        mouseY = Input.GetAxis("Mouse Y");
+        axisValues[InputAction.Horizontal] = Input.GetAxisRaw("Horizontal");
+        axisValues[InputAction.Vertical] = Input.GetAxisRaw("Vertical");
+        axisValues[InputAction.MouseX] = Input.GetAxis("Mouse X");
+        axisValues[InputAction.MouseY] = Input.GetAxis("Mouse Y");
 
-        leftShift = Input.GetButtonDown("LeftShift");
-        jumpCheck = Input.GetButtonDown("Jump");
+        buttonDown[InputAction.LeftShift] = Input.GetButtonDown("LeftShift");
+        buttonDown[InputAction.Jump] = Input.GetButtonDown("Jump");
 
-        fireDown = Input.GetMouseButtonDown(0);
-        fireHold = Input.GetMouseButton(0);
+        buttonDown[InputAction.Fire] = Input.GetMouseButtonDown(0);
+        buttonHold[InputAction.Fire] = Input.GetMouseButton(0);
 
-        weapon1 = Input.GetKeyDown(KeyCode.Alpha1);
-        weapon2 = Input.GetKeyDown(KeyCode.Alpha2);
-        fCheck = Input.GetKeyDown(KeyCode.F);
+        buttonDown[InputAction.Weapon1] = Input.GetKeyDown(KeyCode.Alpha1);
+        buttonDown[InputAction.Weapon2] = Input.GetKeyDown(KeyCode.Alpha2);
+        buttonDown[InputAction.FCheck] = Input.GetKeyDown(KeyCode.F);
+
+        buttonDown[InputAction.Reload] = Input.GetKeyDown(KeyCode.R);
+
+        buttonDown[InputAction.Zoom] = Input.GetMouseButtonDown(1);
+        buttonUp[InputAction.Zoom] = Input.GetMouseButtonUp(1);
     }
-
+    public PlayerInput()
+    {
+        foreach (InputAction action in System.Enum.GetValues(typeof(InputAction)))
+        {
+            axisValues[action] = 0f;
+            buttonDown[action] = false;
+            buttonHold[action] = false;
+            buttonUp[action] = false;
+        }
+    }
 
 
 }

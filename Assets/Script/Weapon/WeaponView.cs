@@ -42,7 +42,7 @@ public class WeaponView : MonoBehaviour
     private float basicDamage;
     private float gunDamage;
     public float GunDamage { get { return gunDamage; } }
-
+    
     private LayerMask headMask;
     private List<HitInfo> hitList = new List<HitInfo>();
     private float meleeDamage;
@@ -107,9 +107,8 @@ public class WeaponView : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        if (animator != null)
-            animator.enabled = false;
-
+        //if (animator != null)
+        //    animator.enabled = false; 이게필요하다면조건을 초기화부분에서 true를넣어주던가 조건이필요함
         muzzlePoint = meshObject.Find("MuzzlePoint");
 
         if (weaponPickup == null)
@@ -124,7 +123,7 @@ public class WeaponView : MonoBehaviour
         }
 
     }
-
+    
     public void WeaponPicupLayer(bool _value)
     {
 

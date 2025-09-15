@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class Hammer : Weapon
             return false;
         }
     }
-
+    public override void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom)
+    {
+    }
 
 }

@@ -19,9 +19,9 @@ public class GameManager : MonoBehaviour
     public CameraManager GetCameraManager { get { return cameraManager; } }
 
     //일단 체크f부분만 리턴나중에 많이쓸경우에 캔버스로두고 따로자식으로 개개인별로찾아주는게좋을거같음
-    [SerializeField] private GameObject checkF;
+    private GameObject checkF;
     public GameObject CheckF { get { return checkF; } }
-    [SerializeField] private Transform weaponParent;
+    private Transform weaponParent;
 
     public Transform GetWeaponParent { get { return weaponParent; } }
 
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Transform poolingRoot;
     public Transform GetPoolinRoot { get { return poolingRoot; } }
-
+    [Tooltip("테스트용 꼭지워줄것")][SerializeField]//테스트용
     private bool isStageStart = false;
     public bool IsStageStarted { get { return isStageStart; } set { isStageStart = value; } }
 
@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
     private int nextStageNum = 0;
     private int stageNum = 0;
     public int GetStageNum { get { return stageNum; } }
+
+    [SerializeField] private GameObject zoomScope;
+    public GameObject ZoomScope { get { return zoomScope; } }
     private void Awake()
     {
 
@@ -92,6 +95,11 @@ public class GameManager : MonoBehaviour
             checkF = canvas.transform.Find("PlayerUI/CheckF").gameObject;
         }
 
+        if (zoomScope == null)
+        {
+             zoomScope = canvas.transform.Find("PlayerUI/ZoomScope").gameObject;
+        }
+
         //카메라
         if (unit != null && cameraManager != null)
             cameraManager.InitializeCamera(unit, unit.transform);
@@ -103,7 +111,7 @@ public class GameManager : MonoBehaviour
     }
 
     public bool stageChange = false;
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -143,7 +151,7 @@ public class GameManager : MonoBehaviour
 
         isLoading = false;
         stageNum++;
-        
+
         loadingBar.fillAmount = 0;
         PoolingManager.Instance.RemovePoolingObject(obj);
         op.allowSceneActivation = true;

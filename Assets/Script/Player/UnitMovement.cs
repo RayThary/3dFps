@@ -30,7 +30,8 @@ public class UnitMovement
 
     public void UnitMove(float _speed,bool _isDodge,Vector3 _dodgeVec)
     {
-        moveVec = (unitTransform.right * input.GetHorizontal) + (unitTransform.forward * input.GetVertical);
+        moveVec = (unitTransform.right * input.GetAxis[InputAction.Horizontal]) + 
+            (unitTransform.forward * input.GetAxis[InputAction.Vertical]);
 
         if (_isDodge) moveVec = _dodgeVec;
 
@@ -42,18 +43,18 @@ public class UnitMovement
     public void jump(float _jumpPower,PlayerInput _playerInput)
     {
         isGround = Physics.Raycast(unitTransform.position, Vector3.down, 0.5f, LayerMask.GetMask("Ground"));
-        if (_playerInput.JumpCheck && isGround)
+        if (_playerInput.ButtonDown[InputAction.Jump] && isGround)
         {
             anim.SetBool("isJump", true);
             anim.SetTrigger("Jump");
             rigid.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
-            _playerInput.JumpCheck = false;
+            _playerInput.ButtonDown[InputAction.Jump] = false;
         }
     }
 
     public bool dodge()
     {
-        if (input.GetLeftShift)
+        if (input.ButtonDown[InputAction.LeftShift])
         {
             return true;
         }

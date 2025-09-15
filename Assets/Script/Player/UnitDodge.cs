@@ -12,7 +12,7 @@ public class UnitDodge : MonoBehaviour
 
     public void dodge(PlayerInput _input, Unit _unit, UnitMovement _unitMovement, float _speed, Vector3 _moveVec)
     {
-        if (_input.GetLeftShift && !dodogeStart && _unitMovement.GetMoveVec != Vector3.zero)
+        if (_input.ButtonDown[InputAction.LeftShift] && !dodogeStart && _unitMovement.GetMoveVec != Vector3.zero)
         {
             dodogeStart = true;
             _unit.IsDodge = true;

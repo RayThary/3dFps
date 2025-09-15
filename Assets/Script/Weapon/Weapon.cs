@@ -1,9 +1,11 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Weapon
 {
+    public string GetName { get { return weaponName; } }
     protected PoolingManager.ePoolingObject poolingMuzzle;
     protected Bullet.BulletType bulletType;
 
@@ -117,6 +119,8 @@ public abstract class Weapon
     {
         damage = damage + (_weaponLevel * 5);
     }
+
+    public abstract void Zoomable(CinemachineVirtualCamera _vCamera,bool _zoom);
 
     //public (int maxLevel,float ) SetWeaponUpgrade()
     //{

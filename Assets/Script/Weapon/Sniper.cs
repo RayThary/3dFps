@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,20 @@ public class Sniper : Weapon
         else
         {
             return false;
+        }
+    }
+
+    public override void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom)
+    {
+        if (_zoom)
+        {
+            _vCamera.m_Lens.FieldOfView = 30;
+            GameManager.instance.ZoomScope.SetActive(true);
+        }
+        else
+        {
+            _vCamera.m_Lens.FieldOfView = 60;
+            GameManager.instance.ZoomScope.SetActive(false);
         }
     }
 }

@@ -132,7 +132,7 @@ public class UnitWeaponChange
         if (Physics.Raycast(ray, out hit, distanceRay, LayerMask.GetMask("WeaponPickup")))
         {
             GameManager.instance.CheckF.SetActive(true);
-            if (_playerinput.FCheck)
+            if (_playerinput.ButtonDown[InputAction.FCheck])
             {
                 WeaponChange(hit.transform.GetComponentInParent<WeaponView>());
             }

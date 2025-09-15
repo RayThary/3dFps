@@ -19,6 +19,8 @@ public class PoolingManager : MonoBehaviour
         Missile,
         TempSkillMissle,
         LoadingCanvas,
+        MissileBoss,
+        BossWall,
     }
 
     [System.Serializable]

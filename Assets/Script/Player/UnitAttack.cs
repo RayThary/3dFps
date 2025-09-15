@@ -65,16 +65,18 @@ public class UnitAttack : MonoBehaviour
         }
 
     }
-    public void Attack(Weapon _weapon, WeaponView _weaponView)
+    public void Attack(Weapon _weapon, WeaponView _weaponView, bool _zoom)
     {
         bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
             if (_weaponView != null) _weaponView.UnitAttackAnim();
-            StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage));
+
+            StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, _zoom));
             isRecoil = true;
             unitRot.unitRecoil(_weapon.GetRecoilPower);
             StartCoroutine(EndSingleRecoil());
+
             if (_weapon.GetCurrentAmmo == 0)
             {
                 _weapon.Reload(_weaponView);
@@ -107,14 +109,14 @@ public class UnitAttack : MonoBehaviour
     {
         isAttackAuto = true;
         isRecoil = true;
-        while (_input.GetFireHold)
+        while (_input.ButtonHold[InputAction.Fire])
         {
             bool shot = gun.Attack(_weaponView.GetMuzzlePoint);
             if (shot)
             {
                 if (_weaponView != null) _weaponView.UnitAttackAnim();
                 unitRot.unitRecoil(gun.GetRecoilPower);
-                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage));
+                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false));
                 yield return new WaitForSeconds(0.1f);
                 if (gun.GetCurrentAmmo == 0)
                 {
@@ -219,19 +221,27 @@ public class UnitAttack : MonoBehaviour
 
         return dir;
     }
-    private IEnumerator gunHit(float _hitDealyTime, float _damage)
+    private IEnumerator gunHit(float _hitDealyTime, float _damage, bool _zoom)
     {
 
-        //이초뒤에 피격판정을준다.
-        yield return new WaitForSeconds(_hitDealyTime);
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 100f, Color.red, 0.1f);
 
         Ray ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
 
         RaycastHit hit;
-        Vector3 dir = bulletSpread(ray, 3);
-        //if (Physics.Raycast(ray, out hit, 100, hitRay))
-        if (Physics.Raycast(ray.origin, dir, out hit, 100f, hitRay))
+        bool rayCheck;
+
+        if (_zoom)
+        {
+            rayCheck = Physics.Raycast(ray, out hit, 100, hitRay);
+        }
+        else
+        {
+            Vector3 dir = bulletSpread(ray, 3);
+            rayCheck = Physics.Raycast(ray.origin, dir, out hit, 100f, hitRay);
+        }
+
+        if (rayCheck)
         {
             Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
 
@@ -243,6 +253,8 @@ public class UnitAttack : MonoBehaviour
 
                 hitEnemy(enemy, _damage, isCritical);
 
+                //이초뒤에 피격판정을준다.
+                yield return new WaitForSeconds(_hitDealyTime);
                 //히트머즐 
                 StartCoroutine(hitMuzzle(isCritical));
             }
