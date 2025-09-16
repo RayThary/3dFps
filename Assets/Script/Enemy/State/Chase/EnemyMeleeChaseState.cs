@@ -18,7 +18,7 @@ public class EnemyMeleeChaseState : IEnemyState
 
     private bool wasChasing = false;
 
-    public bool CanEnter => true;
+    public bool CanEnter { get; set; } = true;
 
     public EnemyMeleeChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
         LayerMask _obstacleMask, float _roamRadius, EnemyData _enemyData)

@@ -19,9 +19,10 @@ public class EnemyChargerState : IEnemyState
     //ÄðÅ¸ÀÓ 
     private float chargerCooltime = 5;
     private float lastUesdTime = 0;
-    public bool CanEnter => Time.time >= lastUesdTime + chargerCooltime;
+    public bool CanEnter
+    { get { return Time.time >= lastUesdTime + chargerCooltime; } set { CanEnter = value; } }
 
-   
+
     public EnemyChargerState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs, BoxCollider _attackBox, float _speed)
     {
         enemy = _enemy;
@@ -57,7 +58,7 @@ public class EnemyChargerState : IEnemyState
             attackBox.enabled = true;
             isAttack = true;
         }
-    
+
 
 
 

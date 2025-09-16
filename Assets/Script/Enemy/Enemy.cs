@@ -63,7 +63,6 @@ public class Enemy : MonoBehaviour
     [HideInInspector][SerializeField] private Transform missilePort2;
     public Transform MissilePort2 { get { return missilePort2; } set { missilePort2 = value; } }
 
-
     private void OnEnable()
     {
         if (enemyCategory == eEnemyCategory.Boss)
@@ -207,6 +206,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void EnemyBossSkillTime()
+    {
+        enemyChaseState.CanEnter = true;
+    }
 
 
 

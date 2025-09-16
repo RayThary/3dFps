@@ -6,7 +6,8 @@ public class EnemySniperState : IEnemySniperState
 {
     private float sniperCooltime = 5;
     private float lastUesdTime = 0;
-    public bool CanEnter => Time.time >= lastUesdTime + sniperCooltime;
+    public bool CanEnter
+    { get { return Time.time >= lastUesdTime + sniperCooltime; } set { CanEnter = value; } }
 
     public bool SniperShot { get; set; }
 
@@ -22,7 +23,7 @@ public class EnemySniperState : IEnemySniperState
 
     private LineRenderer lineR;
 
-    public EnemySniperState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs, LineRenderer _lineR,float _damage)
+    public EnemySniperState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs, LineRenderer _lineR, float _damage)
     {
         enemy = _enemy;
         snipingTrs = _enemyTrs;

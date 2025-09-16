@@ -19,7 +19,7 @@ public class EnemyRangerChaseState : IEnemyState
     private Vector3 lastTargetVec;
 
     private bool wasChasing = false;
-    public bool CanEnter => true;
+    public bool CanEnter { get; set; } = true;
 
     public EnemyRangerChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
          LayerMask _obstacleMask, float _roamRadius, EnemyData _enemyData)

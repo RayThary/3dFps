@@ -8,5 +8,5 @@ public interface IEnemyState
     void Update();
     void Exit();
 
-    bool CanEnter { get; }
+    bool CanEnter { get; set; }
 }

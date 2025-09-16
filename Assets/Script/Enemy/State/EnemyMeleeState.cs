@@ -8,7 +8,7 @@ public class EnemyMeleeState : IEnemyState
     private Enemy enemy;
     private float speed;
 
-    public bool CanEnter => true;
+    public bool CanEnter { get; set; } = true;
 
     public EnemyMeleeState(Enemy _enemy, float _speed)
     {
@@ -22,7 +22,7 @@ public class EnemyMeleeState : IEnemyState
 
     public void Update()
     {
-        
+
     }
 
     public void Exit()

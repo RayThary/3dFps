@@ -55,6 +55,11 @@ public class EnemyBossAttack : MonoBehaviour
         bossMissile(false);
     }
 
+    private void enemyAttackEnd()
+    {
+        enemy.EnemyBossSkillTime();
+    }
+
     private void DeathEnd()
     {
         enemy.EnemyDeath();
