@@ -15335,7 +15335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79754af5230e79d45a589b9f34cfe181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponType: 0
+  weaponType: 4
   weaponCategory: 0
   meshObject: {fileID: 5618776523238471894}
   weaponLevel: 1
@@ -17184,7 +17184,7 @@ GameObject:
   - component: {fileID: 1160136437666803963}
   - component: {fileID: 4624914670229580025}
   m_Layer: 13
-  m_Name: Weapon HandGun
+  m_Name: Weapon ShotGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
