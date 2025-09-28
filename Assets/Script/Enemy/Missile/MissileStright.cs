@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MissileStright : iMissile
 {
-    Transform target;
+    private Transform target;
     private float speed;
 
     public MissileStright(Transform _target, float _speed)

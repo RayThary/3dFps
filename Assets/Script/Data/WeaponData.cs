@@ -10,13 +10,14 @@ public class WeaponData : ScriptableObject
     public string WeaponName;
     public float Damage;
     public float Speed;
-    public GameObject Prefab;
+    public GameObject Prefab;//¹«±â
     public Animator Animator;
     public bool isMelee;
     public int MaxAmmo;
     public int PullAmmo;
     public int weaponMaxLevel;
     public float weaponLevelUpDamage;
+    public float RecoilRecoverSpeed;
 
     [Header("Gun Settings")]
     public float RecoilPower;

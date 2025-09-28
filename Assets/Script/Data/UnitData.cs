@@ -14,8 +14,7 @@ public class UnitData : ScriptableObject
     //마우스감도
     public float Sensitivity;
     //총반동관련
-    // 반동 복귀 속도
-    public float RecoilRecoverSpeed;
+    
     //최대 누적반동
     public float MaxRecoilAngle;
     //위아래 최소 최대값

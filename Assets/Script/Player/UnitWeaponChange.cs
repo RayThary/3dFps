@@ -192,7 +192,6 @@ public class UnitWeaponChange
 
         CameraManager camMger = GameManager.instance.GetCameraManager;
         camMger.weaponSwitched(weaponSlot[currentSlot]);
-        Debug.Log(_pickupWeaponView.gameObject.transform.position);
     }
 
     public void WeaponChangeCool()

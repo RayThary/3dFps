@@ -91,7 +91,7 @@ public class Unit : MonoBehaviour
             unitSpeed = unitData.UnitSpeed;
             unitJumpPower = unitData.UnitJumpPower;
             weaponChangeTime = unitData.WeaponChangeTime;
-            recoilRecoverSpeed = unitData.RecoilRecoverSpeed;
+            //recoilRecoverSpeed = unitData.RecoilRecoverSpeed;
             maxRecoilAngle = unitData.MaxRecoilAngle;
             maxPitch = unitData.MaxPitch;
             minPitch = unitData.MinPitch;
@@ -195,6 +195,10 @@ public class Unit : MonoBehaviour
         attack();
         weaponChange();
         changeUnitStat();
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log($"{unitWeaponChange.GetCurrentWeapon().GetRecoilRecoverSpeed}");
+        }
 
         //나중에모아줄것
         if (playerInput.ButtonDown[InputAction.Zoom])
@@ -218,7 +222,6 @@ public class Unit : MonoBehaviour
             {
                 weapon.Reload(unitWeaponChange.GetCurrentWeaponview());
             }
-
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {

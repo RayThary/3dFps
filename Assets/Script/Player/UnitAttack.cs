@@ -8,9 +8,6 @@ using static WeaponView;
 
 public class UnitAttack : MonoBehaviour
 {
-    //¡∂¡ÿº±
-    [SerializeField] private Image crosshair;
-    [SerializeField] private Image hitCrosshair;
     [SerializeField] private float hitDuration = 0.2f;
     private Color nomalCrossColor = Color.white;
     private Color criticalCrossColor = Color.red;
@@ -34,10 +31,11 @@ public class UnitAttack : MonoBehaviour
     private float criticalChance;
     private float criticalDamage;
 
-    private void Awake()
-    {
-        defaultScale = crosshair.rectTransform.localScale;
+    private void Start()
+    {   
+        defaultScale = GameManager.instance.Crosshair.rectTransform.localScale;
     }
+    
     public void SetUnitAttack(UnitRotation _unitRot, float _criticalChance, float _criticalDamage)
     {
         unitRot = _unitRot;
@@ -270,18 +268,18 @@ public class UnitAttack : MonoBehaviour
     private IEnumerator hitMuzzle(bool _criticalHit)
     {
         if (_criticalHit)
-            crosshair.color = criticalCrossColor;
+            GameManager.instance.Crosshair.color = criticalCrossColor;
 
-        crosshair.rectTransform.localScale = defaultScale * 1.2f;
-        hitCrosshair.gameObject.SetActive(true);
+        GameManager.instance.Crosshair.rectTransform.localScale = defaultScale * 1.2f;
+        GameManager.instance.HitCrosshair.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(hitDuration);
 
         if (_criticalHit)
-            crosshair.color = nomalCrossColor;
-        hitCrosshair.gameObject.SetActive(false);
+            GameManager.instance.Crosshair.color = nomalCrossColor;
+        GameManager.instance.HitCrosshair.gameObject.SetActive(false);
 
-        crosshair.rectTransform.localScale = defaultScale;
+        GameManager.instance.Crosshair.rectTransform.localScale = defaultScale;
     }
 
     private void spawnBulletHole(Vector3 _point, Vector3 _nomal)

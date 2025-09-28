@@ -22,7 +22,8 @@ public class BossWall : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("hit");
+            //임시대미지 
+            GameManager.instance.GetUnit.TakeDamge(5);
         }
     }
     private void Awake()
@@ -30,15 +31,22 @@ public class BossWall : MonoBehaviour
         inCircle = dangerZone.GetChild(0);
         box = GetComponent<BoxCollider>();
     }
+    public bool s = false;
     public bool t = false;
     private void Update()
     {
-        if (t)
+        if (s)
         {
             SetStart();
+            s = false;
+        }
+        if (t)
+        {
+            RemoveWall();
             t = false;
         }
     }
+   
     public void SetStart()
     {
         int outCount = 20;
@@ -94,19 +102,37 @@ public class BossWall : MonoBehaviour
 
     private IEnumerator RockRoutine()
     {
-        float t = 0f;
+        float time = 0f;
         transform.position = new Vector3(targetTransform.x, -10, targetTransform.z);
         wallMesh.gameObject.SetActive(true);
         Vector3 startPos = transform.position;
 
-        while (t < spawnScaleTime)
+        while (time < spawnScaleTime)
         {
-            t += Time.deltaTime;
-            float lerp = t / spawnScaleTime;
+            time += Time.deltaTime;
+            float lerp = time / spawnScaleTime;
             transform.position = Vector3.Lerp(startPos, targetTransform, lerp);
             yield return null;
         }
 
     }
 
+    public void RemoveWall()
+    {
+        StartCoroutine(removeWall());
+    }
+   private IEnumerator removeWall()
+    {
+        float time = 0f;
+        Vector3 originVec = transform.position;
+
+        while (time < 1)
+        {
+            time += Time.deltaTime;
+            float shake = Mathf.Sin(time * 40f) * 0.1f;
+            transform.position = originVec + new Vector3(shake, 0, 0);
+            yield return null;
+        }
+        PoolingManager.Instance.RemovePoolingObject(gameObject);
+    }
 }

@@ -31,6 +31,8 @@ public abstract class Weapon
 
     protected bool isReloading;
     public bool IsReloading { set { isReloading = value; } }
+    protected float recoilRecoverSpeed;
+    public float GetRecoilRecoverSpeed { get { return recoilRecoverSpeed; } }
 
     protected eWeaponType weaponType;
     public eWeaponType WeaponType { get { return weaponType; } }
@@ -58,8 +60,9 @@ public abstract class Weapon
         isMelee = _data.isMelee;
         weaponMaxLevel = _data.weaponMaxLevel;
         weaponLevelUpDamage = _data.weaponLevelUpDamage;
+        recoilRecoverSpeed = _data.RecoilRecoverSpeed;
 
-        currentAmmo = _data.MaxAmmo;
+                currentAmmo = _data.MaxAmmo;
         maxAmmo = _data.MaxAmmo;
 
         reserveAmmo = _data.PullAmmo / 2;
@@ -70,7 +73,7 @@ public abstract class Weapon
         poolingMuzzle = _data.PoolingMuzzle;
         recoilPower = _data.RecoilPower;
     }
-    public Weapon(WeaponData _data,bool _melee)
+    public Weapon(WeaponData _data, bool _melee)
     {
         weaponType = _data.WeaponType;
         weaponName = _data.WeaponName;
@@ -120,11 +123,11 @@ public abstract class Weapon
         damage = damage + (_weaponLevel * 5);
     }
 
-    public abstract void Zoomable(CinemachineVirtualCamera _vCamera,bool _zoom);
+    public abstract void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom);
 
     //public (int maxLevel,float ) SetWeaponUpgrade()
     //{
-        
+
     //}
 }
 

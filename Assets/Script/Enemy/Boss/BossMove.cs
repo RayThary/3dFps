@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BossMove : MonoBehaviour
 {
+
+    private Enemy enemy;
     private bool bossDown;
     private bool bossUp;
     [SerializeField] private float moveSpeed;
@@ -12,7 +14,7 @@ public class BossMove : MonoBehaviour
 
     private Transform enemyTrs;
     private Transform nextTrs;
-    [SerializeField]private List<Transform> movePoint = new List<Transform>();
+    [SerializeField] private List<Transform> movePoint = new List<Transform>();
     public void SetUp(Vector3 _nowVec)
     {
         bossDown = true;
@@ -20,37 +22,46 @@ public class BossMove : MonoBehaviour
         targetPoint = _nowVec;
         targetPoint.y = -10;
         int num = Random.Range(0, movePoint.Count);
+        while (_nowVec == movePoint[num].position)
+        {
+            num = Random.Range(0, movePoint.Count);
+        }
         nextTrs = movePoint[num];
         StartCoroutine(bossMoving());
+    }
+
+    private void Awake()
+    {
+        //movpoints는 어웨이크에서정해주기때문에 스타트에서넣어주기
+        enemy = GetComponent<Enemy>();
     }
     void Start()
     {
         BossMovePoints bMovePoints = FindAnyObjectByType<BossMovePoints>();
         movePoint = bMovePoints.GetPoint;
-        Debug.Log(movePoint.Count);
 
     }
 
     void Update()
     {
-        if (bossDown)
-        {
-            transform.position += Vector3.down * Time.deltaTime * moveSpeed;
-            if (transform.position.y <= -10)
-            {
-                bossDown = false;
-                targetPoint.y = backupPoint.y;
-            }
-        }
+        //if (bossDown)
+        //{
+        //    transform.position += Vector3.down * Time.deltaTime * moveSpeed;
+        //    if (transform.position.y <= -10)
+        //    {
+        //        bossDown = false;
+        //        targetPoint.y = backupPoint.y;
+        //    }
+        //}
 
-        if (bossUp)
-        {
-            transform.position += Vector3.up * Time.deltaTime * (moveSpeed / 2);
-            if (transform.position.y >= targetPoint.y)
-            {
-                bossUp = false;
-            }
-        }
+        //if (bossUp)
+        //{
+        //    transform.position += Vector3.up * Time.deltaTime * (moveSpeed / 2);
+        //    if (transform.position.y >= targetPoint.y)
+        //    {
+        //        bossUp = false;
+        //    }
+        //}
     }
     private IEnumerator bossMoving()
     {
@@ -63,16 +74,16 @@ public class BossMove : MonoBehaviour
                 bossDown = false;
                 targetPoint.y = backupPoint.y;
                 bossUp = true;
-                transform.position =new Vector3(nextTrs.position.x, -10, nextTrs.position.z);
-                
+                transform.position = new Vector3(nextTrs.position.x, -10, nextTrs.position.z);
+
             }
         }
 
         yield return new WaitForSeconds(0.5f);
-        
-        transform.LookAt(GameManager.instance.GetUnit.transform);
-        Vector3 rot = new Vector3(0, transform.eulerAngles.y, 0);
-        transform.eulerAngles = rot;
+
+        Vector3 unitVec = GameManager.instance.GetUnit.transform.position;
+        unitVec.y = 0;
+        transform.LookAt(unitVec);
 
         while (bossUp)
         {
@@ -83,5 +94,6 @@ public class BossMove : MonoBehaviour
                 bossUp = false;
             }
         }
+        enemy.EnemyBossSkillTime();
     }
 }

@@ -4964,7 +4964,7 @@ MonoBehaviour:
   missileSpeed: 5
   RemoveLayer:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 65984
 --- !u!65 &7915109082722656203
 BoxCollider:
   m_ObjectHideFlags: 0

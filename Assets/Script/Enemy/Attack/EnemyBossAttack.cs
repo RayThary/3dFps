@@ -8,13 +8,17 @@ public class EnemyBossAttack : MonoBehaviour
 
     private Transform missilePort1;
     private Transform missilePort2;
+    private Transform mousePoint;
+    [SerializeField]
+    private BossLaser bossLaser;
     private BossMove bossMove;
 
-    public void SetUp(Enemy _enemy, Transform _port1, Transform _port2)
+    public void SetUp(Enemy _enemy, Transform _port1, Transform _port2,Transform _mousePoint)
     {
         enemy = _enemy;
         missilePort1 = _port1;
         missilePort2 = _port2;
+        mousePoint = _mousePoint;
     }
     void Start()
     {
@@ -29,11 +33,12 @@ public class EnemyBossAttack : MonoBehaviour
 
     private void bossWall()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 4; i++)
         {
             GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.BossWall,
                GameManager.instance.PoolingParents[PoolingManager.ePoolingObject.BossWall.ToString()]);
             obj.GetComponent<BossWall>().SetStart();
+            enemy.WallCount++;
         }
     }
 
@@ -55,8 +60,30 @@ public class EnemyBossAttack : MonoBehaviour
         bossMissile(false);
     }
 
+    private void bossRock()
+    {
+        GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.BossRock,
+                GameManager.instance.PoolingParents[PoolingManager.ePoolingObject.BossRock.ToString()]);
+        obj.transform.position = mousePoint.position;
+        obj.transform.LookAt(GameManager.instance.GetUnit.transform);
+
+    }
+
     private void enemyAttackEnd()
     {
+        enemy.EnemyBossSkillTime();
+    }
+
+    private void enemyLaser()
+    {
+        GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.BossLaser,
+                GameManager.instance.PoolingParents[PoolingManager.ePoolingObject.BossLaser.ToString()]);
+        bossLaser = obj.GetComponent<BossLaser>();
+        bossLaser.SetUp(mousePoint);
+    }
+    private void enemyLaserEnd()
+    {
+        bossLaser.LaserHitCheck(enemy);
         enemy.EnemyBossSkillTime();
     }
 

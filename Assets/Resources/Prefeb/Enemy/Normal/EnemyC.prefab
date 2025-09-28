@@ -145,13 +145,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyCategory: 2
   enemyData: {fileID: 11400000, guid: 2b1deb64dd8ab5b4690375f280092cd5, type: 2}
-  roamRadius: 5
+  roamRadius: 10
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 65664
   unitHitBox: {fileID: 0}
   missilePort1: {fileID: 0}
   missilePort2: {fileID: 0}
+  rockPoint: {fileID: 0}
 --- !u!195 &8543304816273698267
 NavMeshAgent:
   m_ObjectHideFlags: 0

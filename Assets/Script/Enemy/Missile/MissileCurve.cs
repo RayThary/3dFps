@@ -5,7 +5,7 @@ using UnityEngine;
 public class MissileCurve : iMissile
 {
 
-    Transform target;
+    private Transform target;
     private float speed;
     private Vector3 p0, p1, p2;
     private float curveT = 0;
@@ -31,7 +31,7 @@ public class MissileCurve : iMissile
 
     public void OnHit(GameObject obj)
     {
-        PoolingManager.Instance.RemovePoolingObject(obj);
+        PoolingManager.Instance.RemovePoolingObject(target.gameObject);
     }
 
     public void Update()
@@ -41,8 +41,8 @@ public class MissileCurve : iMissile
         Vector3 tan = bezierTangent(p0, p1, p2, t);
 
         target.position = bezier(p0, p1, p2, curveT);
-
-        target.rotation = Quaternion.LookRotation(tan.normalized, Vector3.up);
+        if (tan != Vector3.zero)
+            target.rotation = Quaternion.LookRotation(tan.normalized, Vector3.up);
 
         if (curveT >= 1f)
         {

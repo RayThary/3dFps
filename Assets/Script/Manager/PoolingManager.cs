@@ -21,6 +21,8 @@ public class PoolingManager : MonoBehaviour
         LoadingCanvas,
         MissileBoss,
         BossWall,
+        BossRock,
+        BossLaser,
     }
 
     [System.Serializable]

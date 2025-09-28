@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Transform poolingRoot;
     public Transform GetPoolinRoot { get { return poolingRoot; } }
-    [Tooltip("테스트용 꼭지워줄것")][SerializeField]//테스트용
+    [Tooltip("테스트용 꼭지워줄것")]
+    [SerializeField]//테스트용
     private bool isStageStart = false;
     public bool IsStageStarted { get { return isStageStart; } set { isStageStart = value; } }
 
@@ -44,6 +45,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject zoomScope;
     public GameObject ZoomScope { get { return zoomScope; } }
+    private Image crosshair;
+    public Image Crosshair { get { return crosshair; } }
+    private Image hitCrosshair;
+    public Image HitCrosshair { get { return hitCrosshair; } }
     private void Awake()
     {
 
@@ -95,9 +100,15 @@ public class GameManager : MonoBehaviour
             checkF = canvas.transform.Find("PlayerUI/CheckF").gameObject;
         }
 
+        if (crosshair == null || hitCrosshair == null)
+        {
+            crosshair = canvas.transform.Find("PlayerUI/Crosshair").GetComponent<Image>();
+            hitCrosshair = crosshair.transform.GetChild(0).GetComponent<Image>();
+        }
+
         if (zoomScope == null)
         {
-             zoomScope = canvas.transform.Find("PlayerUI/ZoomScope").gameObject;
+            zoomScope = canvas.transform.Find("PlayerUI/ZoomScope").gameObject;
         }
 
         //카메라

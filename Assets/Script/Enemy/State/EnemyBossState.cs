@@ -9,11 +9,16 @@ public class EnemyBossState : IEnemyState
     private Transform missilePort2;
 
     private float lastUesdTime;
-
     private float delayTime = 2;
 
-    public bool CanEnter { get; set; } = true; 
+    private bool skillStop = false;
 
+
+    private int skillCount = 0;
+
+    public bool CanEnter { get; set; } = true;
+
+    private float hp;
     public EnemyBossState(Enemy _enemy, Transform _port1, Transform _port2)
     {
         enemy = _enemy;
@@ -23,34 +28,106 @@ public class EnemyBossState : IEnemyState
 
     public void Enter()
     {
-        movePatten();
+        hp = enemy.Hp;
+        skillStop = true;
         lastUesdTime = Time.time;
     }
 
     public void Update()
     {
-        if (lastUesdTime + delayTime < Time.time )
+        if (lastUesdTime + delayTime < Time.time)
         {
             attack();
+        }
+
+        if (!skillStop)
+        {
+
+            Vector3 unitVec = GameManager.instance.GetUnit.transform.position;
+            unitVec.y = 0;
+            Quaternion targetRot = Quaternion.LookRotation(unitVec - enemy.transform.position);
+            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRot, Time.deltaTime * 2);
         }
 
         if (CanEnter)
         {
             lastUesdTime = Time.time;
+            skillStop = false;
             CanEnter = false;
         }
     }
-    //임시코드
+
     private void attack()
     {
-        int a = Random.Range(0, 2);
-        switch (a)
+        bool half = (enemy.Hp / hp) > 0.5f;
+        int nextPatten = getNextPatten(half);
+
+        switch (nextPatten)
         {
             case 0:
                 missilePatten(); break;
             case 1:
+                wallPatten(); break;
+            case 2:
                 rockPatten(); break;
+            case 3:
+                laserPatten(); break;
+            case 4:
+                movePatten(); break;
         }
+        skillStop = true;
+    }
+
+    private int getNextPatten(bool _hpHalf)
+    {
+        int missileChance = _hpHalf ? 40 : 30;
+        int jumpChance = _hpHalf ? 20 : 15;
+        int rockChance = _hpHalf ? 30 : 35;
+        int laserChance = _hpHalf ? 15 : 20;
+
+        int moveChance = _hpHalf ? 0 : 0;
+     
+
+        if (skillCount >= 12) moveChance = 50;
+        else if (skillCount >= 10) moveChance = 25;
+        else if (skillCount >= 8) moveChance = 10;
+
+
+
+        if (skillCount < 1) laserChance = 0;
+
+        if (enemy.WallCount < 2) laserChance = 10;
+
+        if (enemy.WallCount >= 12)
+        {
+            laserChance += 20;
+            jumpChance = 10;
+        }
+
+        if (enemy.WallCount > 14) jumpChance = 0;
+
+        int total = missileChance + jumpChance + rockChance + laserChance + moveChance;
+        int roll = Random.Range(0, total);
+
+        if (roll < missileChance) return 0;
+        roll -= missileChance;
+
+        if (roll < jumpChance) return 1;
+        roll -= jumpChance;
+
+        if (roll < rockChance) return 2;
+        roll -= rockChance;
+
+        if (roll < laserChance) return 3;
+        roll -= laserChance;
+
+        return 4;
+    }
+
+    private void laserPatten()
+    {
+        enemy.Animator.SetTrigger("Laser");
+        delay();
     }
 
     private void missilePatten()
@@ -58,21 +135,43 @@ public class EnemyBossState : IEnemyState
         enemy.Animator.SetTrigger("Missile");
         delay();
     }
-    private void rockPatten()
+    private void wallPatten()
     {
         enemy.Animator.SetTrigger("Jump");
+        delay();
+    }
+    private void rockPatten()
+    {
+        enemy.Animator.SetTrigger("Rock");
         delay();
     }
     private void movePatten()
     {
         enemy.Animator.SetTrigger("Move");
+        skillCount = 0;
         delay();
     }
 
+
     private void delay()
     {
-        delayTime = Random.Range(2f, 5f);
+        float hpRatio = enemy.Hp / hp;
+        if (hpRatio > 0.7f)
+        {
+            delayTime = Random.Range(3f, 5f);
+        }
+        else if (hpRatio > 0.35f)
+        {
+            delayTime = Random.Range(2.5f, 4.5f);
+        }
+        else
+        {
+            delayTime = Random.Range(2f, 3.5f);
+        }
+
+        CanEnter = false;
         lastUesdTime = Mathf.Infinity;
+        skillCount++;
     }
 
     public void Exit()

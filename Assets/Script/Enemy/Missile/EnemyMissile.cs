@@ -41,13 +41,21 @@ public class EnemyMissile : MonoBehaviour
             other.GetComponent<Unit>().TakeDamge(enemyDamage);
         }
 
-        if (other.gameObject.layer == RemoveLayer)
+        if (((1 << other.gameObject.layer) & RemoveLayer.value) != 0)
         {
-            PoolingManager.Instance.RemovePoolingObject(gameObject);
+            if (missileType == eMissileType.BossRock)
+            {
+                BossWall wall = other.GetComponent<BossWall>();
+                if (wall != null)
+                {
+                    wall.RemoveWall();
+                }
+            }
+            missile.OnHit(gameObject);
         }
     }
 
- 
+
 
     private void Awake()
     {
@@ -61,8 +69,8 @@ public class EnemyMissile : MonoBehaviour
                 missile = curve;
                 break;
             case eMissileType.BossRock:
-
-                 break;
+                missile = new MissileRock(transform, missileSpeed);
+                break;
         }
     }
 
@@ -72,5 +80,5 @@ public class EnemyMissile : MonoBehaviour
         missile.Update();
     }
 
-    
+
 }

@@ -335,13 +335,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyCategory: 0
   enemyData: {fileID: 11400000, guid: 5c8a7102c71d500439007c20bf6fe308, type: 2}
-  roamRadius: 5
+  roamRadius: 10
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 65664
   unitHitBox: {fileID: 2095389510235618661}
   missilePort1: {fileID: 0}
   missilePort2: {fileID: 0}
+  rockPoint: {fileID: 0}
 --- !u!65 &8913626478240790394
 BoxCollider:
   m_ObjectHideFlags: 0

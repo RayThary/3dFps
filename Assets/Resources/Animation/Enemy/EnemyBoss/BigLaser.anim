@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BigShot
+  m_Name: BigLaser
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -8883,15 +8883,15 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 1.72
-    functionName: bossRock
+  - time: 0.8
+    functionName: enemyLaser
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.16
-    functionName: enemyAttackEnd
+  - time: 1.92
+    functionName: enemyLaserEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

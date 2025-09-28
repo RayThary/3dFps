@@ -24,7 +24,8 @@ public class Enemy : MonoBehaviour
 
     private Transform playerTrs;
 
-    private float hp;
+    [SerializeField]private float hp;
+    public float Hp { get { return hp; } }
     private float speed;
     private float damage;
     public float Damage { get { return damage; } }
@@ -55,7 +56,9 @@ public class Enemy : MonoBehaviour
     public Animator Animator { get { return animator; } }
 
     private BoxCollider box;
-    [Tooltip("근거리만 필요함")][SerializeField] private BoxCollider unitHitBox;
+    [HideInInspector][SerializeField] private BoxCollider unitHitBox;
+    public BoxCollider UnitHitBox { get { return unitHitBox; } set { unitHitBox = value; } }
+
     private LineRenderer lineR;
 
     [HideInInspector][SerializeField] private Transform missilePort1;
@@ -63,12 +66,18 @@ public class Enemy : MonoBehaviour
     [HideInInspector][SerializeField] private Transform missilePort2;
     public Transform MissilePort2 { get { return missilePort2; } set { missilePort2 = value; } }
 
+    [HideInInspector][SerializeField] private Transform rockPoint;
+    public Transform RockPoint { get { return rockPoint; } set { rockPoint = value; } }
+    private int currentWallCount;
+    public int WallCount { get { return currentWallCount; } set { currentWallCount = value; } }
+
+
     private void OnEnable()
     {
         if (enemyCategory == eEnemyCategory.Boss)
         {
             EnemyBossAttack bossAttack = GetComponentInChildren<EnemyBossAttack>();
-            bossAttack.SetUp(this, missilePort1, missilePort2);
+            bossAttack.SetUp(this, missilePort1, missilePort2, rockPoint);
         }
     }
     void Start()
