@@ -41,18 +41,18 @@ public class UnitWeaponChange
     public UnitWeaponChange(Unit _unit, Dictionary<int, Weapon> _weaponSlot, GameObject _gunSlot1Obj, GameObject _gunSlot2Obj,
         GameObject _meleeSlot1Obj, GameObject _meleeSlot2Obj, float _weaponChangeTime, UnitAttack _unitAttack, int _defaultSlot = 1)
     {
-        this.unit = _unit;
-        this.weaponSlot = _weaponSlot;
-        this.gunSlot1Obj = _gunSlot1Obj;
-        this.meleeSlot1Obj = _meleeSlot1Obj;
+        unit = _unit;
+        weaponSlot = _weaponSlot;
+        gunSlot1Obj = _gunSlot1Obj;
+        meleeSlot1Obj = _meleeSlot1Obj;
 
-        this.gunSlot2Obj = _gunSlot2Obj;
-        this.meleeSlot2Obj = _meleeSlot2Obj;
+        gunSlot2Obj = _gunSlot2Obj;
+        meleeSlot2Obj = _meleeSlot2Obj;
 
         currentSlot = _defaultSlot;
 
-        this.weaponChangeTime = _weaponChangeTime;
-        this.weaponChangeTimer = 0;
+        weaponChangeTime = _weaponChangeTime;
+        weaponChangeTimer = 0;
 
         unitAttack = _unitAttack;
         slotSwitch();

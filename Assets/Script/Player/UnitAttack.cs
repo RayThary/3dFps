@@ -42,7 +42,11 @@ public class UnitAttack : MonoBehaviour
         criticalChance = _criticalChance;
         criticalDamage = _criticalDamage;
     }
-
+    public void UpdateCriticalStat(float chance, float damage)
+    {
+        criticalChance = chance;
+        criticalDamage = damage;
+    }
     //근접공격부분 이렇게 모션이긴공격은 모션끝에 자동장전을넣어놓을것
     public void Attack(Weapon _weapon, WeaponView _weaponView, Animator _anim)
     {

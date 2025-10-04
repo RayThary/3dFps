@@ -1,0 +1,117 @@
+using Cinemachine;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using static UnityEngine.CullingGroup;
+
+public class UnitAttackModule
+{
+    private Unit unit;
+    private UnitAttack unitAttack;
+    public UnitAttack CurrentUnitAttack { get { return unitAttack; } }
+    private UnitHandMotion unitHandMotion;
+    private UnitZoom unitZoom;
+    private UnitWeaponChange unitWeaponChange;
+    public UnitWeaponChange GetUnitWeaponChange { get { return unitWeaponChange; } }
+
+    private Animator anim;
+    private CinemachineVirtualCamera povCamera;
+    private bool zoomCheck = false;
+
+
+    public void SetUp(Unit _unit,Animator _anim, UnitRotation _unitRotation, CinemachineVirtualCamera _povCamera, PlayerInput _playerInput)
+    {
+        unit = _unit;
+        anim = _anim;
+        povCamera = _povCamera;
+        unitAttack = unit.GetComponent<UnitAttack>();
+        unitAttack.SetUnitAttack(_unitRotation, unit.CurrentStat.criticalChance, unit.CurrentStat.criticalDamage);
+
+        //무기 셋팅
+        unitWeaponChange = new UnitWeaponChange(unit, unit.CurrentSlot.weaponSlot, unit.CurrentSlot.unitSlot1.gameObject, unit.CurrentSlot.unitSlot2.gameObject,
+            unit.CurrentSlot.unitMeleeSlot1.gameObject, unit.CurrentSlot.unitMeleeSlot2.gameObject, unit.CurrentStat.weaponChangeTime, unitAttack);
+        unit.UnitWeapon = unitWeaponChange.GetCurrentWeapon();
+
+
+        unitZoom = new UnitZoom();
+        unitZoom.SetUp(_playerInput, povCamera);
+
+        unitHandMotion = unit.GetComponent<UnitHandMotion>();
+    }
+
+    public void UpdateAttack(PlayerInput _playerInput)
+    {
+
+        unitWeaponChange.WeaponChangeCheck(_playerInput);
+        unitWeaponChange.WeaponChangeCool();
+        attack(_playerInput);
+        zoom(_playerInput);
+        weaponChange(_playerInput);
+    }
+
+    private void attack(PlayerInput _playerInput)
+    {
+        if (unit.UnitWeapon.IsMelee)
+        {
+            if (_playerInput.ButtonDown[InputAction.Fire])
+            {
+
+                unitAttack.Attack(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), anim);
+            }
+        }
+        else
+        {
+            if (!unit.UnitWeapon.Automatic)
+            {
+                if (_playerInput.ButtonDown[InputAction.Fire])
+                {
+                    unitAttack.Attack(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
+                }
+            }
+            else
+            {
+                if (_playerInput.ButtonHold[InputAction.Fire])
+                {
+                    unitAttack.Attack(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview());
+                }
+            }
+        }
+    }
+
+    private void zoom(PlayerInput _playerInput)
+    {
+        if (_playerInput.ButtonDown[InputAction.Zoom])
+        {
+            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);
+            zoomCheck = true;
+        }
+        if (_playerInput.ButtonUp[InputAction.Zoom])
+        {
+            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, false);
+            zoomCheck = false;
+        }
+    }
+
+    private void weaponChange(PlayerInput _playerInput)
+    {
+        if (_playerInput.ButtonDown[InputAction.Weapon1])
+        {
+            unitHandMotion.handMotion(unitWeaponChange, 1);
+
+        }
+        else if (_playerInput.ButtonDown[InputAction.Weapon2])
+        {
+            unitHandMotion.handMotion(unitWeaponChange, 2);
+        }
+
+    }
+
+    private void changeUnitStat()
+    {
+        
+         
+        
+
+    }
+}

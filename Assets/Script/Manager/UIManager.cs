@@ -60,9 +60,9 @@ public class UIManager : MonoBehaviour
         unitSkill = unit.GetComponent<UnitSkill>();
 
         dodgeCoolTime = unitDodge.GetDodgeCool;
-        unitWeaponChange = unit.GetUnitWeaponChange;
+        unitWeaponChange = unit.UnitAttackModule.GetUnitWeaponChange;
 
-        onUIWeaponIcon(unit.GetWeapon);
+        onUIWeaponIcon(unit.UnitWeapon);
         unitWeaponChange.OnWeaponSwitched += onUIWeaponIcon;
 
         skillCoolTime = unitSkill.GetCoolTime;

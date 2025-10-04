@@ -50,6 +50,7 @@ public static class WeaponFactory
 
             case eWeaponType.Sniper:
                 return new Sniper(data);
+
             case eWeaponType.ShotGun:
                 return new ShotGun(data);
 
