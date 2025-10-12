@@ -80,7 +80,7 @@ public class UnitAttack : MonoBehaviour
 
             StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, _zoom));
             isRecoil = true;
-            unitRot.unitRecoil(_weapon.GetRecoilPower);
+            unitRot.unitRecoil(_weapon.GetRecoilPower, _weapon.GetRecoilRecoverSpeed);
             StartCoroutine(EndSingleRecoil());
 
             if (_weapon.GetCurrentAmmo == 0)
@@ -104,38 +104,38 @@ public class UnitAttack : MonoBehaviour
     }
 
 
-    public void Attack_Auto(Weapon gun, PlayerInput _input, WeaponView _weaponView)
+    public void Attack_Auto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView)
     {
         if (!isAttackAuto)
         {
-            StartCoroutine(attackAuto(gun, _input, _weaponView));
+            StartCoroutine(attackAuto(_weapon, _input, _weaponView));
         }
     }
-    private IEnumerator attackAuto(Weapon gun, PlayerInput _input, WeaponView _weaponView)
+    private IEnumerator attackAuto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView)
     {
         isAttackAuto = true;
         isRecoil = true;
         while (_input.ButtonHold[InputAction.Fire])
         {
-            bool shot = gun.Attack(_weaponView.GetMuzzlePoint);
+            bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
             if (shot)
             {
                 if (_weaponView != null) _weaponView.UnitAttackAnim();
-                unitRot.unitRecoil(gun.GetRecoilPower);
+                unitRot.unitRecoil(_weapon.GetRecoilPower, _weapon.GetRecoilRecoverSpeed);
                 StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false));
                 yield return new WaitForSeconds(0.1f);
-                if (gun.GetCurrentAmmo == 0)
+                if (_weapon.GetCurrentAmmo == 0)
                 {
                     yield return new WaitForSeconds(0.2f);
-                    gun.Reload(_weaponView);
+                    _weapon.Reload(_weaponView);
                     break;
                 }
             }
             else
             {
-                if (gun.GetCurrentAmmo >= 0)
+                if (_weapon.GetCurrentAmmo >= 0)
                 {
-                    gun.Reload(_weaponView);
+                    _weapon.Reload(_weaponView);
                 }
                 break;
             }
@@ -157,7 +157,7 @@ public class UnitAttack : MonoBehaviour
                 StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false));
             }
             isRecoil = true;
-            unitRot.unitRecoil(_weapon.GetRecoilPower);
+            unitRot.unitRecoil(_weapon.GetRecoilPower,_weapon.GetRecoilRecoverSpeed);
             StartCoroutine(EndSingleRecoil());
 
             if (_weapon.GetCurrentAmmo == 0)

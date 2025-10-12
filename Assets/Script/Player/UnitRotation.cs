@@ -151,28 +151,31 @@ public class UnitRotation
 
         rotationPitch -= _mouseY * _sensitivity;
         rotationPitch = Mathf.Clamp(rotationPitch, minPitch, maxPitch);
-
-        mouseMoveAttack = Mathf.Abs(_mouseY) > 0;
-
-        if (mouseMoveAttack)
-        {
-            basePitch = rotationPitch;
-        }
-
     }
 
-    public void unitRecoil(float _recoilPower)
+    public void unitRecoil(float _recoilPower, float _recoilRecoverSpeed)
     {
         basePitch = rotationPitch;
 
         recoilPitch += _recoilPower;
         recoilPitch = Mathf.Clamp(recoilPitch, 0, maxRecoilAngle);
+        recoilRecoverSpeed = _recoilRecoverSpeed;
     }
 
-
+    private float tempMouseY;
+    private float delta;
     //반동후되돌아가는부분
-    public void ApplyRotation(bool _isRecoil,bool _isMelee)
+    public void ApplyRotation(bool _isRecoil,bool _isMelee,PlayerInput _playerInput)
     {
+
+        delta = Mathf.Abs(_playerInput.GetAxis[InputAction.MouseY] - tempMouseY);
+        mouseMoveAttack = delta > 0.01f;
+        
+        if (mouseMoveAttack)
+        {
+            basePitch = rotationPitch;
+        }
+
 
         if (!_isRecoil && !mouseMoveAttack)
         {
@@ -194,7 +197,7 @@ public class UnitRotation
 
         playerHead.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
 
-
+        tempMouseY = _playerInput.GetAxis[InputAction.MouseY];
         mouseMoveAttack = false;
     }
     public void ResetMouseRecoil()
@@ -202,13 +205,10 @@ public class UnitRotation
 
         float current = playerHead.localEulerAngles.x;
         if (current > 180f) current -= 360f;
-        // ②내부 조준값과 기준값을 실제 각도로 싱크
+
         rotationPitch = current;
         basePitch = current;
-
-
         recoilPitch = 0f;
-
     }
 }
 

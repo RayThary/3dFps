@@ -242,7 +242,7 @@ public class UnitClone : MonoBehaviour
     }
     void LateUpdate()
     {
-        unitRotation.ApplyRotation(unitAttack.GetIsRecoil, weapon.IsMelee);
+        unitRotation.ApplyRotation(unitAttack.GetIsRecoil, weapon.IsMelee, playerInput);
     }
 
 

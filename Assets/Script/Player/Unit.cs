@@ -183,7 +183,7 @@ public class Unit : MonoBehaviour
 
     void LateUpdate()
     {
-        unitRotation.ApplyRotation(attackModule.CurrentUnitAttack.GetIsRecoil, weapon.IsMelee);
+        unitRotation.ApplyRotation(attackModule.CurrentUnitAttack.GetIsRecoil, weapon.IsMelee, playerInput);
     }
 
 
