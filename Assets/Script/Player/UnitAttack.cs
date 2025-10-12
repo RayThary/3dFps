@@ -32,10 +32,10 @@ public class UnitAttack : MonoBehaviour
     private float criticalDamage;
 
     private void Start()
-    {   
+    {
         defaultScale = GameManager.instance.Crosshair.rectTransform.localScale;
     }
-    
+
     public void SetUnitAttack(UnitRotation _unitRot, float _criticalChance, float _criticalDamage)
     {
         unitRot = _unitRot;
@@ -48,7 +48,7 @@ public class UnitAttack : MonoBehaviour
         criticalDamage = damage;
     }
     //근접공격부분 이렇게 모션이긴공격은 모션끝에 자동장전을넣어놓을것
-    public void Attack(Weapon _weapon, WeaponView _weaponView, Animator _anim)
+    public void Attack_Melee(Weapon _weapon, WeaponView _weaponView, Animator _anim)
     {
 
         if (_weapon.IsMelee)
@@ -67,11 +67,15 @@ public class UnitAttack : MonoBehaviour
         }
 
     }
-    public void Attack(Weapon _weapon, WeaponView _weaponView, bool _zoom)
+    public void Attack_Single(Weapon _weapon, WeaponView _weaponView, bool _zoom)
     {
         bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
+            //if (isRecoil)
+            //{
+            //    return;
+            //}
             if (_weaponView != null) _weaponView.UnitAttackAnim();
 
             StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, _zoom));
@@ -100,7 +104,7 @@ public class UnitAttack : MonoBehaviour
     }
 
 
-    public void Attack(Weapon gun, PlayerInput _input, WeaponView _weaponView)
+    public void Attack_Auto(Weapon gun, PlayerInput _input, WeaponView _weaponView)
     {
         if (!isAttackAuto)
         {
@@ -139,6 +143,35 @@ public class UnitAttack : MonoBehaviour
         isRecoil = false;
         isAttackAuto = false;
         unitRot.ResetMouseRecoil();
+    }
+
+    public void Attack_ShotGun(Weapon _weapon, WeaponView _weaponView)
+    {
+        bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
+        if (shot)
+        {
+            if (_weaponView != null) _weaponView.UnitAttackAnim();
+
+            for (int i = 0; i < 7; i++)
+            {
+                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false));
+            }
+            isRecoil = true;
+            unitRot.unitRecoil(_weapon.GetRecoilPower);
+            StartCoroutine(EndSingleRecoil());
+
+            if (_weapon.GetCurrentAmmo == 0)
+            {
+                _weapon.Reload(_weaponView);
+            }
+        }
+        else
+        {
+            if (_weapon.GetReserveAmmo >= 0)
+            {
+                _weapon.Reload(_weaponView);
+            }
+        }
     }
 
 

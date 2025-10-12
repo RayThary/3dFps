@@ -160,7 +160,7 @@ public class Unit : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Debug.Log($"{unitSlot.weaponSlot[1].GetName},{unitSlot.weaponSlot[2].GetName}");
+            Debug.Log($"{UnitWeapon.GetName}");
         }
         playerInput.ReadInput();
         movementModule.UpdateMovement();

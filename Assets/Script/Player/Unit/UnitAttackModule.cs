@@ -20,7 +20,7 @@ public class UnitAttackModule
     private bool zoomCheck = false;
 
 
-    public void SetUp(Unit _unit,Animator _anim, UnitRotation _unitRotation, CinemachineVirtualCamera _povCamera, PlayerInput _playerInput)
+    public void SetUp(Unit _unit, Animator _anim, UnitRotation _unitRotation, CinemachineVirtualCamera _povCamera, PlayerInput _playerInput)
     {
         unit = _unit;
         anim = _anim;
@@ -46,6 +46,7 @@ public class UnitAttackModule
         unitWeaponChange.WeaponChangeCheck(_playerInput);
         unitWeaponChange.WeaponChangeCool();
         attack(_playerInput);
+        weaponReroad(_playerInput);
         zoom(_playerInput);
         weaponChange(_playerInput);
     }
@@ -57,23 +58,38 @@ public class UnitAttackModule
             if (_playerInput.ButtonDown[InputAction.Fire])
             {
 
-                unitAttack.Attack(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), anim);
+                unitAttack.Attack_Melee(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), anim);
             }
         }
         else
         {
+
             if (!unit.UnitWeapon.Automatic)
             {
                 if (_playerInput.ButtonDown[InputAction.Fire])
                 {
-                    unitAttack.Attack(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
+                    switch (unit.UnitWeapon.WeaponType)
+                    {
+                        case eWeaponType.HandGun:
+                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
+                            break;
+
+                        case eWeaponType.ShotGun:
+                            unitAttack.Attack_ShotGun(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview());
+                            break;
+                    }
                 }
             }
             else
             {
                 if (_playerInput.ButtonHold[InputAction.Fire])
                 {
-                    unitAttack.Attack(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview());
+                    switch (unit.UnitWeapon.WeaponType)
+                    {
+                        case eWeaponType.SubMachineGun:
+                            unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview());
+                            break;
+                    }
                 }
             }
         }
@@ -107,11 +123,26 @@ public class UnitAttackModule
 
     }
 
+    private void weaponReroad(PlayerInput _playerInput)
+    {
+        if (_playerInput.ButtonDown[InputAction.Reload])
+        {
+
+            if (unit.UnitWeapon.IsMelee)
+            {
+                unit.UnitWeapon.Reload(anim);
+            }
+            else
+            {
+                unit.UnitWeapon.Reload(unitWeaponChange.GetCurrentWeaponview());
+            }
+        }
+    }
     private void changeUnitStat()
     {
-        
-         
-        
+
+
+
 
     }
 }

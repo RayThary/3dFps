@@ -253,7 +253,7 @@ public class UnitClone : MonoBehaviour
             if (playerInput.ButtonDown[InputAction.Fire])
             {
 
-                unitAttack.Attack(weapon, unitWeaponChange.GetCurrentWeaponview(), anim);
+                unitAttack.Attack_Melee(weapon, unitWeaponChange.GetCurrentWeaponview(), anim);
             }
         }
         else
@@ -262,14 +262,14 @@ public class UnitClone : MonoBehaviour
             {
                 if (playerInput.ButtonDown[InputAction.Fire])
                 {
-                    unitAttack.Attack(weapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
+                    unitAttack.Attack_Single(weapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
                 }
             }
             else
             {
                 if (playerInput.ButtonHold[InputAction.Fire])
                 {
-                    unitAttack.Attack(weapon, playerInput, unitWeaponChange.GetCurrentWeaponview());
+                    unitAttack.Attack_Auto(weapon, playerInput, unitWeaponChange.GetCurrentWeaponview());
                 }
             }
         }
