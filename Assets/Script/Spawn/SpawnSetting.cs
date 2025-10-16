@@ -8,7 +8,6 @@ public class SpawnSetting : MonoBehaviour
     [SerializeField] private List<EnemySpawn> spawnTower = new List<EnemySpawn>();
     [SerializeField] private SpawnData spawnData;
 
-    [SerializeField] private bool spawnStart = false;
 
     public int testStageNum;
     void Start()

@@ -70,7 +70,8 @@ public class Unit : MonoBehaviour
 
     //  능력치 (Unit 고유값)
     private UnitStat unitStat = new UnitStat();
-    public UnitStat CurrentStat { get { return unitStat; } }
+    public UnitStat CurrentStat { get { return unitStat; } set { unitStat = value; } }
+    
     private UnitStat unitStatBasic;
 
     public class UnitStat
@@ -129,6 +130,8 @@ public class Unit : MonoBehaviour
         attackModule = new UnitAttackModule();
         attackModule.SetUp(this, anim, unitRotation, povCamera, playerInput);
 
+        unitRotation.SetUnitAttack(attackModule.CurrentUnitAttack);
+
         if (GameManager.instance.GetUnit == null)
         {
             GameManager.instance.SetUnit = this;
@@ -183,7 +186,7 @@ public class Unit : MonoBehaviour
 
     void LateUpdate()
     {
-        unitRotation.ApplyRotation(attackModule.CurrentUnitAttack.GetIsRecoil, weapon.IsMelee, playerInput);
+        unitRotation.ApplyRotation( weapon.IsMelee, playerInput);
     }
 
 
@@ -191,21 +194,9 @@ public class Unit : MonoBehaviour
 
 
     //모듈빼줄것
-    private void changeUnitStat()
+    public void changeUnitStat()
     {
-        //if (statChange)
-        //{
-        //    if (!Mathf.Approximately(unitStatBasic.criticalChance, unitStat.criticalChance) ||
-        //        !Mathf.Approximately(unitStatBasic.criticalDamage, unitStat.criticalDamage))
-        //    {
-        //        unitAttack.SetUnitCritical(unitStat.criticalChance, unitStat.criticalDamage);
-        //        unitStatBasic.criticalChance = unitStat.criticalChance;
-        //        unitStatBasic.criticalDamage = unitStat.criticalDamage;
-        //    }
-
-        //    unitStatBasic = unitStat.Clone();
-        //}
-
+        unitStatBasic = unitStat;
     }
 
     public void TakeDamge(float _damage)

@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
         Charger,
         Ranger,
         Sniper,
+        Boom,
         Boss,
     }
     [SerializeField] private eEnemyCategory enemyCategory;
@@ -56,6 +57,8 @@ public class Enemy : MonoBehaviour
     public Animator Animator { get { return animator; } }
 
     private BoxCollider box;
+    public BoxCollider BoxCollider { get { return box; } set { box = value; } }
+
     [HideInInspector][SerializeField] private BoxCollider unitHitBox;
     public BoxCollider UnitHitBox { get { return unitHitBox; } set { unitHitBox = value; } }
 
@@ -132,6 +135,10 @@ public class Enemy : MonoBehaviour
                 enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage);
                 return;
+            case eEnemyCategory.Boom:
+                enemyChaseState = new EnemyBoomChaseState(this, playerTrs, transform, obstacleMask, enemyData);
+                enemyAttackState = new EnemyBoomState(this);
+                break;
             case eEnemyCategory.Boss:
                 enemyChaseState = new EnemyBossState(this, missilePort1, missilePort2);
                 return;
@@ -213,6 +220,16 @@ public class Enemy : MonoBehaviour
             sniper.SniperShot = true;
             animator.speed = 0;
         }
+    }
+
+    public void EnemyBoomAttack(PoolingManager.ePoolingObject _poolingObject)
+    {
+        GameObject obj = PoolingManager.Instance.CreateObject(_poolingObject, GameManager.instance.PoolingParents[_poolingObject.ToString()]);
+        obj.transform.position = transform.position;
+        hp = enemyData.Hp;
+        stateMachine.ChangeState(enemyChaseState);
+        box.enabled = true;
+        PoolingManager.Instance.RemovePoolingObject(gameObject);
     }
 
     public void EnemyBossSkillTime()

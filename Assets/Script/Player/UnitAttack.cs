@@ -19,34 +19,31 @@ public class UnitAttack : MonoBehaviour
     [SerializeField] private LayerMask hitHeadRay;
     private bool isAttackAuto = false;
     private UnitRotation unitRot;
+    private Unit unit;
 
     private bool isRecoil;
     public bool GetIsRecoil { get { return isRecoil; } }
+    private bool lockAttack = false;
+    public bool LockAttack { set { lockAttack = value; } }
 
     //크리티컬관련  확정크리티컬 / 확정크리티컬시간
     private bool forceCritical;
     private bool forceCriticalTime;
     private float forceCriticalUntilTime;
 
-    private float criticalChance;
-    private float criticalDamage;
+   
 
     private void Start()
     {
         defaultScale = GameManager.instance.Crosshair.rectTransform.localScale;
+        unit = GetComponent<Unit>();
     }
 
-    public void SetUnitAttack(UnitRotation _unitRot, float _criticalChance, float _criticalDamage)
+    public void SetUnitAttack(UnitRotation _unitRot )
     {
         unitRot = _unitRot;
-        criticalChance = _criticalChance;
-        criticalDamage = _criticalDamage;
     }
-    public void UpdateCriticalStat(float chance, float damage)
-    {
-        criticalChance = chance;
-        criticalDamage = damage;
-    }
+   
     //근접공격부분 이렇게 모션이긴공격은 모션끝에 자동장전을넣어놓을것
     public void Attack_Melee(Weapon _weapon, WeaponView _weaponView, Animator _anim)
     {
@@ -69,17 +66,19 @@ public class UnitAttack : MonoBehaviour
     }
     public void Attack_Single(Weapon _weapon, WeaponView _weaponView, bool _zoom)
     {
+        if (lockAttack)
+        {
+            return;
+        }
+
         bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
-            //if (isRecoil)
-            //{
-            //    return;
-            //}
             if (_weaponView != null) _weaponView.UnitAttackAnim();
 
             StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, _zoom));
             isRecoil = true;
+            lockAttack = true;
             unitRot.unitRecoil(_weapon.GetRecoilPower, _weapon.GetRecoilRecoverSpeed);
             StartCoroutine(EndSingleRecoil());
 
@@ -126,7 +125,7 @@ public class UnitAttack : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
                 if (_weapon.GetCurrentAmmo == 0)
                 {
-                    yield return new WaitForSeconds(0.2f);
+                    yield return new WaitForSeconds(0.3f);
                     _weapon.Reload(_weaponView);
                     break;
                 }
@@ -147,17 +146,24 @@ public class UnitAttack : MonoBehaviour
 
     public void Attack_ShotGun(Weapon _weapon, WeaponView _weaponView)
     {
+        if (lockAttack)
+        {
+            return;
+        }
+
         bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
             if (_weaponView != null) _weaponView.UnitAttackAnim();
+
 
             for (int i = 0; i < 7; i++)
             {
                 StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false));
             }
             isRecoil = true;
-            unitRot.unitRecoil(_weapon.GetRecoilPower,_weapon.GetRecoilRecoverSpeed);
+            lockAttack = true;
+            unitRot.unitRecoil(_weapon.GetRecoilPower, _weapon.GetRecoilRecoverSpeed);
             StartCoroutine(EndSingleRecoil());
 
             if (_weapon.GetCurrentAmmo == 0)
@@ -194,7 +200,7 @@ public class UnitAttack : MonoBehaviour
         else
         {
 
-            if (Random.value < criticalChance * 0.01f)
+            if (Random.value < unit.CurrentStat.criticalChance * 0.01f)
             {
                 return true;
             }
@@ -228,13 +234,12 @@ public class UnitAttack : MonoBehaviour
             return true;
         }
 
-        if (Random.value < criticalChance * 0.01f)
+        if (Random.value < unit.CurrentStat.criticalChance * 0.01f)
         {
             return true;
         }
 
         return false;
-
     }
     // 1회용 확정크리티컬 
     public void SetforceCritical()
@@ -329,7 +334,7 @@ public class UnitAttack : MonoBehaviour
 
     private void hitEnemy(Enemy _enemy, float _damage, bool _isCritical)
     {
-        _enemy.HitEnemy(_damage, criticalDamage, _isCritical);
+        _enemy.HitEnemy(_damage, unit.CurrentStat.criticalDamage, _isCritical);
     }
 
     public void HandleMeleeHits(List<HitInfo> _hits)
@@ -344,15 +349,11 @@ public class UnitAttack : MonoBehaviour
             if (hit.enemy != null)
             {
                 bool ciriticalCheck = forceCriticalCheck(hit.IsCritical);
-                hit.enemy.HitEnemy(hit.Damage, criticalDamage, ciriticalCheck);
+                hit.enemy.HitEnemy(hit.Damage, unit.CurrentStat.criticalDamage, ciriticalCheck);
             }
         }
         StartCoroutine(hitMuzzle(criticalCheck));
     }
 
-    public void SetUnitCritical(float _criticalChance, float _criticalDamage)
-    {
-        criticalChance = _criticalChance;
-        criticalDamage = _criticalDamage;
-    }
+ 
 }

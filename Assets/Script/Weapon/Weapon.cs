@@ -43,6 +43,8 @@ public abstract class Weapon
 
     protected bool automatic;
     public bool Automatic { get { return automatic; } protected set { automatic = value; } }
+    protected bool zoomWeapon;
+    public bool ZoomWeapon { get { return zoomWeapon; } }
 
     protected GameObject weaponPrefeb;
     public GameObject WeaponPrefeb { get { return weaponPrefeb; } protected set { weaponPrefeb = value; } }
@@ -72,6 +74,7 @@ public abstract class Weapon
         bulletType = _data.BulletType;
         poolingMuzzle = _data.PoolingMuzzle;
         recoilPower = _data.RecoilPower;
+        zoomWeapon = _data.ZoomWeapon;
     }
     public Weapon(WeaponData _data, bool _melee)
     {

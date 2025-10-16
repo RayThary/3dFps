@@ -159,7 +159,7 @@ public class UnitClone : MonoBehaviour
 
 
         unitAttack = GetComponent<UnitAttack>();
-        unitAttack.SetUnitAttack(unitRotation, unitStat.criticalChance, unitStat.criticalDamage);
+        unitAttack.SetUnitAttack(unitRotation);
 
         addWeapon();
         unitZoom = new UnitZoom();
@@ -242,7 +242,7 @@ public class UnitClone : MonoBehaviour
     }
     void LateUpdate()
     {
-        unitRotation.ApplyRotation(unitAttack.GetIsRecoil, weapon.IsMelee, playerInput);
+        unitRotation.ApplyRotation( weapon.IsMelee, playerInput);
     }
 
 
@@ -298,7 +298,6 @@ public class UnitClone : MonoBehaviour
             if (!Mathf.Approximately(unitStatBasic.criticalChance, unitStat.criticalChance) ||
                 !Mathf.Approximately(unitStatBasic.criticalDamage, unitStat.criticalDamage))
             {
-                unitAttack.SetUnitCritical(unitStat.criticalChance, unitStat.criticalDamage);
                 unitStatBasic.criticalChance = unitStat.criticalChance;
                 unitStatBasic.criticalDamage = unitStat.criticalDamage;
             }

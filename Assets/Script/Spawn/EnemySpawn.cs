@@ -7,7 +7,6 @@ public class EnemySpawn : MonoBehaviour
 {
     private float spawnCoolTime;
     [SerializeField] private float spawnRange;// 몬스터 소환범위
-    private int spawnEnemyCount = 50;
     private int spawnWave;
 
 
@@ -46,7 +45,7 @@ public class EnemySpawn : MonoBehaviour
     {
         if (inner == 0 || outer == 0)
         {
-            Debug.Log("문제");
+            Debug.LogError("SpawnPointError");
         }
         float inner2 = inner * inner;
         float outer2 = outer * outer;

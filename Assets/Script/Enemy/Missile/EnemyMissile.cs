@@ -22,7 +22,6 @@ public class EnemyMissile : MonoBehaviour
     private MissileCurve curve;
 
     private Vector3 p0, p1, p2;
-    private float curveT = 0;
 
     public void SetDamage(float _enemyDamage)
     {

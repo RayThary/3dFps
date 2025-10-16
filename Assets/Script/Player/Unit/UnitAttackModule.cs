@@ -26,7 +26,7 @@ public class UnitAttackModule
         anim = _anim;
         povCamera = _povCamera;
         unitAttack = unit.GetComponent<UnitAttack>();
-        unitAttack.SetUnitAttack(_unitRotation, unit.CurrentStat.criticalChance, unit.CurrentStat.criticalDamage);
+        unitAttack.SetUnitAttack(_unitRotation);
 
         //무기 셋팅
         unitWeaponChange = new UnitWeaponChange(unit, unit.CurrentSlot.weaponSlot, unit.CurrentSlot.unitSlot1.gameObject, unit.CurrentSlot.unitSlot2.gameObject,
@@ -45,9 +45,9 @@ public class UnitAttackModule
 
         unitWeaponChange.WeaponChangeCheck(_playerInput);
         unitWeaponChange.WeaponChangeCool();
+        zoom(_playerInput);
         attack(_playerInput);
         weaponReroad(_playerInput);
-        zoom(_playerInput);
         weaponChange(_playerInput);
     }
 
@@ -77,6 +77,9 @@ public class UnitAttackModule
                         case eWeaponType.ShotGun:
                             unitAttack.Attack_ShotGun(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview());
                             break;
+                        case eWeaponType.Sniper:
+                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
+                            break;
                     }
                 }
             }
@@ -97,6 +100,11 @@ public class UnitAttackModule
 
     private void zoom(PlayerInput _playerInput)
     {
+        if (!unit.UnitWeapon.ZoomWeapon)
+        {
+            return;
+        }
+
         if (_playerInput.ButtonDown[InputAction.Zoom])
         {
             unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);

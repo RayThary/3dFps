@@ -15,6 +15,7 @@ public class PoolingManager : MonoBehaviour
         EnemyA,
         EnemyB,
         EnemyC,
+        EnemyD,
         EnemyF,
         Missile,
         TempSkillMissle,
@@ -23,6 +24,7 @@ public class PoolingManager : MonoBehaviour
         BossWall,
         BossRock,
         BossLaser,
+        EnemyBoom,
     }
 
     [System.Serializable]

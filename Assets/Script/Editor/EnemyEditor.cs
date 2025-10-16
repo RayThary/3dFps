@@ -22,7 +22,7 @@ public class EnemyEditor : Editor
             enemy.RockPoint = (Transform)EditorGUILayout.ObjectField("Boss Projectile 2", enemy.RockPoint, typeof(Transform), true);
         }
 
-        if (enemy.Type == Enemy.eEnemyCategory.Melee || enemy.Type == Enemy.eEnemyCategory.Charger)
+        if (enemy.Type == Enemy.eEnemyCategory.Melee || enemy.Type == Enemy.eEnemyCategory.Charger|| enemy.Type == Enemy.eEnemyCategory.Boom)
         {
             enemy.UnitHitBox = (BoxCollider)EditorGUILayout.ObjectField("testHitBox", enemy.UnitHitBox, typeof(BoxCollider), true) as BoxCollider;
         }

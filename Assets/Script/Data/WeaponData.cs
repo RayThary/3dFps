@@ -24,6 +24,7 @@ public class WeaponData : ScriptableObject
     public bool Automatic;
     public PoolingManager.ePoolingObject PoolingMuzzle;
     public Bullet.BulletType BulletType;
+    public bool ZoomWeapon;
 
     //[Header("Melee Settings")] 근접전용추가할일있으면 넣어줄곳
 

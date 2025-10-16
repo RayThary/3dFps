@@ -8,6 +8,14 @@ public class bmtest : MonoBehaviour
     public float speed;
     public Vector3 backupPoint;
     public Vector3 targetPoint;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            Debug.Log("ÅÍÁü¸ÂÀ½");
+         
+        }
+    }
 
     void Start()
     {

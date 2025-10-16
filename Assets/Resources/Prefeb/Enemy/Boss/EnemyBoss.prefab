@@ -359,6 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 341226c01ea28b74aafbbd3d42545a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossLaser: {fileID: 0}
 --- !u!1 &5451456325720030030
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,15 +622,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c62467647f24a54dbeaee0cfdf3e44a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyCategory: 4
+  enemyCategory: 5
   enemyData: {fileID: 11400000, guid: 8c3bd4df4eb00914ca7a8ebba8ea6a38, type: 2}
   roamRadius: 0
   obstacleMask:
     serializedVersion: 2
     m_Bits: 0
+  hp: 0
   unitHitBox: {fileID: 0}
   missilePort1: {fileID: 2270642282911939601}
   missilePort2: {fileID: 1463840392283406267}
+  rockPoint: {fileID: 0}
 --- !u!65 &6255705026999644172
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -664,6 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 20
+  movePoint: []
 --- !u!1 &6532689146287834490
 GameObject:
   m_ObjectHideFlags: 0
