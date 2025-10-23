@@ -105,6 +105,19 @@ public class UnitAttackModule
             return;
         }
 
+        if (unit.zoomTest)
+        {
+            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);
+            zoomCheck = true;
+            return;
+        }
+        else
+        {
+            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, false);
+            zoomCheck = false;
+            return;
+        }
+
         if (_playerInput.ButtonDown[InputAction.Zoom])
         {
             unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);

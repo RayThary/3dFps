@@ -128,10 +128,7 @@ public abstract class Weapon
 
     public abstract void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom);
 
-    //public (int maxLevel,float ) SetWeaponUpgrade()
-    //{
-
-    //}
+    
 }
 
 

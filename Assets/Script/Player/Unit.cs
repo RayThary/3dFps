@@ -158,7 +158,7 @@ public class Unit : MonoBehaviour
     }
 
 
-
+    public bool zoomTest = false;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z))

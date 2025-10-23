@@ -2,23 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static SoundManager;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
     public enum Clips
     {
-        Atk_Cavalry,
-        Atk_Guard,
-        Atk_Magic,
-        Atk_Range,
-        Atk_Sword,
-        Buy,
-        Defeat,
-        Upgrade,
-        Victory,
+
     }
 
     private AudioSource m_backGroundSource;
@@ -73,7 +67,52 @@ public class SoundManager : MonoBehaviour
         bgSoundPlay(m_BackGroundClip);
     }
 
+    /// <summary>
+    /// 총은 pitch를 랜덤으로해서 조절하기위해서 따로빼줌
+    /// </summary>
+    /// <param name="_clip"></param>
+    /// <param name="_volum"></param>
+    /// <param name="_pitch">랜덤값으로 주기 ex)0.9~1.1 </param>
+    /// <param name="_parent"></param>
+    public void GunSFXCreate(Clips _clip, float _volum, Transform _parent)
+    {
+        AudioClip clip = clips.Find(x => x.name == _clip.ToString());
+        StartCoroutine(GunSFXPlaying(clip, _volum, 0, _parent, false, false));
+    }
+    public void GunHitSFXCreate(Clips _clip, float _volum, Transform _parent, bool _isCritical)
+    {
+        AudioClip clip = clips.Find(x => x.name == _clip.ToString());
+        StartCoroutine(GunSFXPlaying(clip, _volum, 0, _parent, true, _isCritical));
+    }
 
+    IEnumerator GunSFXPlaying(AudioClip clip, float _volum, float _SFXTime, Transform _parent,bool _hit,bool _isCritical)
+    {
+        GameObject SFXSource = getPoolingObject(_parent);
+
+        AudioSource m_sfxaudiosource = SFXSource.GetComponent<AudioSource>();
+
+        m_sfxaudiosource.outputAudioMixerGroup = m_mixer.FindMatchingGroups("SFX")[0];
+        m_sfxaudiosource.clip = clip;
+        m_sfxaudiosource.loop = false;
+        applyPitch(m_sfxaudiosource, _hit, _isCritical);
+        m_sfxaudiosource.volume = _volum * Random.Range(0.95f, 1.05f);
+        m_sfxaudiosource.time = _SFXTime;
+        m_sfxaudiosource.Play();
+        yield return new WaitForSeconds(clip.length);
+        removePooling(SFXSource);
+    }
+
+    private void applyPitch(AudioSource _src , bool _hit, bool _isCritical)
+    {
+        if (_hit)
+        {
+            _src.pitch = _isCritical ? Random.Range(1.05f, 1.15f) : _src.pitch = Random.Range(0.75f, 0.85f);
+        }
+        else
+        {
+            _src.pitch = Random.Range(0.95f, 1.05f);
+        }
+    }
     /// <summary>
     /// 내부 이넘을 통해서 사용할 클립을 선택, 볼륨 크기 , 사운드의 시작지점 미지정시 시작지점은 처음 볼륨은1
     /// </summary>
