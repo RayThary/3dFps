@@ -49,10 +49,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallMesh: {fileID: 6355004150830494072}
   spawnScaleTime: 0.5
-  randomRangeMin: -30
-  randomRangeMax: 30
+  randomRangeMin: -45
+  randomRangeMax: 45
   dangerZone: {fileID: 8497648369304778546}
   warningTime: 2
+  center: {x: 0, y: 0, z: 100}
   s: 0
   t: 0
 --- !u!65 &407675735791867755

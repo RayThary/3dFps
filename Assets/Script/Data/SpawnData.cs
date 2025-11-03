@@ -17,5 +17,6 @@ public class spawnSetting
     [Tooltip("근접")] public int CountA;
     [Tooltip("돌진")] public int CountB;
     [Tooltip("미사일")] public int CountC;
+    [Tooltip("자폭")] public int CountD;
     [Tooltip("저격")] public int CountF;
 }

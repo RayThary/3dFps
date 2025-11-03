@@ -71,9 +71,12 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector][SerializeField] private Transform rockPoint;
     public Transform RockPoint { get { return rockPoint; } set { rockPoint = value; } }
+    [SerializeField]
     private int currentWallCount;
     public int WallCount { get { return currentWallCount; } set { currentWallCount = value; } }
 
+    private bool hitCheck = false;
+    public bool HitCheck { get { return hitCheck; } }
 
     private void OnEnable()
     {
@@ -166,6 +169,7 @@ public class Enemy : MonoBehaviour
 
     public void HitEnemy(float _damage, float _criticalDamage, bool _hitDamage)
     {
+        hitCheck = true;
         if (_hitDamage)
         {
             hp -= _damage * _criticalDamage;
@@ -174,12 +178,14 @@ public class Enemy : MonoBehaviour
         {
             hp -= _damage;
         }
+        SoundManager.instance.GunHitSFXCreate(SoundManager.Clips.CriticalHit, 1, GameManager.instance.WeaponSoundParent, _hitDamage);
         if (hp <= 0)
         {
             animator.SetTrigger("Death");
             box.enabled = false;
             isDead = true;
             isStarted = false;
+            hitCheck = false;
         }
     }
 

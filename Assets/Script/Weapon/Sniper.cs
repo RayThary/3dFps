@@ -18,6 +18,7 @@ public class Sniper : Weapon
             bullet.transform.localRotation = Quaternion.identity;
 
             currentAmmo--;
+            SoundManager.instance.GunSFXCreate(SoundManager.Clips.Sniper, 0.6f, GameManager.instance.WeaponSoundParent);
             return true;
         }
         else

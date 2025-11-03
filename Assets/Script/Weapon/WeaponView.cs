@@ -46,6 +46,7 @@ public class WeaponView : MonoBehaviour
     private LayerMask headMask;
     private List<HitInfo> hitList = new List<HitInfo>();
     private float meleeDamage;
+    private MeshRenderer mesh;
 
 
     public float GetWeaponLevel()
@@ -107,6 +108,7 @@ public class WeaponView : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        mesh = GetComponentInChildren<MeshRenderer>();
         //if (animator != null)
         //    animator.enabled = false; 이게필요하다면조건을 초기화부분에서 true를넣어주던가 조건이필요함
         muzzlePoint = meshObject.Find("MuzzlePoint");
@@ -131,6 +133,10 @@ public class WeaponView : MonoBehaviour
             LayerMask.NameToLayer("FirstPersonWeapon") : LayerMask.NameToLayer("Weapon");
       
     }
+    public void WeaponZoom(bool _zoom)
+    {
+        mesh.enabled = !_zoom;
+    }
 
     public bool WeaponUpgrade()
     {
@@ -144,12 +150,19 @@ public class WeaponView : MonoBehaviour
         return true;
     }
 
-    public void UnitAttackAnim()
+    public void UnitAttackSingleAnim()
     {
         if (animator != null)
         {
             //모든공격모션은 Attack으로바꿔줄필요가있음
             animator.SetTrigger("Attack");
+        }
+    }
+    public void UnitAttackAutoAnim(bool _value)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("Attack", _value);
         }
     }
     public void UnitReloadAnim()

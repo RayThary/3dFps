@@ -19,7 +19,6 @@ public class UnitAttackModule
     private CinemachineVirtualCamera povCamera;
     private bool zoomCheck = false;
 
-
     public void SetUp(Unit _unit, Animator _anim, UnitRotation _unitRotation, CinemachineVirtualCamera _povCamera, PlayerInput _playerInput)
     {
         unit = _unit;
@@ -71,14 +70,14 @@ public class UnitAttackModule
                     switch (unit.UnitWeapon.WeaponType)
                     {
                         case eWeaponType.HandGun:
-                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
+                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck,3);
                             break;
 
                         case eWeaponType.ShotGun:
-                            unitAttack.Attack_ShotGun(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview());
+                            unitAttack.Attack_ShotGun(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(),6);
                             break;
                         case eWeaponType.Sniper:
-                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck);
+                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck,4);
                             break;
                     }
                 }
@@ -90,7 +89,10 @@ public class UnitAttackModule
                     switch (unit.UnitWeapon.WeaponType)
                     {
                         case eWeaponType.SubMachineGun:
-                            unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview());
+                            unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview(),0.1f,2);
+                            break;
+                        case eWeaponType.Rifle:
+                            unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview(), 0.15f,2.5f);
                             break;
                     }
                 }
@@ -105,27 +107,17 @@ public class UnitAttackModule
             return;
         }
 
-        if (unit.zoomTest)
-        {
-            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);
-            zoomCheck = true;
-            return;
-        }
-        else
-        {
-            unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, false);
-            zoomCheck = false;
-            return;
-        }
 
         if (_playerInput.ButtonDown[InputAction.Zoom])
         {
             unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);
+            unitWeaponChange.GetCurrentWeaponview().WeaponZoom(true);
             zoomCheck = true;
         }
         if (_playerInput.ButtonUp[InputAction.Zoom])
         {
             unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, false);
+            unitWeaponChange.GetCurrentWeaponview().WeaponZoom(false);
             zoomCheck = false;
         }
     }

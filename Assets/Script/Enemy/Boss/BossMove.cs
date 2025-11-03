@@ -9,18 +9,12 @@ public class BossMove : MonoBehaviour
     private bool bossDown;
     private bool bossUp;
     [SerializeField] private float moveSpeed;
-    private Vector3 backupPoint;
-    private Vector3 targetPoint;
 
-    private Transform enemyTrs;
     private Transform nextTrs;
     [SerializeField] private List<Transform> movePoint = new List<Transform>();
     public void SetUp(Vector3 _nowVec)
     {
         bossDown = true;
-        backupPoint = _nowVec;
-        targetPoint = _nowVec;
-        targetPoint.y = -10;
         int num = Random.Range(0, movePoint.Count);
         while (_nowVec == movePoint[num].position)
         {
@@ -44,24 +38,7 @@ public class BossMove : MonoBehaviour
 
     void Update()
     {
-        //if (bossDown)
-        //{
-        //    transform.position += Vector3.down * Time.deltaTime * moveSpeed;
-        //    if (transform.position.y <= -10)
-        //    {
-        //        bossDown = false;
-        //        targetPoint.y = backupPoint.y;
-        //    }
-        //}
-
-        //if (bossUp)
-        //{
-        //    transform.position += Vector3.up * Time.deltaTime * (moveSpeed / 2);
-        //    if (transform.position.y >= targetPoint.y)
-        //    {
-        //        bossUp = false;
-        //    }
-        //}
+      
     }
     private IEnumerator bossMoving()
     {
@@ -72,7 +49,6 @@ public class BossMove : MonoBehaviour
             if (transform.position.y <= -10)
             {
                 bossDown = false;
-                targetPoint.y = backupPoint.y;
                 bossUp = true;
                 transform.position = new Vector3(nextTrs.position.x, -10, nextTrs.position.z);
 
@@ -89,7 +65,7 @@ public class BossMove : MonoBehaviour
         {
             transform.position += Vector3.up * Time.deltaTime * (moveSpeed / 2);
             yield return null;
-            if (transform.position.y >= targetPoint.y)
+            if (transform.position.y >= nextTrs.position.y)
             {
                 bossUp = false;
             }

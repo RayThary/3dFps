@@ -12,13 +12,20 @@ public class SoundManager : MonoBehaviour
 
     public enum Clips
     {
-
+        HandGun,
+        Rifle,
+        ShotGun,
+        SMG,
+        Sniper,
+        CriticalHit,
+        NomalHit,
     }
 
     private AudioSource m_backGroundSource;
     //오디오믹서와 배경음악을 넣어줄것
     [SerializeField] private AudioMixer m_mixer;
-    [SerializeField] private AudioClip m_BackGroundClip;
+    [SerializeField] private List<AudioClip> m_BackGroundClip;
+    public List<AudioClip> BackGroundClip { get { return m_BackGroundClip; } }
     [SerializeField] private float m_bgmStartDealy = 0.5f;
 
     private Transform pollingObjParentTrs;//풀링오브젝트의 부모위치
@@ -43,7 +50,7 @@ public class SoundManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         m_backGroundSource = GetComponent<AudioSource>();
-
+        m_backGroundSource.outputAudioMixerGroup = m_mixer.FindMatchingGroups("BackGround")[0];
         StartCoroutine(bgStart());
         pollingObjParentTrs = transform.GetChild(0);
         initPoolingClip();
@@ -64,7 +71,7 @@ public class SoundManager : MonoBehaviour
     {
         yield return new WaitForSeconds(m_bgmStartDealy);
 
-        bgSoundPlay(m_BackGroundClip);
+        bgmSoundPlay(m_BackGroundClip[0]);
     }
 
     /// <summary>
@@ -85,7 +92,7 @@ public class SoundManager : MonoBehaviour
         StartCoroutine(GunSFXPlaying(clip, _volum, 0, _parent, true, _isCritical));
     }
 
-    IEnumerator GunSFXPlaying(AudioClip clip, float _volum, float _SFXTime, Transform _parent,bool _hit,bool _isCritical)
+    IEnumerator GunSFXPlaying(AudioClip clip, float _volum, float _SFXTime, Transform _parent, bool _hit, bool _isCritical)
     {
         GameObject SFXSource = getPoolingObject(_parent);
 
@@ -102,7 +109,7 @@ public class SoundManager : MonoBehaviour
         removePooling(SFXSource);
     }
 
-    private void applyPitch(AudioSource _src , bool _hit, bool _isCritical)
+    private void applyPitch(AudioSource _src, bool _hit, bool _isCritical)
     {
         if (_hit)
         {
@@ -113,6 +120,7 @@ public class SoundManager : MonoBehaviour
             _src.pitch = Random.Range(0.95f, 1.05f);
         }
     }
+
     /// <summary>
     /// 내부 이넘을 통해서 사용할 클립을 선택, 볼륨 크기 , 사운드의 시작지점 미지정시 시작지점은 처음 볼륨은1
     /// </summary>
@@ -194,22 +202,39 @@ public class SoundManager : MonoBehaviour
     }
 
 
-    private void bgSoundPlay(AudioClip clip)
+    private void bgmSoundPlay(AudioClip clip)
     {
-
-        m_backGroundSource.outputAudioMixerGroup = m_mixer.FindMatchingGroups("BackGround")[0];
         m_backGroundSource.clip = clip;
         m_backGroundSource.loop = true;
         m_backGroundSource.time = 0;
         m_backGroundSource.volume = 0.5f;
         m_backGroundSource.Play();
+
+    }
+
+    public IEnumerator BGMSoundChange(AudioClip clip)
+    {
+        float bgVolum = m_backGroundSource.volume;
+        while (true)
+        {
+            bgVolum -= Time.deltaTime * 0.4f;
+            yield return null;
+            m_backGroundSource.volume = bgVolum;
+            if (bgVolum <= 0)
+            {
+                break;
+            }
+        }
+        bgmSoundPlay(clip);
+        Debug.Log("멈춤");
+        BGMSoundPause(true);
     }
 
     /// <summary>
     /// 사운드 멈추기 
     /// </summary>
     /// <param name="_value"></param>
-    public void bgSoundPause(bool _value)
+    public void BGMSoundPause(bool _value)
     {
         if (_value)
         {

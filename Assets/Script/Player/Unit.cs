@@ -135,6 +135,7 @@ public class Unit : MonoBehaviour
         if (GameManager.instance.GetUnit == null)
         {
             GameManager.instance.SetUnit = this;
+            Debug.Log("없음");
         }
         else
         {
@@ -142,6 +143,7 @@ public class Unit : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+                Debug.Log("있음");
         }
     }
     private void addWeapon()
@@ -157,8 +159,6 @@ public class Unit : MonoBehaviour
 
     }
 
-
-    public bool zoomTest = false;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z))

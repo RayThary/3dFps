@@ -31,7 +31,7 @@ public class UnitAttack : MonoBehaviour
     private bool forceCriticalTime;
     private float forceCriticalUntilTime;
 
-   
+
 
     private void Start()
     {
@@ -39,11 +39,11 @@ public class UnitAttack : MonoBehaviour
         unit = GetComponent<Unit>();
     }
 
-    public void SetUnitAttack(UnitRotation _unitRot )
+    public void SetUnitAttack(UnitRotation _unitRot)
     {
         unitRot = _unitRot;
     }
-   
+
     //근접공격부분 이렇게 모션이긴공격은 모션끝에 자동장전을넣어놓을것
     public void Attack_Melee(Weapon _weapon, WeaponView _weaponView, Animator _anim)
     {
@@ -64,7 +64,7 @@ public class UnitAttack : MonoBehaviour
         }
 
     }
-    public void Attack_Single(Weapon _weapon, WeaponView _weaponView, bool _zoom)
+    public void Attack_Single(Weapon _weapon, WeaponView _weaponView, bool _zoom, float _SpreadRange)
     {
         if (lockAttack)
         {
@@ -74,9 +74,9 @@ public class UnitAttack : MonoBehaviour
         bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
-            if (_weaponView != null) _weaponView.UnitAttackAnim();
+            if (_weaponView != null) _weaponView.UnitAttackSingleAnim();
 
-            StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, _zoom));
+            StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, _zoom, _SpreadRange));
             isRecoil = true;
             lockAttack = true;
             unitRot.unitRecoil(_weapon.GetRecoilPower, _weapon.GetRecoilRecoverSpeed);
@@ -103,29 +103,31 @@ public class UnitAttack : MonoBehaviour
     }
 
 
-    public void Attack_Auto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView)
+    public void Attack_Auto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView, float _shotDelay, float _SpreadRange)
     {
+
         if (!isAttackAuto)
         {
-            StartCoroutine(attackAuto(_weapon, _input, _weaponView));
+            StartCoroutine(attackAuto(_weapon, _input, _weaponView, _shotDelay, _SpreadRange));
         }
     }
-    private IEnumerator attackAuto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView)
+    private IEnumerator attackAuto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView, float _shotDelay, float _SpreadRange)
     {
         isAttackAuto = true;
         isRecoil = true;
+        if (_weaponView != null) _weaponView.UnitAttackAutoAnim(true);
         while (_input.ButtonHold[InputAction.Fire])
         {
             bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
             if (shot)
             {
-                if (_weaponView != null) _weaponView.UnitAttackAnim();
+                
                 unitRot.unitRecoil(_weapon.GetRecoilPower, _weapon.GetRecoilRecoverSpeed);
-                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false));
-                yield return new WaitForSeconds(0.1f);
+                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false, _SpreadRange));
+                yield return new WaitForSeconds(_shotDelay);
                 if (_weapon.GetCurrentAmmo == 0)
                 {
-                    yield return new WaitForSeconds(0.3f);
+                    yield return new WaitForSeconds(_shotDelay);
                     _weapon.Reload(_weaponView);
                     break;
                 }
@@ -140,11 +142,14 @@ public class UnitAttack : MonoBehaviour
             }
         }
         isRecoil = false;
-        isAttackAuto = false;
         unitRot.ResetMouseRecoil();
+        if (_weaponView != null) _weaponView.UnitAttackAutoAnim(false);
+        yield return new WaitForSeconds(0.5f);
+        isAttackAuto = false;
+
     }
 
-    public void Attack_ShotGun(Weapon _weapon, WeaponView _weaponView)
+    public void Attack_ShotGun(Weapon _weapon, WeaponView _weaponView, float _SpreadRange)
     {
         if (lockAttack)
         {
@@ -154,12 +159,12 @@ public class UnitAttack : MonoBehaviour
         bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
         if (shot)
         {
-            if (_weaponView != null) _weaponView.UnitAttackAnim();
+            if (_weaponView != null) _weaponView.UnitAttackSingleAnim();
 
 
             for (int i = 0; i < 7; i++)
             {
-                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false));
+                StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false, _SpreadRange));
             }
             isRecoil = true;
             lockAttack = true;
@@ -260,8 +265,9 @@ public class UnitAttack : MonoBehaviour
         Vector3 dir = Quaternion.AngleAxis(angle, Random.insideUnitSphere) * _ray.direction;
 
         return dir;
+
     }
-    private IEnumerator gunHit(float _hitDealyTime, float _damage, bool _zoom)
+    private IEnumerator gunHit(float _hitDealyTime, float _damage, bool _zoom, float _SpreadRange)
     {
 
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 100f, Color.red, 0.1f);
@@ -273,11 +279,12 @@ public class UnitAttack : MonoBehaviour
 
         if (_zoom)
         {
-            rayCheck = Physics.Raycast(ray, out hit, 100, hitRay);
+            Vector3 dir = bulletSpread(ray, 0.3f);
+            rayCheck = Physics.Raycast(ray.origin, dir, out hit, 100f, hitRay);
         }
         else
         {
-            Vector3 dir = bulletSpread(ray, 3);
+            Vector3 dir = bulletSpread(ray, _SpreadRange);
             rayCheck = Physics.Raycast(ray.origin, dir, out hit, 100f, hitRay);
         }
 
@@ -355,5 +362,5 @@ public class UnitAttack : MonoBehaviour
         StartCoroutine(hitMuzzle(criticalCheck));
     }
 
- 
+
 }

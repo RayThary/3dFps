@@ -17,7 +17,7 @@ public class BossWall : MonoBehaviour
 
     private BoxCollider box;
 
-
+    [SerializeField] private Vector3 center;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -56,7 +56,7 @@ public class BossWall : MonoBehaviour
             float randX = Random.Range(randomRangeMin, randomRangeMax);
             float randZ = Random.Range(randomRangeMin, randomRangeMax);
 
-            Vector3 randomPos = new Vector3(randX, 0, randZ);
+            Vector3 randomPos = new Vector3(randX + center.x, 0, randZ + center.z);
 
             NavMeshHit hit;
             if (NavMesh.SamplePosition(randomPos, out hit, 5f, NavMesh.AllAreas))

@@ -20,6 +20,7 @@ public class ShotGun : Weapon
             bullet.transform.localRotation = Quaternion.identity;
 
             currentAmmo--;
+            SoundManager.instance.GunSFXCreate(SoundManager.Clips.ShotGun, 0.6f, GameManager.instance.WeaponSoundParent);
             return true;
         }
         else
@@ -31,4 +32,6 @@ public class ShotGun : Weapon
     public override void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom)
     {
     }
+
+
 }

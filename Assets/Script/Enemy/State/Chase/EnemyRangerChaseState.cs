@@ -40,7 +40,8 @@ public class EnemyRangerChaseState : IEnemyState
     {
         enemy.NavMesh.speed = speed;
         enemy.NavMesh.ResetPath();
-        enemy.NavMesh.SetDestination(playerTrs.position);
+        nextPoint();
+        lastTargetVec = targetVec;
     }
 
 
@@ -124,7 +125,7 @@ public class EnemyRangerChaseState : IEnemyState
     private void RoamTarget()
     {
         float dis = Vector3.Distance(enemyTrs.position, targetVec);
-        if (dis > 1.25f)
+        if (dis > enemy.NavMesh.stoppingDistance + 0.3f)
         {
             enemy.NavMesh.SetDestination(targetVec);
 
@@ -146,7 +147,7 @@ public class EnemyRangerChaseState : IEnemyState
                 enemy.NavMesh.SetDestination(targetVec);
                 break;
             }
-            Vector3 tempPoint = targetPoint(5);
+            Vector3 tempPoint = targetPoint(10);
 
             NavMeshHit navHit;
             if (!NavMesh.SamplePosition(tempPoint, out navHit, roamRadius, NavMesh.AllAreas))

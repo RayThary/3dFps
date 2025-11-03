@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missileType: 2
-  missileSpeed: 10
+  missileSpeed: 20
   RemoveLayer:
     serializedVersion: 2
     m_Bits: 65984

@@ -9,8 +9,6 @@ public class HandGun : Weapon
 
     public override bool Attack(Transform _muzzlePoint)
     {
-
-
         if (currentAmmo > 0 && !base.isReloading)
         {
             GameObject bullet = PoolingManager.Instance.CreateObject(poolingMuzzle, _muzzlePoint);
@@ -20,6 +18,8 @@ public class HandGun : Weapon
             bullet.transform.localRotation = Quaternion.identity;
 
             currentAmmo--;
+
+            SoundManager.instance.GunSFXCreate(SoundManager.Clips.HandGun, 0.3f, GameManager.instance.WeaponSoundParent);
             return true;
         }
         else

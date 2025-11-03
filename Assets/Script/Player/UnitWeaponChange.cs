@@ -151,7 +151,7 @@ public class UnitWeaponChange
         var nowView = weaponViewSlot[currentSlot];
         if (nowView != null)
         {
-            nowView.transform.SetParent(GameManager.instance.GetWeaponParent, true);
+            nowView.transform.SetParent(GameManager.instance.GetWorldParent, true);
             nowView.WeaponPickup.GetComponent<BoxCollider>().enabled = true;
             nowView.WeaponPicupLayer(false);
             nowView.Anim.enabled = false;

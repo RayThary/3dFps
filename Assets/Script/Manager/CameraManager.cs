@@ -25,6 +25,7 @@ public class CameraManager : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main.GetComponent<CinemachineBrain>();
+        POVCam = GameManager.instance.GetUnit.GetComponentInChildren<CinemachineVirtualCamera>();
 
         ChangeCam.Priority = 5;
         Camera.main.cullingMask = firstPersonMask.value;

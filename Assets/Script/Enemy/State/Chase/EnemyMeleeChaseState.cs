@@ -18,6 +18,8 @@ public class EnemyMeleeChaseState : IEnemyState
 
     private bool wasChasing = false;
 
+    private bool checkChase;
+
     public bool CanEnter { get; set; } = true;
 
     public EnemyMeleeChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
@@ -45,7 +47,14 @@ public class EnemyMeleeChaseState : IEnemyState
 
     public void Update()
     {
-        bool checkChase = Vector3.Distance(enemyTrs.position, playerTrs.position) < chaseDistance;
+        if (enemy.HitCheck)
+        {
+            checkChase = true;
+        }
+        else
+        {
+            checkChase = Vector3.Distance(enemyTrs.position, playerTrs.position) < chaseDistance;
+        }
         if (checkChase)
         {
             bool isAttackCheck = chase();
@@ -97,7 +106,7 @@ public class EnemyMeleeChaseState : IEnemyState
         if (dis > 1.25f)
         {
             enemy.NavMesh.SetDestination(targetVec);
-            
+
             return;
         }
         else

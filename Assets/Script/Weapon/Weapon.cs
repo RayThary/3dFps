@@ -126,7 +126,7 @@ public abstract class Weapon
         damage = damage + (_weaponLevel * 5);
     }
 
-    public abstract void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom);
+    public abstract void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom );
 
     
 }
