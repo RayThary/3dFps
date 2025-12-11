@@ -18,9 +18,8 @@ public class SubMachineGun : Weapon
 
             bullet.transform.localPosition = Vector3.zero;
             bullet.transform.localRotation = Quaternion.identity;
-
+            SoundManager.instance.GunSFXCreate(SoundManager.Clips.Rifle, 0.5f, GameManager.instance.WeaponSoundParent);
             currentAmmo--;
-            SoundManager.instance.GunSFXCreate(SoundManager.Clips.SMG, 0.7f, GameManager.instance.WeaponSoundParent);
             return true;
         }
         else

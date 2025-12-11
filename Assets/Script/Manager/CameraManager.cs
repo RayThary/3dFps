@@ -9,76 +9,27 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private LayerMask firstPersonMask;
     [SerializeField] private LayerMask thirdPersonMask;
 
-    //true¸é 1ÀÎÄª falseÀÏ¶© 3ÀÎÄª
-    private bool isFirstPerson = true;
-    private bool isSwitching = false;
-
-
-
+    private CinemachineVirtualCamera POVCam;
     
-    [SerializeField] private CinemachineVirtualCamera POVCam;
     [SerializeField] private CinemachineVirtualCamera ChangeCam;
     [SerializeField] private CinemachineVirtualCamera V3Cam;
 
     private CinemachineBrain mainCamera;
 
+    public void SetPovCam(CinemachineVirtualCamera _povCam) 
+    {
+        POVCam = _povCam;
+        POVCam.Priority = 11;
+    }
     void Start()
     {
         mainCamera = Camera.main.GetComponent<CinemachineBrain>();
-        POVCam = GameManager.instance.GetUnit.GetComponentInChildren<CinemachineVirtualCamera>();
+
 
         ChangeCam.Priority = 5;
         Camera.main.cullingMask = firstPersonMask.value;
-        POVCam.Priority = 11;
 
 
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B) && !isSwitching)
-        {
-            //StartCoroutine(camChange());
-
-        }
-    }
-
-    private IEnumerator camChange(bool _isMelee)
-    {
-        isSwitching = true;
-
-        if (_isMelee)
-        {
-            ChangeCam.Priority = 13;
-            Camera.main.cullingMask = thirdPersonMask.value;
-
-            yield return new WaitForSeconds(0.8f);
-
-            ChangeCam.Priority = 5;
-            POVCam.Priority = 9;
-        }
-        else
-        {
-            ChangeCam.Priority = 13;
-
-            yield return new WaitForSeconds(0.3f);
-
-            ChangeCam.Priority = 5;
-            Camera.main.cullingMask = firstPersonMask.value;
-            POVCam.Priority = 11;
-        }
-
-        isFirstPerson = !isFirstPerson;
-        isSwitching = false;
-    }
-
-    public void weaponSwitched(Weapon _weapon)
-    {
-        bool isMelee = _weapon.IsMelee;
-        if (isMelee == isFirstPerson)
-        {
-            StartCoroutine(camChange(isMelee));
-        }
     }
 
     public void InitializeCamera(Unit _player,Transform _playerTrs)

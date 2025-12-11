@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 
+
 public class WeaponView : MonoBehaviour
 {
     [SerializeField]
@@ -16,24 +17,21 @@ public class WeaponView : MonoBehaviour
         Melee,
     }
     [SerializeField] private WeaponCategory weaponCategory;
-    
+
     private Animator animator;
     public Animator Anim { get { return animator; } }
     private Weapon weapon;
-    private BoxCollider box;
-
 
     private Transform weaponPickup;
     public Transform WeaponPickup { get { return weaponPickup; } }
 
     private Transform muzzlePoint;
     public Transform GetMuzzlePoint { get { return muzzlePoint; } }
-    
+
     //어웨이크끼리의 충돌경우방지
-    [SerializeField]private Transform meshObject;
+    [SerializeField] private Transform meshObject;
     public Transform MeshObject { get { return meshObject; } }
 
-    public event Action<List<HitInfo>> OnMeleeHit;
 
     [SerializeField] private float weaponLevel = 1;
     public float WeaponLevel { get { return weaponLevel; } set { weaponLevel = value; } }
@@ -42,12 +40,12 @@ public class WeaponView : MonoBehaviour
     private float basicDamage;
     private float gunDamage;
     public float GunDamage { get { return gunDamage; } }
-    
+
     private LayerMask headMask;
-    private List<HitInfo> hitList = new List<HitInfo>();
-    private float meleeDamage;
     private MeshRenderer mesh;
 
+    private int weaponUpPrice = 100;
+    public int WeaponUpPrice { get { return weaponUpPrice; } set { weaponUpPrice = value; } }
 
     public float GetWeaponLevel()
     {
@@ -80,37 +78,18 @@ public class WeaponView : MonoBehaviour
         gunDamage = _weapon.GetDamage;
         basicDamage = gunDamage;
         weaponMaxLevel = _weapon.WeaponMaxLevel;
-        weaponLevelUpDamage = _weapon.WeaponLevelUpDamage;
         if (animator != null)
             animator.enabled = true;
         transform.localPosition = Vector3.zero;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (weaponCategory == WeaponCategory.Melee)
-        {
-            Enemy enemy = other.GetComponentInParent<Enemy>();
 
-            if (enemy == null)
-                return;
-
-            if (hitList.Exists(x => x.enemy == enemy))
-                return;
-
-            int layerMask = 1 << other.gameObject.layer;
-            bool crit = (headMask & layerMask) != 0;
-            hitList.Add(new HitInfo(enemy, crit, meleeDamage));
-
-        }
-    }
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         mesh = GetComponentInChildren<MeshRenderer>();
-        //if (animator != null)
-        //    animator.enabled = false; 이게필요하다면조건을 초기화부분에서 true를넣어주던가 조건이필요함
+
         muzzlePoint = meshObject.Find("MuzzlePoint");
 
         if (weaponPickup == null)
@@ -118,38 +97,45 @@ public class WeaponView : MonoBehaviour
             weaponPickup = transform.Find("Mesh Object/WeaponPickup");
         }
 
-        if (weaponCategory == WeaponCategory.Melee)
-        {
-            box = GetComponent<BoxCollider>();
-            box.enabled = false;
-        }
-
     }
-    
+
     public void WeaponPicupLayer(bool _value)
     {
 
         meshObject.gameObject.layer = _value ?
             LayerMask.NameToLayer("FirstPersonWeapon") : LayerMask.NameToLayer("Weapon");
-      
+
     }
     public void WeaponZoom(bool _zoom)
     {
         mesh.enabled = !_zoom;
     }
 
-    public bool WeaponUpgrade()
+    public string WeaponUpgrade()
     {
         if (weaponLevel >= weaponMaxLevel)
         {
-            return false;
+            return "";
         }
-        gunDamage = basicDamage * Mathf.Pow(1 + weaponLevelUpDamage, WeaponLevel);
-
+        int rand = UnityEngine.Random.Range(0, 6);
         weaponLevel++;
-        return true;
+        upgradePrice();
+        return weapon.Upgrade(rand, weapon.Automatic);
     }
 
+    private void upgradePrice()
+    {
+        int basePrice = 100;
+
+        // 가격 상승률
+        float priceRate = 1.15f;
+
+        float rand = UnityEngine.Random.Range(0.9f, 1.15f);
+
+        float price = basePrice * (weaponLevel * priceRate) * rand;
+
+        weaponUpPrice = Mathf.RoundToInt(price);
+    }
     public void UnitAttackSingleAnim()
     {
         if (animator != null)
@@ -172,35 +158,10 @@ public class WeaponView : MonoBehaviour
             animator.SetTrigger("Reload");
         }
     }
-    public void meleeStart(LayerMask _headMask, float _damage)
-    {
-        hitList.Clear();
-        if (weaponCategory == WeaponCategory.Melee)
-        {
-            box.enabled = true;
-            headMask = _headMask;
-            meleeDamage = _damage;
-        }
-        else
-        {
-            Debug.Log("카테고리 설정잘못");
-        }
-    }
 
 
-    public void MeleeEnd()
-    {
-        meleeEnd();
-    }
-    private void meleeEnd()
-    {
-        OnMeleeHit?.Invoke(hitList);
 
-        hitList.Clear();
-        box.enabled = false;
-        meleeDamage = 0;
 
-    }
 
     //애니메이션
     private void reloadEnd()

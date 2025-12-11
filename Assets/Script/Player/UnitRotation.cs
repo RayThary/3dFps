@@ -30,7 +30,7 @@ public class UnitRotation
 
     private UnitAttack unitAttack;
 
-    public void SetUnitRotation(Transform _head, Transform _neck, float _minP, float _maxP, float _maxRecoilAngle, float recoverSpd )
+    public void SetUnitRotation(Transform _head, Transform _neck, float _minP, float _maxP, float _maxRecoilAngle, float recoverSpd)
     {
         playerHead = _head;
         minPitch = _minP;
@@ -69,7 +69,7 @@ public class UnitRotation
     private float tempMouseY;
     private float delta;
     //반동후되돌아가는부분
-    public void ApplyRotation( bool _isMelee, PlayerInput _playerInput)
+    public void ApplyRotation(PlayerInput _playerInput)
     {
 
         delta = Mathf.Abs(_playerInput.GetAxis[InputAction.MouseY] - tempMouseY);
@@ -95,15 +95,10 @@ public class UnitRotation
         float finalPitch = basePitch - recoilPitch;
 
 
-        if (_isMelee)
-        {
-            finalPitch = Mathf.Clamp(finalPitch, minMeleePitch, maxMeleePitch);
-        }
-        else
-        {
-            finalPitch = Mathf.Clamp(finalPitch, minPitch, maxPitch);
-            playerNeck.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
-        }
+
+        finalPitch = Mathf.Clamp(finalPitch, minPitch, maxPitch);
+        playerNeck.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
+
 
         playerHead.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
 

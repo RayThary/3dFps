@@ -25,19 +25,21 @@ public class UnitMovementModule
         unitMovement.SetUp(unitTrs, _anim, _rigid, _playerInput);
 
         unitRotation = new UnitRotation();
-        unitRotation.SetUnitRotation(_head, _neck, _unitData.MinPitch, _unitData.MaxPitch, _unitData.MaxRecoilAngle, unit.CurrentStat.sensitivity);
+        unitRotation.SetUnitRotation(_head, _neck, _unitData.MinPitch, _unitData.MaxPitch, _unitData.MaxRecoilAngle, unit.Sensitivity);
         unit.CurrentRotation = unitRotation;
 
         unitDodge = unit.GetComponent<UnitDodge>();
+        unitDodge.UnitSpeed = unit.UnitSpeed;
+        unitDodge.DodgeSpeed = unit.UnitSpeed * 1.5f;
     }
 
     public void UpdateMovement()
     {
-        unitMovement.UnitMove(unit.CurrentStat.unitSpeed, unit.IsDodge, unit.DodgeVec);
         unitMovement.jump(unit.CurrentStat.unitJumpPower, playerInput);
         unitRotation.unitMouseLook(unitTrs, playerInput.GetAxis[InputAction.MouseX],
-            playerInput.GetAxis[InputAction.MouseY], unit.CurrentStat.sensitivity);
-        unitDodge.dodge(playerInput, unit, unitMovement, unit.CurrentStat.unitSpeed, unitMovement.GetMoveVec);
+            playerInput.GetAxis[InputAction.MouseY], unit.Sensitivity);
+        unitDodge.dodge(playerInput, unit, unitMovement, unit.UnitSpeed, unitMovement.GetMoveVec);
+        unitMovement.UnitMove(unit.UnitSpeed, unit.IsDodge, unit.DodgeVec);
     }
 
 }

@@ -28,8 +28,8 @@ public class UnitAttackModule
         unitAttack.SetUnitAttack(_unitRotation);
 
         //무기 셋팅
-        unitWeaponChange = new UnitWeaponChange(unit, unit.CurrentSlot.weaponSlot, unit.CurrentSlot.unitSlot1.gameObject, unit.CurrentSlot.unitSlot2.gameObject,
-            unit.CurrentSlot.unitMeleeSlot1.gameObject, unit.CurrentSlot.unitMeleeSlot2.gameObject, unit.CurrentStat.weaponChangeTime, unitAttack);
+        unitWeaponChange = new UnitWeaponChange(unit, unit.CurrentSlot.weaponSlot, unit.CurrentSlot.unitSlot1.gameObject,
+            unit.CurrentSlot.unitSlot2.gameObject, unit.CurrentStat.weaponChangeTime, unitAttack);
         unit.UnitWeapon = unitWeaponChange.GetCurrentWeapon();
 
 
@@ -52,52 +52,43 @@ public class UnitAttackModule
 
     private void attack(PlayerInput _playerInput)
     {
-        if (unit.UnitWeapon.IsMelee)
+        if (!unit.UnitWeapon.Automatic)
         {
             if (_playerInput.ButtonDown[InputAction.Fire])
             {
+                switch (unit.UnitWeapon.WeaponType)
+                {
+                    case eWeaponType.HandGun:
+                        unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetWeaponview(), zoomCheck, unit.UnitWeapon.SpreadRange);
+                        break;
 
-                unitAttack.Attack_Melee(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), anim);
+                    case eWeaponType.ShotGun:
+                        unitAttack.Attack_ShotGun(unit.UnitWeapon, unitWeaponChange.GetWeaponview(), unit.UnitWeapon.SpreadRange);
+                        break;
+                    case eWeaponType.Sniper:
+                        unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetWeaponview(), zoomCheck, unit.UnitWeapon.SpreadRange);
+                        break;
+                }
             }
         }
         else
         {
-
-            if (!unit.UnitWeapon.Automatic)
+            if (_playerInput.ButtonHold[InputAction.Fire])
             {
-                if (_playerInput.ButtonDown[InputAction.Fire])
+                switch (unit.UnitWeapon.WeaponType)
                 {
-                    switch (unit.UnitWeapon.WeaponType)
-                    {
-                        case eWeaponType.HandGun:
-                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck,3);
-                            break;
-
-                        case eWeaponType.ShotGun:
-                            unitAttack.Attack_ShotGun(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(),6);
-                            break;
-                        case eWeaponType.Sniper:
-                            unitAttack.Attack_Single(unit.UnitWeapon, unitWeaponChange.GetCurrentWeaponview(), zoomCheck,4);
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                if (_playerInput.ButtonHold[InputAction.Fire])
-                {
-                    switch (unit.UnitWeapon.WeaponType)
-                    {
-                        case eWeaponType.SubMachineGun:
-                            unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview(),0.1f,2);
-                            break;
-                        case eWeaponType.Rifle:
-                            unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetCurrentWeaponview(), 0.15f,2.5f);
-                            break;
-                    }
+                    case eWeaponType.SubMachineGun:
+                        unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetWeaponview(),
+                            unit.UnitWeapon.FireDelay, unit.UnitWeapon.SpreadRange);
+                        break;
+                    case eWeaponType.Rifle:
+                        unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetWeaponview(),
+                            unit.UnitWeapon.FireDelay, unit.UnitWeapon.SpreadRange);
+                        break;
                 }
             }
         }
+
     }
 
     private void zoom(PlayerInput _playerInput)
@@ -111,13 +102,13 @@ public class UnitAttackModule
         if (_playerInput.ButtonDown[InputAction.Zoom])
         {
             unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, true);
-            unitWeaponChange.GetCurrentWeaponview().WeaponZoom(true);
+            unitWeaponChange.GetWeaponview().WeaponZoom(true);
             zoomCheck = true;
         }
         if (_playerInput.ButtonUp[InputAction.Zoom])
         {
             unitWeaponChange.GetCurrentWeapon().Zoomable(povCamera, false);
-            unitWeaponChange.GetCurrentWeaponview().WeaponZoom(false);
+            unitWeaponChange.GetWeaponview().WeaponZoom(false);
             zoomCheck = false;
         }
     }
@@ -141,14 +132,9 @@ public class UnitAttackModule
         if (_playerInput.ButtonDown[InputAction.Reload])
         {
 
-            if (unit.UnitWeapon.IsMelee)
-            {
-                unit.UnitWeapon.Reload(anim);
-            }
-            else
-            {
-                unit.UnitWeapon.Reload(unitWeaponChange.GetCurrentWeaponview());
-            }
+
+            unit.UnitWeapon.Reload(unitWeaponChange.GetWeaponview());
+
         }
     }
     private void changeUnitStat()

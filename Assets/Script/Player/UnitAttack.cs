@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using static WeaponView;
 
 public class UnitAttack : MonoBehaviour
@@ -31,12 +30,25 @@ public class UnitAttack : MonoBehaviour
     private bool forceCriticalTime;
     private float forceCriticalUntilTime;
 
+    private Weapon currentWeapon;
+    public void SetCurrentWeapon(Weapon _weapon)
+    {
+        currentWeapon = _weapon;
+    }
 
 
     private void Start()
     {
         defaultScale = GameManager.instance.Crosshair.rectTransform.localScale;
         unit = GetComponent<Unit>();
+        var weaponChange = unit.UnitAttackModule.GetUnitWeaponChange;
+
+        // 현재 무기 초기 설정
+        SetCurrentWeapon(weaponChange.GetCurrentWeapon());
+
+        // 무기 교체될 때마다 자동 갱신
+        weaponChange.OnWeaponSwitched += SetCurrentWeapon;
+
     }
 
     public void SetUnitAttack(UnitRotation _unitRot)
@@ -44,26 +56,7 @@ public class UnitAttack : MonoBehaviour
         unitRot = _unitRot;
     }
 
-    //근접공격부분 이렇게 모션이긴공격은 모션끝에 자동장전을넣어놓을것
-    public void Attack_Melee(Weapon _weapon, WeaponView _weaponView, Animator _anim)
-    {
 
-        if (_weapon.IsMelee)
-        {
-            bool shot = _weapon.Attack(null);
-            if (shot)
-            {
-                _anim.SetTrigger("Attack");
-
-                _weaponView.meleeStart(hitHeadRay, _weapon.GetDamage);
-            }
-            else
-            {
-                _weapon.Reload(_anim);
-            }
-        }
-
-    }
     public void Attack_Single(Weapon _weapon, WeaponView _weaponView, bool _zoom, float _SpreadRange)
     {
         if (lockAttack)
@@ -121,7 +114,7 @@ public class UnitAttack : MonoBehaviour
             bool shot = _weapon.Attack(_weaponView.GetMuzzlePoint);
             if (shot)
             {
-                
+
                 unitRot.unitRecoil(_weapon.GetRecoilPower, _weapon.GetRecoilRecoverSpeed);
                 StartCoroutine(gunHit(hitDealyTime, _weaponView.GunDamage, false, _SpreadRange));
                 yield return new WaitForSeconds(_shotDelay);
@@ -205,7 +198,7 @@ public class UnitAttack : MonoBehaviour
         else
         {
 
-            if (Random.value < unit.CurrentStat.criticalChance * 0.01f)
+            if (Random.value < currentWeapon.CriticalChance)
             {
                 return true;
             }
@@ -239,7 +232,7 @@ public class UnitAttack : MonoBehaviour
             return true;
         }
 
-        if (Random.value < unit.CurrentStat.criticalChance * 0.01f)
+        if (Random.value < currentWeapon.CriticalChance)
         {
             return true;
         }
@@ -341,26 +334,9 @@ public class UnitAttack : MonoBehaviour
 
     private void hitEnemy(Enemy _enemy, float _damage, bool _isCritical)
     {
-        _enemy.HitEnemy(_damage, unit.CurrentStat.criticalDamage, _isCritical);
+        _enemy.HitEnemy(_damage, currentWeapon.CriticalDamage, _isCritical);
     }
 
-    public void HandleMeleeHits(List<HitInfo> _hits)
-    {
-        if (_hits == null || !_hits.Any(x => x.enemy != null))
-        {
-            return;
-        }
-        bool criticalCheck = _hits.Any(x => x.IsCritical);
-        foreach (var hit in _hits)
-        {
-            if (hit.enemy != null)
-            {
-                bool ciriticalCheck = forceCriticalCheck(hit.IsCritical);
-                hit.enemy.HitEnemy(hit.Damage, unit.CurrentStat.criticalDamage, ciriticalCheck);
-            }
-        }
-        StartCoroutine(hitMuzzle(criticalCheck));
-    }
 
 
 }

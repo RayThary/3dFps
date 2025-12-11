@@ -12,7 +12,7 @@ public class UnitData : ScriptableObject
 
     public float WeaponChangeTime;
     //마우스감도
-    public float Sensitivity;
+    //public float Sensitivity;
     //총반동관련
     
     //최대 누적반동
@@ -21,7 +21,4 @@ public class UnitData : ScriptableObject
     public float MaxPitch;
     public float MinPitch;
 
-    //크리티컬 기본
-    public float CriticalChance;
-    public float CriticalDamage;
 }

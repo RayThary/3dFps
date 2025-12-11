@@ -15,10 +15,12 @@ public class SoundManager : MonoBehaviour
         HandGun,
         Rifle,
         ShotGun,
-        SMG,
+        SubMachineGun,
         Sniper,
         CriticalHit,
         NomalHit,
+        SubMachineGunEnd,
+        RifleEnd,
     }
 
     private AudioSource m_backGroundSource;
@@ -74,6 +76,46 @@ public class SoundManager : MonoBehaviour
         bgmSoundPlay(m_BackGroundClip[0]);
     }
 
+
+    public GameObject GunAutoSFXCreate(Clips _clip, float _volum, Transform _parent)
+    {
+
+        AudioClip clip = clips.Find(x => x.name == _clip.ToString());
+        GameObject SFXSource = getPoolingObject(_parent);
+
+        AudioSource m_sfxaudiosource = SFXSource.GetComponent<AudioSource>();
+
+        m_sfxaudiosource.outputAudioMixerGroup = m_mixer.FindMatchingGroups("SFX")[0];
+        m_sfxaudiosource.clip = clip;
+        m_sfxaudiosource.loop = true;
+        applyPitch(m_sfxaudiosource, false, false);
+        m_sfxaudiosource.volume = _volum * Random.Range(0.95f, 1.05f);
+        m_sfxaudiosource.time = 0;
+        m_sfxaudiosource.Play();
+
+        return SFXSource;
+    }
+
+    public void StopLoop(GameObject _sfxObj)
+    {
+        AudioSource src = _sfxObj.GetComponent<AudioSource>();
+        src.loop = false;
+        string clipEnd = src.clip.ToString() + "End";
+        src.clip = clips.Find(x => x.name == clipEnd);
+        StartCoroutine(stopLoop(src, _sfxObj));
+
+    }
+
+    IEnumerator stopLoop(AudioSource _audioSFXSource, GameObject _sfxObj)
+    {
+        while (_audioSFXSource.isPlaying)
+        {
+            yield return null;
+        }
+
+        removePooling(_sfxObj);
+    }
+
     /// <summary>
     /// 총은 pitch를 랜덤으로해서 조절하기위해서 따로빼줌
     /// </summary>
@@ -83,11 +125,13 @@ public class SoundManager : MonoBehaviour
     /// <param name="_parent"></param>
     public void GunSFXCreate(Clips _clip, float _volum, Transform _parent)
     {
+        //총발사소리 
         AudioClip clip = clips.Find(x => x.name == _clip.ToString());
         StartCoroutine(GunSFXPlaying(clip, _volum, 0, _parent, false, false));
     }
     public void GunHitSFXCreate(Clips _clip, float _volum, Transform _parent, bool _isCritical)
     {
+        //총의 피격소리
         AudioClip clip = clips.Find(x => x.name == _clip.ToString());
         StartCoroutine(GunSFXPlaying(clip, _volum, 0, _parent, true, _isCritical));
     }
@@ -108,6 +152,9 @@ public class SoundManager : MonoBehaviour
         yield return new WaitForSeconds(clip.length);
         removePooling(SFXSource);
     }
+
+
+
 
     private void applyPitch(AudioSource _src, bool _hit, bool _isCritical)
     {
@@ -178,7 +225,8 @@ public class SoundManager : MonoBehaviour
         return obj;
     }
 
-    private void removePooling(GameObject _obj)
+
+    public void removePooling(GameObject _obj)
     {
 
         //본인이 없는경우 채워넣어주고 만약 자식의 개수가 더많다면 삭제해준다.

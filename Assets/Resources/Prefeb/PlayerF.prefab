@@ -295,101 +295,6 @@ Transform:
   - {fileID: 2877257027306624356}
   m_Father: {fileID: 8391574712376864415}
   m_LocalEulerAnglesHint: {x: -0.6007886, y: 1.619034, z: -114.63995}
---- !u!1 &2240059700032988138
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 572115641482291252}
-  m_Layer: 11
-  m_Name: MeleeWeaponSlot1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &572115641482291252
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2240059700032988138}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5413493588394915011}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2420490070096167951
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8719974777315965760}
-  m_Layer: 11
-  m_Name: MeleeWeaponSlot2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8719974777315965760
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2420490070096167951}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5413493588394915011}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2473862361806190908
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5413493588394915011}
-  m_Layer: 11
-  m_Name: MeleeWeapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5413493588394915011
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473862361806190908}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.79, y: 5.94, z: -1.87}
-  m_LocalScale: {x: 5, y: 5, z: 5}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 572115641482291252}
-  - {fileID: 8719974777315965760}
-  m_Father: {fileID: 8802474175475351344}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2793207510235059013
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,8 +390,7 @@ Transform:
   m_LocalPosition: {x: 0.20501375, y: 1.0215364, z: -0.14160201}
   m_LocalScale: {x: 0.19999997, y: 0.20000003, z: 0.20000003}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5413493588394915011}
+  m_Children: []
   m_Father: {fileID: 7579205759457787285}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &623497295612143583
@@ -819,8 +723,9 @@ MonoBehaviour:
   unitData: {fileID: 11400000, guid: ec633be00cc3df340885b097963288d6, type: 2}
   unitHead: {fileID: 3089936762169551889}
   unitHandSlot: {fileID: 8161690352351732591}
-  unitMeleeSlot: {fileID: 5413493588394915011}
   neck: {fileID: 6964182724346701154}
+  sensitivity: 0
+  currentGold: 0
   povCamera: {fileID: 5089827861307097487}
 --- !u!114 &7459868301389727150
 MonoBehaviour:
@@ -834,14 +739,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38371f59f3fe9584c89f754a4d8ce1a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillName: 0
-  skillData:
-  - {fileID: 11400000, guid: 6403f06677d08854aa512411b882fb9a, type: 2}
+  skillName: 1
   outLayer:
     serializedVersion: 2
     m_Bits: 30976
   skillSpawnTrs: {fileID: 3663747727375442744}
   useSkill: 0
+  throwMissile:
+    damage: 70
+    missileCount: 4
+    fireInterval: 0.15
+    coolTime: 0
+    missileSpeed: 30
+    damageUp: 0
+    coolDownRate: 0
+    missileCountUp: 0
+    fireIntervalUp: 0
+    missileSpeedUp: 0
+    criticalEnable: 0
+  throwMissileUpgradeLevel:
+    damageLevel: 0
+    coolDownLevel: 0
+    missileCountLevel: 0
+    fireIntervalLevel: 0
+    missileSpeedLevel: 0
+    criticalEnableLevel: 0
+    damageMaxLevel: 5
+    coolDownMaxLevel: 3
+    missileCountMaxLevel: 3
+    fireIntervalMaxLevel: 3
+    missileSpeedMaxLevel: 3
+    criticalEnableMaxLevel: 1
+  shockwave:
+    damage: 70
+    coolTime: 6
+    shockwaveRadius: 10
+    damageUp: 1.2
+    coolTimeUp: 0.9
+    radiusUp: 2.5
+    slowAmount: 1
+    residueDuration: 1
+    doubleShockwave: 0
+  shockwaveUpgradeLevel:
+    damageLevel: 0
+    coolTimeLevel: 0
+    radiusLevel: 0
+    slowLevel: 0
+    residueLevel: 0
+    doubleShockwaveLevel: 0
+    damageMaxLevel: 5
+    coolTimeMaxLevel: 3
+    radiusMaxLevel: 5
+    slowMaxLevel: 3
+    residueMaxLevel: 3
+    doubleShockwaveMaxLevel: 1
+  debugSlamRadius: 0
 --- !u!114 &942464816705683304
 MonoBehaviour:
   m_ObjectHideFlags: 0

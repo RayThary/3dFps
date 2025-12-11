@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public bool spawn = false;
+    public GameObject test;
     void Start()
     {
-        GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyD, transform);
-        obj.transform.position = transform.position;
+        GameManager.instance.EnemyMaxCount = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-     
-        
+        if (spawn)
+        {
+            GameManager.instance.AddKillCount();
+            spawn = false;
+        }
+
     }
 }

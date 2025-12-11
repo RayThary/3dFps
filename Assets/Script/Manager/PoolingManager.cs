@@ -18,13 +18,16 @@ public class PoolingManager : MonoBehaviour
         EnemyD,
         EnemyF,
         Missile,
-        TempSkillMissle,
         LoadingCanvas,
         MissileBoss,
         BossWall,
         BossRock,
         BossLaser,
         EnemyBoom,
+        ItemAmmo,
+        ItemCoin,
+        SkillMissile,
+        Shockwave,
     }
 
     [System.Serializable]

@@ -46,9 +46,6 @@ public static class WeaponFactory
             case eWeaponType.SubMachineGun:
                 return new SubMachineGun(data);
 
-            case eWeaponType.Hammer:
-                return new Hammer(data);
-
             case eWeaponType.Sniper:
                 return new Sniper(data);
 

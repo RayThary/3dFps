@@ -610,8 +610,7 @@ Transform:
   m_LocalPosition: {x: -0.18137485, y: 1.6085135, z: -0.54236007}
   m_LocalScale: {x: 0.19999997, y: 0.19999997, z: 0.2}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7459977304683669969}
+  m_Children: []
   m_Father: {fileID: 3943758400851710408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7211257748408846934
@@ -694,37 +693,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 203626751520241100}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3054894161049336703
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5628720815548377968}
-  m_Layer: 11
-  m_Name: MeleeWeaponSlot2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5628720815548377968
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3054894161049336703}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7459977304683669969}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3124737164221136193
 GameObject:
@@ -1137,8 +1105,9 @@ MonoBehaviour:
   unitData: {fileID: 11400000, guid: ec633be00cc3df340885b097963288d6, type: 2}
   unitHead: {fileID: 5401834921608893278}
   unitHandSlot: {fileID: 4206875433554880461}
-  unitMeleeSlot: {fileID: 7459977304683669969}
   neck: {fileID: 5947687007584758761}
+  sensitivity: 0
+  currentGold: 0
   povCamera: {fileID: 3314300461031420196}
 --- !u!114 &5232305930072985549
 MonoBehaviour:
@@ -1153,13 +1122,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: 0
-  skillData:
-  - {fileID: 11400000, guid: 6403f06677d08854aa512411b882fb9a, type: 2}
   outLayer:
     serializedVersion: 2
     m_Bits: 30976
   skillSpawnTrs: {fileID: 203626751520241100}
   useSkill: 0
+  throwMissile:
+    damage: 70
+    missileCount: 4
+    fireInterval: 0.15
+    coolTime: 6
+    missileSpeed: 30
+    damageUp: 1.2
+    coolDownRate: 0.9
+    missileCountUp: 2
+    fireIntervalUp: 0.2
+    missileSpeedUp: 5
+    criticalEnable: 0
+  shockwave:
+    damage: 70
+    coolTime: 0
+    damageUp: 0
+    coolTimeUp: 0
+    radiusUp: 0
+    slowAmount: 0
+    residueDuration: 0
+    doubleShockwave: 0
+  debugSlamRadius: 0
 --- !u!114 &7004103501642571485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1269,39 +1258,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 203626751520241100}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6803124622806851501
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7459977304683669969}
-  m_Layer: 11
-  m_Name: MeleeWeapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7459977304683669969
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6803124622806851501}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.79, y: 5.94, z: -1.87}
-  m_LocalScale: {x: 5, y: 5, z: 5}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1721174964223889230}
-  - {fileID: 5628720815548377968}
-  m_Father: {fileID: 4499023936140656288}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6918111672649022360
 GameObject:
@@ -1536,37 +1492,6 @@ Transform:
   - {fileID: 4613609313087541413}
   m_Father: {fileID: 7254610222497260568}
   m_LocalEulerAnglesHint: {x: -51.615616, y: -23.811422, z: 10.922596}
---- !u!1 &7795885111185348328
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1721174964223889230}
-  m_Layer: 11
-  m_Name: MeleeWeaponSlot1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1721174964223889230
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7795885111185348328}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7459977304683669969}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7852497832785370587
 GameObject:
   m_ObjectHideFlags: 0

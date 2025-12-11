@@ -28,9 +28,9 @@ public class UnitMovement
         input = _input;
     }
 
-    public void UnitMove(float _speed,bool _isDodge,Vector3 _dodgeVec)
+    public void UnitMove(float _speed, bool _isDodge, Vector3 _dodgeVec)
     {
-        moveVec = (unitTransform.right * input.GetAxis[InputAction.Horizontal]) + 
+        moveVec = (unitTransform.right * input.GetAxis[InputAction.Horizontal]) +
             (unitTransform.forward * input.GetAxis[InputAction.Vertical]);
 
         if (_isDodge) moveVec = _dodgeVec;
@@ -40,7 +40,7 @@ public class UnitMovement
         anim.SetBool("Run", moveVec != Vector3.zero);
     }
 
-    public void jump(float _jumpPower,PlayerInput _playerInput)
+    public void jump(float _jumpPower, PlayerInput _playerInput)
     {
         isGround = Physics.Raycast(unitTransform.position, Vector3.down, 0.5f, LayerMask.GetMask("Ground"));
         if (_playerInput.ButtonDown[InputAction.Jump] && isGround)
@@ -62,5 +62,5 @@ public class UnitMovement
     }
 
 
-  
+
 }

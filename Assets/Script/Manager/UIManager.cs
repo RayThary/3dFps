@@ -1,148 +1,283 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography;
+using System.IO;
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
-
-
 
 public class UIManager : MonoBehaviour
 {
-    private Unit unit;
+    public static UIManager instance;
+
+    [SerializeField] private GameObject baseWindow;
+    [SerializeField] private GameObject characterWindow;
+    [SerializeField] private GameObject optionWindow;
+    [SerializeField] private GameObject pauseWindow;
+    [SerializeField] private GameObject loadingBarWindow;
+    public GameObject LoadingBar { get { return loadingBarWindow; } }
 
 
-    private UnitWeaponChange unitWeaponChange;
-    private UnitSkill unitSkill;
-    //스킬
-    private float skillCoolTime;
-    private bool uesSkill = false;
+    [SerializeField] private Slider s_MasterSound;
+    [SerializeField] private Slider s_BGM;
+    [SerializeField] private Slider s_SFX;
 
-    //대시
-    [SerializeField]
-    private Image dodgeCool;
+    [SerializeField] private TMP_Dropdown d_Resolutions;
+    private readonly List<Resolution> resolutions = new();
+    [SerializeField] private TMP_Dropdown d_FPS;
+    private readonly List<int> frameRate = new();
+    [SerializeField] private TMP_Dropdown d_ScreenMode;
+    private readonly List<FullScreenMode> screenModes = new();
 
-    private UnitDodge unitDodge;
-    private bool isDodge;
-    private float dodgeCoolTime;
+    [SerializeField] private Button optionClose;
 
-    //총알
-    [SerializeField]
-    private TextMeshProUGUI ammoText;
+    [SerializeField] private Slider s_Sensitivity;
 
-    private int currentAmmo;
-    private int reserveAmmo;
-
-    //총 아이콘
-    [System.Serializable]
-    public struct WeaponIcon
+    [SerializeField] private SkillUpgradeUI skillUpgradeUI;
+    public SkillUpgradeUI GetSkillUpgradeUI { get { return skillUpgradeUI; } }
+    private void Awake()
     {
-        public eWeaponType type;
-        public Sprite sprite;
-    }
-
-    [SerializeField] private Image iconImage;
-    [SerializeField] private Image weaponCool;
-    [SerializeField] private Image skillCool;
-
-    [SerializeField] private List<WeaponIcon> weaponIcon = new List<WeaponIcon>();
-
-
-
-
-
-    void Start()
-    {
-        unit = GameManager.instance.GetUnit;
-        unitDodge = unit.GetComponent<UnitDodge>();
-        unitSkill = unit.GetComponent<UnitSkill>();
-
-        dodgeCoolTime = unitDodge.GetDodgeCool;
-        unitWeaponChange = unit.UnitAttackModule.GetUnitWeaponChange;
-
-        onUIWeaponIcon(unit.UnitWeapon);
-        unitWeaponChange.OnWeaponSwitched += onUIWeaponIcon;
-
-        skillCoolTime = unitSkill.GetCoolTime;
-    }
-
-    void OnDestroy()
-    {
-        unitWeaponChange.OnWeaponSwitched -= onUIWeaponIcon;
-    }
-    private void onUIWeaponIcon(Weapon _weapon)
-    {
-        foreach (WeaponIcon _wicon in weaponIcon)
+        if (instance == null)
         {
-            if (_wicon.type == _weapon.WeaponType)
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        InitResolutionOptions();
+        InitFPSOption();
+        InitScreenModeOption();
+
+        LoadOptionData();
+
+        d_Resolutions.onValueChanged.AddListener(ApplyResolution);
+        d_FPS.onValueChanged.AddListener(ApplyFPS);
+
+        SoundManager.instance.SetMasterSound(s_MasterSound);
+        SoundManager.instance.SetBGMSound(s_BGM);
+        SoundManager.instance.SetSFXSound(s_SFX);
+        optionClose.onClick.AddListener(OnButtonOptionClose);
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void LoadOptionData()
+    {
+        string path = Application.persistentDataPath + "/option.json";
+        if (!File.Exists(path))
+        {
+
+            Debug.Log("옵션값이없어서 초기화합니다.");
+            return;
+        }
+
+        string json = File.ReadAllText(path);
+        OptionData data = JsonUtility.FromJson<OptionData>(json);
+
+        //해상도
+        if (data.ResolutionIndex < Screen.resolutions.Length)
+        {
+            Resolution r = resolutions[data.ResolutionIndex];
+            Screen.SetResolution(r.width, r.height, data.ScreenMode);
+            d_Resolutions.value = data.ResolutionIndex;
+            d_Resolutions.RefreshShownValue();
+        }
+
+        //화면모드
+        if (Screen.fullScreenMode != data.ScreenMode)
+        {
+            Screen.SetResolution(Screen.width, Screen.height, data.ScreenMode);
+            d_ScreenMode.value = screenModes.IndexOf(data.ScreenMode);
+            d_ScreenMode.RefreshShownValue();
+        }
+
+        //프레임
+        Application.targetFrameRate = data.FrameRate == -1 ? -1 : data.FrameRate;
+
+        int fpsIntdx = frameRate.IndexOf(data.FrameRate);
+        if (fpsIntdx >= 0)
+        {
+            d_FPS.value = fpsIntdx;
+            d_FPS.RefreshShownValue();
+        }
+
+        //사운드
+        s_MasterSound.value = data.MasterVolume;
+        s_BGM.value = data.BGMVolume;
+        s_SFX.value = data.SFXVolume;
+
+        s_Sensitivity.value = data.Sensitivity;
+    }
+    private void InitResolutionOptions()
+    {
+        d_Resolutions.options.Clear();
+        resolutions.Clear();
+        resolutions.AddRange(Screen.resolutions);
+
+        int currentIndex = 0;
+        for (int i = 0; i < resolutions.Count; i++)
+        {
+            TMP_Dropdown.OptionData optionData = new()
+            { text = $"{resolutions[i].width} x {resolutions[i].height} {Mathf.RoundToInt((float)resolutions[i].refreshRateRatio.value)}hz" };
+            d_Resolutions.options.Add(optionData);
+
+            if (resolutions[i].width == Screen.currentResolution.width &&
+                resolutions[i].height == Screen.currentResolution.height)
             {
-                iconImage.sprite = _wicon.sprite;
-                break;
+                currentIndex = i;
+            }
+        }
+
+        d_Resolutions.value = currentIndex;
+    }
+
+    private void InitFPSOption()
+    {
+        d_FPS.options.Clear();
+        if (Application.targetFrameRate > 240)
+            Application.targetFrameRate = 240;
+        frameRate.Add(-1);
+        frameRate.Add(240);
+        frameRate.Add(120);
+        frameRate.Add(60);
+        frameRate.Add(30);
+
+        for (int i = 0; i < frameRate.Count; i++)
+        {
+            string text = frameRate[i] == -1 ? "Unlimited" : frameRate[i].ToString();
+            TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData(text);
+            d_FPS.options.Add(data);
+        }
+        d_FPS.RefreshShownValue();
+    }
+
+    private void InitScreenModeOption()
+    {
+        d_ScreenMode.options.Clear();
+        screenModes.Clear();
+
+
+        List<string> modeNames = new() { "전체화면", "테두리 없는 전체창", "창 모드" };
+
+
+        screenModes.Add(FullScreenMode.ExclusiveFullScreen);
+        screenModes.Add(FullScreenMode.FullScreenWindow);
+        screenModes.Add(FullScreenMode.Windowed);
+
+        // Dropdown 옵션 세팅
+        for (int i = 0; i < modeNames.Count; i++)
+        {
+            d_ScreenMode.options.Add(new TMP_Dropdown.OptionData(modeNames[i]));
+        }
+
+        d_ScreenMode.RefreshShownValue();
+    }
+    private void saveOption()
+    {
+        OptionData data = new OptionData();
+        data.ResolutionIndex = d_Resolutions.value;
+        data.FrameRate = frameRate[d_FPS.value];
+        data.ScreenMode = screenModes[d_ScreenMode.value];
+
+        data.MasterVolume = s_MasterSound.value;
+        data.BGMVolume = s_BGM.value;
+        data.SFXVolume = s_SFX.value;
+        data.Sensitivity = s_Sensitivity.value;
+
+        GameManager.instance.characterSensitivity(s_Sensitivity.value);
+
+        string json = JsonUtility.ToJson(data, true);
+        string path = Application.persistentDataPath + "/option.json";
+        File.WriteAllText(path, json);
+
+        saveSensitivity();
+    }
+
+    private void saveSensitivity()
+    {
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            Unit unit = GameManager.instance.GetUnit;
+            if (unit != null)
+            {
+                unit.Sensitivity = s_Sensitivity.value * 0.5f;
             }
         }
     }
 
-
-
-    // Update is called once per frame
-    void Update()
+    public void PauseOption()
     {
-        uiDodge();
-        uiAmmo();
-        uiSkillCool();
-        uiWeaponChange();
-
+        Time.timeScale = 0;
+        GameManager.instance.IsPaused = true;
+        pauseWindow.SetActive(true);
     }
 
-    private void uiDodge()
-    {
-        if (!isDodge && unit.IsDodge)
-        {
 
-            dodgeCool.fillAmount = 1;
-            isDodge = true;
-        }
-        if (isDodge)
+    public void PauseContinue()
+    {
+        Time.timeScale = 1;
+        GameManager.instance.IsPaused = false;
+        pauseWindow.SetActive(false);
+    }
+    public void PauseExit()
+    {
+        pauseWindow.SetActive(false);
+
+        if (GameManager.instance.GetUnit != null)
         {
-            dodgeCool.fillAmount -= Time.deltaTime / dodgeCoolTime;
-            if (dodgeCool.fillAmount <= 0)
-            {
-                isDodge = false;
-            }
+            GameObject obj = GameManager.instance.GetUnit.gameObject;
+            GameManager.instance.SetUnit = null;
+            Destroy(obj);
         }
+
+
+        GameManager.instance.IsPaused = false;
+        Time.timeScale = 1;
+        SceneManager.LoadSceneAsync(0);
+        baseWindow.SetActive(true);
+    }
+    public void OnButtonInGameOption()
+    {
+        optionWindow.SetActive(true);
     }
 
-    private void uiAmmo()
+    public void OnButtonStart()
     {
-        currentAmmo = GameManager.instance.GetUnit.CurrentAmmo;
-        reserveAmmo = GameManager.instance.GetUnit.ReserveAmmo;
-        ammoText.text = $"{currentAmmo}/{reserveAmmo}";
+        baseWindow.SetActive(false);
+        characterWindow.SetActive(true);
     }
 
-    private void uiWeaponChange()
+    public void OnButtonOption()
     {
-        weaponCool.fillAmount = unitWeaponChange.ChangeCooldown;
-
+        baseWindow.SetActive(false);
+        optionWindow.SetActive(true);
     }
 
-    private void uiSkillCool()
+    public void OnButtonOptionClose()
     {
-        if (!uesSkill && unitSkill.UseSkill == true)
-        {
-            uesSkill = true;
-            unitSkill.UseSkill = false;
-            skillCool.fillAmount = 1;
-        }
+        saveOption();
+        optionWindow.SetActive(false);
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            baseWindow.SetActive(true);
+    }
 
-        if (uesSkill)
-        {
-            skillCool.fillAmount -= Time.deltaTime / skillCoolTime;
-            if (skillCool.fillAmount <= 0)
-            {
-                uesSkill = false;
-            }
-        }
+    private void ApplyResolution(int index)
+    {
+        Resolution r = resolutions[index];
+        Screen.SetResolution(r.width, r.height, Screen.fullScreen);
+    }
+
+    private void ApplyFPS(int index)
+    {
+        int selected = frameRate[index];
+        Application.targetFrameRate = selected == -1 ? -1 : selected;
+    }
+
+    public void OnButtonExit()
+    {
+        Application.Quit();
     }
 }

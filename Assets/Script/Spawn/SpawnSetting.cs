@@ -38,6 +38,7 @@ public class SpawnSetting : MonoBehaviour
         if (nowSettingNum >= 0)
         {
             spawnSetting spSetting = spawnData.SpawnSetting[nowSettingNum];
+            GameManager.instance.EnemyMaxCount = spSetting.StageSpawnCount;
             if (spSetting != null)
                 basicSpawn(spSetting);
         }

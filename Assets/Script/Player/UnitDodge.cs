@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,10 @@ using UnityEngine.Windows;
 
 public class UnitDodge : MonoBehaviour
 {
-
+    private float dodgeSpeed;
+    public float DodgeSpeed { set { dodgeSpeed = value; } }
+    private float unitSpeed;
+    public float UnitSpeed { set { unitSpeed = value; } }
     private bool dodogeStart = false;
     [SerializeField] private float dodgeCool;
     public float GetDodgeCool { get { return dodgeCool; } }
@@ -16,21 +20,23 @@ public class UnitDodge : MonoBehaviour
         {
             dodogeStart = true;
             _unit.IsDodge = true;
-            StartCoroutine(cDodge(_unit, _speed,_moveVec));
+            StartCoroutine(cDodge(_unit, _speed, _moveVec));
         }
 
     }
 
-    private IEnumerator cDodge(Unit _unit, float _speed,Vector3 _moveVec)
+    private IEnumerator cDodge(Unit _unit, float _speed, Vector3 _moveVec)
     {
         _unit.DodgeVec = _moveVec;
-        _unit.SetSpeed *= 2;
-        yield return new WaitForSeconds(0.3f);
-        _unit.SetSpeed *= 0.5f;
+        _unit.UnitSpeed = dodgeSpeed;
+
+        yield return new WaitForSeconds(0.5f);
+
+        _unit.UnitSpeed = unitSpeed;
 
         _unit.IsDodge = false;
 
-        yield return new WaitForSeconds(dodgeCool - 0.3f);
+        yield return new WaitForSeconds(dodgeCool - 0.5f);
         dodogeStart = false;
 
     }

@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
 
     private Transform playerTrs;
 
-    [SerializeField]private float hp;
+    [SerializeField] private float hp;
     public float Hp { get { return hp; } }
     private float speed;
     private float damage;
@@ -178,15 +178,36 @@ public class Enemy : MonoBehaviour
         {
             hp -= _damage;
         }
+
         SoundManager.instance.GunHitSFXCreate(SoundManager.Clips.CriticalHit, 1, GameManager.instance.WeaponSoundParent, _hitDamage);
+
         if (hp <= 0)
         {
             animator.SetTrigger("Death");
+            GameManager.instance.AddKillCount();
             box.enabled = false;
             isDead = true;
             isStarted = false;
             hitCheck = false;
         }
+    }
+
+    /// <summary>
+    /// 슬로우
+    /// </summary>
+    /// <param name="_slowSpeed">속도감소 배율</param>
+    /// <param name="_slowTime">속도감속 시간</param>
+    public void SlowEenemy(float _slowSpeed, float _slowTime)
+    {
+        StartCoroutine(slowEnemy(_slowSpeed, _slowTime));
+    }
+
+    private IEnumerator slowEnemy(float _slowSpeed, float _slowTime)
+    {
+        float basicSpeed = speed;
+        speed *= _slowSpeed;
+        yield return new WaitForSeconds(_slowTime);
+        speed = basicSpeed;
     }
 
     //애니메이션 부분
@@ -255,8 +276,37 @@ public class Enemy : MonoBehaviour
         isDead = false;
         stateMachine.ChangeState(enemyChaseState);
 
+        itemDrop();
+
         if (unitHitBox != null) unitHitBox.enabled = false;
         PoolingManager.Instance.RemovePoolingObject(gameObject);
     }
+
+    private void itemDrop()
+    {
+        int goldDropChance = Random.Range(0, 10);
+        if (goldDropChance < 6)
+            item(PoolingManager.ePoolingObject.ItemCoin);
+
+        int ammoDropChance = Random.Range(0, 10);
+        if (ammoDropChance < 6)
+            item(PoolingManager.ePoolingObject.ItemAmmo);
+    }
+
+    private void item(PoolingManager.ePoolingObject _item)
+    {
+        int dropCount = Random.Range(1, 4);
+
+        float randY = Random.Range(3, 3.5f);
+        for (int i = 0; i < dropCount; i++)
+        {
+            GameObject obj = PoolingManager.Instance.CreateObject(_item, GameManager.instance.PoolingParents[_item.ToString()]);
+            Vector3 objTargerVector = transform.position;
+            objTargerVector.y += randY;
+            obj.transform.position = objTargerVector;
+        }
+    }
+
+
 
 }

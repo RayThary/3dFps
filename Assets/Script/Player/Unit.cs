@@ -1,7 +1,6 @@
 using Cinemachine;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using static Unit;
 
@@ -19,6 +18,7 @@ public class Unit : MonoBehaviour
 
     private UnitAttackModule attackModule;
     public UnitAttackModule UnitAttackModule { get { return attackModule; } }
+    
 
     private Animator anim;
     private Rigidbody rigid;
@@ -34,13 +34,14 @@ public class Unit : MonoBehaviour
     public Transform GetUnitHead { get { return unitHead; } }
 
     [SerializeField] private Transform unitHandSlot;
-    [SerializeField] private Transform unitMeleeSlot;
     [SerializeField] private Transform neck;
 
     ///플레이어 상태값
     private float unitCurrentHp;
+    public float UnitHp { get { return unitCurrentHp; }set { unitCurrentHp = value; } }
+
     private float unitSpeed;
-    public float SetSpeed { get { return unitSpeed; } set { unitSpeed = value; } }
+    public float UnitSpeed { get { return unitSpeed; } set { unitSpeed = value; } }
 
     private bool isDodge = false;
     public bool IsDodge { get { return isDodge; } set { isDodge = value; } }
@@ -48,11 +49,12 @@ public class Unit : MonoBehaviour
     private Vector3 dodgeVec;
     public Vector3 DodgeVec { get { return dodgeVec; } set { dodgeVec = value; } }
 
-    private bool statChange = false;
-    public bool SetStatChange { set { statChange = value; } }
 
     private UnitSlot unitSlot = new UnitSlot();
     public UnitSlot CurrentSlot { get { return unitSlot; } set { unitSlot = value; } }
+
+    [SerializeField] private float sensitivity; // 런타임용, 에디터 조정 X
+    public float Sensitivity { get { return sensitivity; } set { sensitivity = value; } }
 
     // 플레이어슬롯
     public class UnitSlot
@@ -67,16 +69,19 @@ public class Unit : MonoBehaviour
     }
 
 
+    //골드 임시테스트용 직렬화
+    [SerializeField]
+    private int currentGold = 0;
+    public int Gold { get { return currentGold; } set { currentGold = value; } }
 
     //  능력치 (Unit 고유값)
     private UnitStat unitStat = new UnitStat();
     public UnitStat CurrentStat { get { return unitStat; } set { unitStat = value; } }
-    
+
     private UnitStat unitStatBasic;
 
     public class UnitStat
     {
-        public float sensitivity = 0.8f;
         public float unitMaxHp;
         public float unitSpeed;
         public float unitJumpPower;
@@ -85,21 +90,14 @@ public class Unit : MonoBehaviour
         public float minPitch = -45f;
         public float maxPitch = 45f;
 
-        // 크리티컬 관련
-        public float criticalChance;
-        public float criticalDamage;
-
         public UnitStat Clone() => (UnitStat)MemberwiseClone();
 
         public void setUnitStat(UnitData unitData)
         {
-            sensitivity = unitData.Sensitivity; // 임시
             unitMaxHp = unitData.UnitMaxHp;
             unitSpeed = unitData.UnitSpeed;
             unitJumpPower = unitData.UnitJumpPower;
             weaponChangeTime = unitData.WeaponChangeTime;
-            criticalChance = unitData.CriticalChance;
-            criticalDamage = unitData.CriticalDamage;
             maxRecoilAngle = unitData.MaxRecoilAngle;
             maxPitch = unitData.MaxPitch;
             minPitch = unitData.MinPitch;
@@ -107,6 +105,8 @@ public class Unit : MonoBehaviour
     }
 
     [SerializeField] private CinemachineVirtualCamera povCamera;
+    public CinemachineVirtualCamera PovCamera { get { return povCamera; } }
+
 
 
     private void Awake()
@@ -135,7 +135,6 @@ public class Unit : MonoBehaviour
         if (GameManager.instance.GetUnit == null)
         {
             GameManager.instance.SetUnit = this;
-            Debug.Log("없음");
         }
         else
         {
@@ -143,7 +142,6 @@ public class Unit : MonoBehaviour
             {
                 Destroy(gameObject);
             }
-                Debug.Log("있음");
         }
     }
     private void addWeapon()
@@ -154,17 +152,14 @@ public class Unit : MonoBehaviour
 
         unitSlot.unitSlot1 = unitHandSlot.GetChild(0);
         unitSlot.unitSlot2 = unitHandSlot.GetChild(1);
-        unitSlot.unitMeleeSlot1 = unitMeleeSlot.GetChild(0);
-        unitSlot.unitMeleeSlot2 = unitMeleeSlot.GetChild(1);
+
 
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            Debug.Log($"{UnitWeapon.GetName}");
-        }
+        if (GameManager.instance.IsPaused || GameManager.instance.UnitStop) return;
+
         playerInput.ReadInput();
         movementModule.UpdateMovement();
         attackModule.UpdateAttack(playerInput);
@@ -180,24 +175,22 @@ public class Unit : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
             }
         }
+
     }
 
 
 
     void LateUpdate()
     {
-        unitRotation.ApplyRotation( weapon.IsMelee, playerInput);
+        unitRotation.ApplyRotation(playerInput);
     }
 
 
 
 
 
-    //모듈빼줄것
-    public void changeUnitStat()
-    {
-        unitStatBasic = unitStat;
-    }
+    //모듈빼줄것 아마도?
+
 
     public void TakeDamge(float _damage)
     {
@@ -223,8 +216,5 @@ public class Unit : MonoBehaviour
         weapon.IsReloading = false;
     }
 
-    public void UnitMeleeEnd()
-    {
-        //unitWeaponChange.GetCurrentWeaponview().MeleeEnd();
-    }
+
 }

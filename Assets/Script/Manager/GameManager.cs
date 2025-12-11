@@ -1,17 +1,17 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-
-//using UnityEditor.SearchService;
+using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager instance;
-    public WeaponView CurrentWeaponView { get; private set; }
 
     private Unit unit;
     public Unit GetUnit { get { return unit; } }
@@ -20,40 +20,77 @@ public class GameManager : MonoBehaviour
     private CameraManager cameraManager;
     public CameraManager GetCameraManager { get { return cameraManager; } }
 
-    //일단 체크f부분만 리턴나중에 많이쓸경우에 캔버스로두고 따로자식으로 개개인별로찾아주는게좋을거같음
-    private GameObject checkF;
-    public GameObject CheckF { get { return checkF; } }
-    private Transform worldnParent;
 
-    public Transform GetWorldParent { get { return worldnParent; } }
+    //UI 관련
+    private GameObject centerTextObj;
+    public GameObject CenterTextObj { get { return centerTextObj; } }
 
+    private TextMeshProUGUI centerText;
+    public TextMeshProUGUI CenterText { get { return centerText; } set { centerText = value; } }
+
+    [SerializeField] private GameObject zoomScope;
+    public GameObject ZoomScope { get { return zoomScope; } }
+
+    private Image crosshair;
+    public Image Crosshair { get { return crosshair; } }
+
+    private Image hitCrosshair;
+    public Image HitCrosshair { get { return hitCrosshair; } }
+
+    private GameObject playerCharacter;
+    public GameObject PlayerCharacter { get { return playerCharacter; } set { playerCharacter = value; } }
+
+    private GameObject currentCharacter;
+
+    //풀링 관련
     private Dictionary<string, Transform> poolingParents = new();
     public Dictionary<string, Transform> PoolingParents { get { return poolingParents; } }
 
     [SerializeField] private Transform poolingRoot;
     public Transform GetPoolinRoot { get { return poolingRoot; } }
 
+    private Transform worldnParent;
+    public Transform GetWorldParent { get { return worldnParent; } }
+
     [SerializeField] private Transform weaponSoundParent;
     public Transform WeaponSoundParent { get { return weaponSoundParent; } }
 
+    //스테이지 / 로딩 관련
     private bool isStageStart = false;
     public bool IsStageStarted { get { return isStageStart; } set { isStageStart = value; } }
 
+    private int nextStageNum = 1;
+
+    [SerializeField] private int stageNum = 1;
+    public int GetStageNum { get { return stageNum; } }
+
+    private GameObject loadingBarObj;
     private Image loadingBar;
+
     private bool isLoading = false;
     public bool GetisLoading { get { return isLoading; } }
 
-    private int nextStageNum = 1;
-    [SerializeField]
-    private int stageNum = 1;
-    public int GetStageNum { get { return stageNum; } }
+    //캐릭터 관련
+    private string unitName;
+    public string UnitName { get { return unitName; } set { unitName = value; } }
 
-    [SerializeField] private GameObject zoomScope;
-    public GameObject ZoomScope { get { return zoomScope; } }
-    private Image crosshair;
-    public Image Crosshair { get { return crosshair; } }
-    private Image hitCrosshair;
-    public Image HitCrosshair { get { return hitCrosshair; } }
+    //게임환경관련 (Pause / Stop 등)
+    private bool isPaused = false;
+    public bool IsPaused { get { return isPaused; } set { isPaused = value; } }
+
+    private bool unitStop = false;
+    public bool UnitStop { get { return unitStop; } set { unitStop = value; } }
+
+    //스테이지 관련
+    private bool isShopOpen;
+    public bool ShopOpen { get { return isShopOpen; } set { isShopOpen = value; } }
+
+    private bool stageChange = false;
+    public bool StageChange { set { stageChange = value; } }
+
+    private int enemyCount = 0;
+    public int EnemyMaxCount { set { enemyCount = value; } }
+
     private void Awake()
     {
 
@@ -67,7 +104,6 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
 
-        unit = FindObjectOfType<Unit>();
         cameraManager = GetComponentInChildren<CameraManager>();
         UnityEngine.Random.InitState(Environment.TickCount);
 
@@ -84,26 +120,44 @@ public class GameManager : MonoBehaviour
     //초기화될때마다 새로해줄것들
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        GameObject worldObject = GameObject.Find("WorldObjects");
-        worldnParent = worldObject.transform.Find("WeaponParent");
-
-        if (SceneManager.sceneCount == 0)
+        // 로비씬 넘어가기
+        if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             return;
         }
 
+        //월드오브젝트 다시설정
+        GameObject worldObject = GameObject.Find("WorldObjects");
+        if (worldnParent != null)
+            worldnParent = worldObject.transform.Find("WeaponParent");
+
+        //초기화할것들
         isStageStart = false;
         nextStageNum++;
+        characterCreate();
         Initialize();
+        ShopUI.instance.ConsumableShopUI.AmmoBuyReset();
+
+        //로딩바
+        if (loadingBarObj != null)
+        {
+            loadingBarObj.SetActive(false);
+            loadingBar.fillAmount = 0;
+        }
+
+
+        unitStop = false;
     }
 
     private void Initialize()
     {
+
         //캔버스
-        GameObject canvas = GameObject.Find("Canvas");
-        if (checkF == null)
+        GameObject canvas = GameObject.Find("SceenCanvas");
+        if (centerTextObj == null)
         {
-            checkF = canvas.transform.Find("PlayerUI/CheckF").gameObject;
+            centerTextObj = canvas.transform.Find("PlayerUI/CheckF").gameObject;
+            centerText = centerTextObj.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         if (crosshair == null || hitCrosshair == null)
@@ -129,13 +183,56 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    private void characterCreate()
+    {
+
+        if (SceneManager.GetActiveScene().buildIndex != 1)
+            return;
+
+        if (currentCharacter == null)
+        {
+            GameObject character = Instantiate(playerCharacter);
+
+            currentCharacter = character;
+
+            unit = character.GetComponent<Unit>();
+
+            CinemachineVirtualCamera pov = unit.GetComponentInChildren<CinemachineVirtualCamera>();
+            cameraManager.SetPovCam(pov);
+
+            OptionData data = LoadOptionData();
+            unit.Sensitivity = data.Sensitivity / 2;
+        }
+    }
+
+    private OptionData LoadOptionData()
+    {
+        string path = Application.persistentDataPath + "/option.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            return JsonUtility.FromJson<OptionData>(json);
+        }
+        else
+        {
+            return null; // 없을 경우그냥 비어있는걸반환
+        }
+    }
+
+    public void characterSensitivity(float _sensitivity)
+    {
+        if (unit != null)
+        {
+            unit.Sensitivity = _sensitivity / 2;
+        }
+    }
     void Start()
     {
 
     }
 
-    [Tooltip("테스트용")]
-    public bool stageChange = false;
+    
 
     // Update is called once per frame
     void Update()
@@ -145,9 +242,26 @@ public class GameManager : MonoBehaviour
             StartCoroutine(loadSceneWithLoading(nextStageNum));
             stageChange = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && !isShopOpen && SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            UIManager.instance.PauseOption();
+        }
+    }
+
+    public void AddKillCount()
+    {
+        enemyCount--;
+
+        if (enemyCount <= 0)
+        {
+            UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
+        }
+            
     }
     IEnumerator loadSceneWithLoading(int _stageNum)
     {
+        unitStop = true;
         SoundManager sm = SoundManager.instance;
         switch (nextStageNum)
         {
@@ -159,8 +273,9 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[3])); break;
         }
 
-        GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.LoadingCanvas, worldnParent);
-        loadingBar = obj.transform.Find("Loading/LoadingBar").GetComponent<Image>();
+        loadingBarObj = UIManager.instance.LoadingBar;
+        loadingBarObj.SetActive(true);
+        loadingBar = loadingBarObj.transform.Find("Loading/LoadingBar").GetComponent<Image>();
         isLoading = true;
         AsyncOperation op = SceneManager.LoadSceneAsync(_stageNum);
         op.allowSceneActivation = false;
@@ -186,8 +301,6 @@ public class GameManager : MonoBehaviour
         isLoading = false;
         stageNum++;
 
-        //loadingBar.fillAmount = 0;
-        //PoolingManager.Instance.RemovePoolingObject(obj);
         op.allowSceneActivation = true;
     }
 

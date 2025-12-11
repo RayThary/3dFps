@@ -17,9 +17,6 @@ public class ChildAnimationEvents : MonoBehaviour
         unit.ReloadEnd();
     }
 
-    private void meleeEnd()
-    {
-        unit.UnitMeleeEnd();
-    }
+
   
 }
