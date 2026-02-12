@@ -39,7 +39,6 @@ public class PlayerHUD : MonoBehaviour
     public struct WeaponIcon
     {
         public eWeaponType type;
-        public Sprite sprite;
     }
 
     [SerializeField] private Image iconImage;
@@ -83,7 +82,7 @@ public class PlayerHUD : MonoBehaviour
         {
             if (_wicon.type == _weapon.WeaponType)
             {
-                iconImage.sprite = _wicon.sprite;
+                iconImage.sprite = _weapon.WeaponIcon;
                 break;
             }
         }

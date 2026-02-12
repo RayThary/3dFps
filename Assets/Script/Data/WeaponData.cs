@@ -9,6 +9,7 @@ public class WeaponData : ScriptableObject
     public eWeaponType WeaponType;
     public string WeaponName;
     public GameObject Prefab;//무기
+    public Sprite WeaponIcon;
 
     [Header("기본 스텟")]
     public float Damage;

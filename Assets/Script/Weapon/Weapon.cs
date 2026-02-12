@@ -14,6 +14,8 @@ public abstract class Weapon
 
     protected GameObject weaponPrefeb;
     public GameObject WeaponPrefeb { get { return weaponPrefeb; } protected set { weaponPrefeb = value; } }
+    protected Sprite weaponIcon;
+    public Sprite WeaponIcon { get { return weaponIcon; } }
 
     //±‚∫ªΩ∫≈› 
     protected float damage;
@@ -86,6 +88,7 @@ public abstract class Weapon
         weaponType = _data.WeaponType;
         weaponName = _data.WeaponName;
         weaponPrefeb = _data.Prefab;
+        weaponIcon = _data.WeaponIcon;
 
         // ±‚∫ª Ω∫≈»
         damage = _data.Damage;
