@@ -13,7 +13,7 @@ public class EnemyMissile : MonoBehaviour
     }
     [SerializeField] private eMissileType missileType;
 
-    private float enemyDamage;
+    [SerializeField] private float enemyDamage;
     [SerializeField] private float missileSpeed;
 
     [SerializeField] private LayerMask RemoveLayer;
@@ -37,14 +37,20 @@ public class EnemyMissile : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            if (enemyDamage == 0)
+            {
+                enemyDamage = 15;
+            }
+
             other.GetComponent<Unit>().TakeDamge(enemyDamage);
         }
 
         if (((1 << other.gameObject.layer) & RemoveLayer.value) != 0)
         {
+
             if (missileType == eMissileType.BossRock)
             {
-                BossWall wall = other.GetComponent<BossWall>();
+                BossWall wall = other.GetComponentInParent<BossWall>();
                 if (wall != null)
                 {
                     wall.RemoveWall();

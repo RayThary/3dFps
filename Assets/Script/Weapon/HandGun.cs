@@ -11,11 +11,13 @@ public class HandGun : Weapon
     {
         if (currentAmmo > 0 && !base.isReloading)
         {
+
             GameObject bullet = PoolingManager.Instance.CreateObject(poolingMuzzle, _muzzlePoint);
 
             bullet.transform.SetParent(_muzzlePoint);
             bullet.transform.localPosition = Vector3.zero;
             bullet.transform.localRotation = Quaternion.identity;
+
 
             currentAmmo--;
 

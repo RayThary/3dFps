@@ -6,19 +6,21 @@ public class BossLaser : MonoBehaviour
 {
     private LineRenderer lineR;
 
-    [SerializeField] private Transform startPoint;
+    private Transform startPoint;
     private Transform endPoint;
     private Vector3 hitPoint;
 
+    [SerializeField] private float damage;
+
     private RaycastHit hit;
-    [SerializeField] private bool isStart = false;
+    private bool isStart = false;
 
     public void SetUp(Transform _startPoint)
     {
         startPoint = _startPoint;
         isStart = true;
     }
-
+    
     public void LaserHitCheck(Enemy _enemy)
     {
         Vector3 dir = endPoint.position - startPoint.position;
@@ -30,12 +32,13 @@ public class BossLaser : MonoBehaviour
             {
                 hit.transform.GetComponentInParent<BossWall>().RemoveWall();
                 _enemy.WallCount = Mathf.Max(0, _enemy.WallCount - 1);
-
+                PoolingManager.Instance.RemovePoolingObject(gameObject);
+                return;
             }
+
             if (layer == LayerMask.NameToLayer("Player"))
             {
-                //임시대미지
-                GameManager.instance.GetUnit.TakeDamge(5);
+                GameManager.instance.GetUnit.TakeDamge(damage);
             }
         }
 

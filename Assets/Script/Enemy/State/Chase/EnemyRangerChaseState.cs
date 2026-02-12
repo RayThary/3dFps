@@ -18,7 +18,7 @@ public class EnemyRangerChaseState : IEnemyState
     private Vector3 targetVec;
     private Vector3 lastTargetVec;
 
-    private bool wasChasing = false;
+    private bool isAggro = false;
     public bool CanEnter { get; set; } = true;
 
     public EnemyRangerChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
@@ -40,6 +40,7 @@ public class EnemyRangerChaseState : IEnemyState
     {
         enemy.NavMesh.speed = speed;
         enemy.NavMesh.ResetPath();
+        enemy.NavMesh.updateRotation = true;
         nextPoint();
         lastTargetVec = targetVec;
     }
@@ -47,42 +48,73 @@ public class EnemyRangerChaseState : IEnemyState
 
     public void Update()
     {
-
-        bool checkChase = Vector3.Distance(enemyTrs.position, playerTrs.position) < chaseDistance;
-        if (checkChase)
+        if (enemy.EnemyStop)
+        {
+            return;
+        }
+        chaseCheck();
+        if (isAggro)
         {
             bool isChasingNow = chase();
 
-            float dis = Vector3.Distance(enemyTrs.position, playerTrs.position);
-
-
-            if (isChasingNow != wasChasing)
+            if (isChasingNow)
             {
-                wasChasing = isChasingNow;
-                enemy.NavMesh.updateRotation = !isChasingNow;
-            }
+                bool isShotCheck = rayCheck();
 
-            if (Mathf.Abs(dis - (stopDistance - 0.5f)) <= 0.5f)
-            {
-                enemy.NavMesh.ResetPath();
-                enemy.Animator.SetBool("Idle", true);
-                return;
+                if (isShotCheck)
+                {
+
+                    if (enemy.EnemyAttackState.CanEnter)
+                    {
+                        enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
+                        enemy.EnemyStop = true;
+
+                        //공격중 회전방지
+                        enemy.NavMesh.updateRotation = false;
+                    }
+                }
+                else
+                {
+                    enemy.NavMesh.SetDestination(playerTrs.position);
+                }
             }
             else
             {
+
+                float dis = Vector3.Distance(enemyTrs.position, playerTrs.position);
+                bool isDeadZone = Mathf.Abs(dis - stopDistance) <= 0.5f;
+                bool canShotPos = rayCheck();
+                //사격가능한지 확인및 데드존체크
+                if (isDeadZone)
+                {
+                    if (canShotPos)
+                    {
+                        enemy.NavMesh.ResetPath();
+                        enemy.Animator.SetBool("Idle", true);
+                        return;
+                    }
+                    else
+                    {
+                        enemy.NavMesh.SetDestination(playerTrs.position);
+                        enemy.Animator.SetBool("Idle", false);
+                        return;
+                    }
+                }
+
                 enemy.Animator.SetBool("Idle", false);
-            }
 
-            if (isChasingNow == false)
-            {
-                enemy.NavMesh.SetDestination(playerTrs.position);
-            }
-            else
-            {
-                Vector3 dir = (enemyTrs.position - playerTrs.position).normalized;
-                Vector3 retreatPos = playerTrs.position + dir * stopDistance;
-                enemy.transform.LookAt(playerTrs);
-                enemy.NavMesh.SetDestination(retreatPos);
+                if (dis > stopDistance)
+                {
+                    enemy.NavMesh.SetDestination(playerTrs.position);
+                }
+                else
+                {
+                    //뒤로가기
+                    Vector3 dir = (enemyTrs.position - playerTrs.position).normalized;
+                    Vector3 retreatPos = playerTrs.position + dir * stopDistance;
+                    enemy.transform.LookAt(playerTrs);
+                    enemy.NavMesh.SetDestination(retreatPos);
+                }
             }
         }
         else
@@ -92,27 +124,28 @@ public class EnemyRangerChaseState : IEnemyState
 
     }
 
+
+
+    private void chaseCheck()
+    {
+        if (isAggro)
+        {
+            return;
+        }
+        bool checkChase = Vector3.Distance(enemyTrs.position, playerTrs.position) < chaseDistance;
+        if (checkChase)
+        {
+            isAggro = true;
+        }
+    }
+
     private bool chase()
     {
-        if (enemy.EnemyStop && enemy.EnemyAttackState.CanEnter)
-        {
-            enemy.EnemyStop = false;
-        }
 
-        if (enemy.EnemyStop)
-        {
-            return true;
-        }
 
         float dis = Vector3.Distance(playerTrs.position, enemyTrs.position);
         if (dis <= stopDistance)
         {
-            if (enemy.EnemyAttackState.CanEnter)
-            {
-                enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
-                enemy.EnemyStop = true;
-            }
-
             return true;
         }
         else
@@ -122,6 +155,41 @@ public class EnemyRangerChaseState : IEnemyState
 
     }
 
+    private bool rayCheck()
+    {
+
+        bool frontCheck = frontBlocked();
+        if (frontCheck)
+        {
+            return false;
+        }
+
+        Vector3 origin = enemyTrs.position + Vector3.up * 1.5f;   // 눈 높이
+        Vector3 target = playerTrs.position + Vector3.up * 1.0f;  // 플레이어 중심
+        Vector3 dir = (target - origin).normalized;
+
+        int mask = obstacleMask | LayerMask.GetMask("Player");
+
+        // 플레이어가 바로 맞으면 공격 가능
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, stopDistance, mask))
+        {
+            if (hit.transform == playerTrs)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool frontBlocked()
+    {
+        Vector3 center = enemyTrs.position + enemyTrs.forward * 2 + Vector3.up * 1.5f;
+
+        Vector3 halfExtents = new Vector3(3f, 3f, 1f);
+
+        return Physics.CheckBox(center, halfExtents, enemyTrs.rotation, obstacleMask);
+    }
     private void RoamTarget()
     {
         float dis = Vector3.Distance(enemyTrs.position, targetVec);
@@ -197,6 +265,5 @@ public class EnemyRangerChaseState : IEnemyState
     }
     public void Exit()
     {
-        wasChasing = false;
     }
 }

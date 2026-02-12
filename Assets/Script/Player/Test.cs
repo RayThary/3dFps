@@ -1,24 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Test : MonoBehaviour
 {
-    public bool spawn = false;
-    public GameObject test;
+    public bool test;
+    public Image a1;
+    public Sprite a;
     void Start()
     {
-        GameManager.instance.EnemyMaxCount = 1;
+        DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (spawn)
+        //if (test)
+        //{
+        //    UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
+        //    test = false;
+        //}
+
+        if (test)
         {
-            GameManager.instance.AddKillCount();
-            spawn = false;
+            a1.sprite = a;
+            test = false;
         }
+
 
     }
 }

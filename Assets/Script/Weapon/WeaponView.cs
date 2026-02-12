@@ -17,7 +17,7 @@ public class WeaponView : MonoBehaviour
         Melee,
     }
     [SerializeField] private WeaponCategory weaponCategory;
-
+    [SerializeField]
     private Animator animator;
     public Animator Anim { get { return animator; } }
     private Weapon weapon;
@@ -36,10 +36,9 @@ public class WeaponView : MonoBehaviour
     [SerializeField] private float weaponLevel = 1;
     public float WeaponLevel { get { return weaponLevel; } set { weaponLevel = value; } }
     private int weaponMaxLevel;
-    private float weaponLevelUpDamage;
-    private float basicDamage;
+    [SerializeField]
     private float gunDamage;
-    public float GunDamage { get { return gunDamage; } }
+    public float GunDamage { get { return gunDamage; } set { gunDamage = value; } }
 
     private LayerMask headMask;
     private MeshRenderer mesh;
@@ -76,7 +75,6 @@ public class WeaponView : MonoBehaviour
         }
         weaponPickup.GetComponent<BoxCollider>().enabled = false;
         gunDamage = _weapon.GetDamage;
-        basicDamage = gunDamage;
         weaponMaxLevel = _weapon.WeaponMaxLevel;
         if (animator != null)
             animator.enabled = true;
@@ -120,7 +118,7 @@ public class WeaponView : MonoBehaviour
         int rand = UnityEngine.Random.Range(0, 6);
         weaponLevel++;
         upgradePrice();
-        return weapon.Upgrade(rand, weapon.Automatic);
+        return weapon.Upgrade(this, rand, weapon.Automatic);
     }
 
     private void upgradePrice()

@@ -10,6 +10,9 @@ public class PoolingManager : MonoBehaviour
     public enum ePoolingObject
     {
         HandGunMuzzle,
+        RifleMuzzle,
+        ShotgunMuzzle,
+        SniperMuzzle,
         SubMachineMuzzle,
         BulletHole,
         EnemyA,
@@ -17,6 +20,7 @@ public class PoolingManager : MonoBehaviour
         EnemyC,
         EnemyD,
         EnemyF,
+        EnemyBossBoom,
         Missile,
         LoadingCanvas,
         MissileBoss,
@@ -28,6 +32,7 @@ public class PoolingManager : MonoBehaviour
         ItemCoin,
         SkillMissile,
         Shockwave,
+        Portal,
     }
 
     [System.Serializable]
@@ -147,6 +152,9 @@ public class PoolingManager : MonoBehaviour
 
     private void initGameManagerPoolingParets()
     {
+        if (GameManager.instance == null)
+            return;
+
         Transform parent = GameManager.instance.GetPoolinRoot;
         foreach (cPoolingObject obj in m_listPoolingObject)
         {

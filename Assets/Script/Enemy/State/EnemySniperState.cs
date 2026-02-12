@@ -80,7 +80,6 @@ public class EnemySniperState : IEnemySniperState
             if (hit.collider.CompareTag("Player"))
             {
                 GameManager.instance.GetUnit.TakeDamge(damage);
-                Debug.Log("È÷Æ®");
             }
 
         }

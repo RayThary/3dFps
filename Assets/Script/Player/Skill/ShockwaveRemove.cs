@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class ShockwaveRemove : MonoBehaviour
 {
+    private bool poolingCreate = true;
     private void OnEnable()
     {
-        Invoke("remove", 0.5f);
+        if (poolingCreate)
+        {
+            poolingCreate = false;
+            return;
+        }
+        Invoke("remove", 1f);
     }
 
     private void remove()

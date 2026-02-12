@@ -37,6 +37,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private SkillUpgradeUI skillUpgradeUI;
     public SkillUpgradeUI GetSkillUpgradeUI { get { return skillUpgradeUI; } }
+
+    [SerializeField]private FadeWinodw fadeWinodw;
+    public FadeWinodw FadeWindow { get { return fadeWinodw; } }
+
     private void Awake()
     {
         if (instance == null)
@@ -208,13 +212,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void PauseOption()
+    public void PauseKey()
     {
         Time.timeScale = 0;
         GameManager.instance.IsPaused = true;
         pauseWindow.SetActive(true);
     }
 
+    public void PauseOption()
+    {
+        optionWindow.SetActive(true);
+    }
 
     public void PauseContinue()
     {
@@ -230,6 +238,8 @@ public class UIManager : MonoBehaviour
         {
             GameObject obj = GameManager.instance.GetUnit.gameObject;
             GameManager.instance.SetUnit = null;
+            GameManager.instance.RemoveEnemy();
+            GameManager.instance.RemovePoolingRoot();
             Destroy(obj);
         }
 

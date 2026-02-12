@@ -24,7 +24,7 @@ public class EnemyEditor : Editor
 
         if (enemy.Type == Enemy.eEnemyCategory.Melee || enemy.Type == Enemy.eEnemyCategory.Charger|| enemy.Type == Enemy.eEnemyCategory.Boom)
         {
-            enemy.UnitHitBox = (BoxCollider)EditorGUILayout.ObjectField("testHitBox", enemy.UnitHitBox, typeof(BoxCollider), true) as BoxCollider;
+            enemy.UnitHitBox = (BoxCollider)EditorGUILayout.ObjectField("HitBox", enemy.UnitHitBox, typeof(BoxCollider), true) as BoxCollider;
         }
 
         if (GUI.changed)

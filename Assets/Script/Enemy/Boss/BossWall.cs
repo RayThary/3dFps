@@ -7,8 +7,6 @@ public class BossWall : MonoBehaviour
 {
     [SerializeField] private Transform wallMesh;
     [SerializeField] private float spawnScaleTime = 0.5f;
-    [SerializeField] private float randomRangeMin = -30f;
-    [SerializeField] private float randomRangeMax = 30f;
 
     private Vector3 targetTransform;
     [SerializeField]private Transform dangerZone;
@@ -17,57 +15,30 @@ public class BossWall : MonoBehaviour
 
     private BoxCollider box;
 
-    [SerializeField] private Vector3 center;
+    [SerializeField] private float damage;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            //임시대미지 
-            GameManager.instance.GetUnit.TakeDamge(5);
+            GameManager.instance.GetUnit.TakeDamge(damage);
         }
     }
+    
     private void Awake()
     {
         inCircle = dangerZone.GetChild(0);
         box = GetComponent<BoxCollider>();
     }
-    public bool s = false;
-    public bool t = false;
+
     private void Update()
     {
-        if (s)
-        {
-            SetStart();
-            s = false;
-        }
-        if (t)
-        {
-            RemoveWall();
-            t = false;
-        }
+      
     }
    
-    public void SetStart()
+    public void SetStart(Vector3 _targetTrs)
     {
-        int outCount = 20;
-        for (int i = 0; i < outCount; i++)
-        {
-
-            float randX = Random.Range(randomRangeMin, randomRangeMax);
-            float randZ = Random.Range(randomRangeMin, randomRangeMax);
-
-            Vector3 randomPos = new Vector3(randX + center.x, 0, randZ + center.z);
-
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomPos, out hit, 5f, NavMesh.AllAreas))
-            {
-                targetTransform = hit.position;
-                break;
-            }
-        }
-    
-
-        transform.position = targetTransform;
+        targetTransform = _targetTrs;
+        transform.position = _targetTrs;
         StartCoroutine(DangerRoutine());
     }
 

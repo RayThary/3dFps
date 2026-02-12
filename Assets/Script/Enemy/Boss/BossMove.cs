@@ -12,7 +12,9 @@ public class BossMove : MonoBehaviour
 
     private Transform nextTrs;
     [SerializeField] private List<Transform> movePoint = new List<Transform>();
-    public void SetUp(Vector3 _nowVec)
+
+    private Vector3 center = new Vector3(0, 0, -55);
+    public void startMoving(Vector3 _nowVec)
     {
         bossDown = true;
         int num = Random.Range(0, movePoint.Count);
@@ -36,10 +38,6 @@ public class BossMove : MonoBehaviour
 
     }
 
-    void Update()
-    {
-      
-    }
     private IEnumerator bossMoving()
     {
         while (bossDown)
@@ -54,7 +52,7 @@ public class BossMove : MonoBehaviour
 
             }
         }
-
+        spawnBossBoom(5);
         yield return new WaitForSeconds(0.5f);
 
         Vector3 unitVec = GameManager.instance.GetUnit.transform.position;
@@ -72,4 +70,27 @@ public class BossMove : MonoBehaviour
         }
         enemy.EnemyBossSkillTime();
     }
+
+    private void spawnBossBoom(int count)
+    {
+        Vector3 dir = (center - nextTrs.position).normalized;
+        Vector3 spawnPoint = nextTrs.position + dir * 0.2f;
+        for (int i = 0; i < count; i++)
+        {
+
+            float angle = i * (360f / count);
+
+            float radius = Random.Range(0.8f, 1.2f);
+
+            float rad = angle * Mathf.Deg2Rad;
+            Vector3 offset = new Vector3(Mathf.Cos(rad) * radius, 0f, Mathf.Sin(rad) * radius);
+
+            Vector3 spawnPos = spawnPoint + offset;
+
+            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyBossBoom, GameManager.instance.PoolingParents["EnemyBossBoom"]);
+            obj.transform.position = spawnPos;
+        }
+
+    }
+
 }

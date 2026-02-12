@@ -41,7 +41,9 @@ public abstract class Weapon
     protected float fireDelay;
     public float FireDelay { get { return fireDelay; } }
 
-    protected Bullet.BulletType bulletType;
+    protected float fireCooldown;
+    public float FireCooldown { get { return fireCooldown; } }
+
     protected PoolingManager.ePoolingObject poolingMuzzle;
 
     protected bool zoomWeapon;
@@ -104,7 +106,7 @@ public abstract class Weapon
         // 사격 설정
         automatic = _data.Automatic;
         fireDelay = _data.fireDelay;
-        bulletType = _data.BulletType;
+        fireCooldown = _data.fireCooldown;
         poolingMuzzle = _data.PoolingMuzzle;
         zoomWeapon = _data.ZoomWeapon;
 
@@ -128,19 +130,16 @@ public abstract class Weapon
     {
         if (currentAmmo == maxAmmo || reserveAmmo <= 0 || isReloading)
         {
-            Debug.Log("장전중 또는 총알이 꽉차있거나 부족함");
             return;
         }
         isReloading = true;
         _weaponView.UnitReloadAnim();
-        Debug.Log("장전 ");
     }
 
     public virtual void Reload(Animator _anim)
     {
         if (currentAmmo == maxAmmo || reserveAmmo <= 0 || isReloading)
         {
-            Debug.Log("장전중 또는 총알이 꽉차있거나 부족함");
             return;
         }
         isReloading = true;
@@ -177,11 +176,14 @@ public abstract class Weapon
         reserveAmmo = Mathf.Min(reserveAmmo + addAmount, maxReserveAmmo);
     }
 
-    public string Upgrade(int _upgradeNum, bool _auto)
+    public string Upgrade(WeaponView _view, int _upgradeNum, bool _auto)
     {
         float randFactor = Random.Range(0.8f, 1.2f);
 
-        damage += damageUp * randFactor;
+        float tempDamage = _view.GunDamage + (damageUp * randFactor);
+
+        _view.GunDamage = Mathf.RoundToInt(tempDamage);
+
         switch (_upgradeNum)
         {
             case 0:

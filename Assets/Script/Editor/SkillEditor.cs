@@ -95,7 +95,7 @@ public class SkillEditor : Editor
 
             EditorGUILayout.Space(5);
             EditorGUILayout.PropertyField(shockwave.FindPropertyRelative("damageUp"));
-            EditorGUILayout.PropertyField(shockwave.FindPropertyRelative("coolTimeUp"));
+            EditorGUILayout.PropertyField(shockwave.FindPropertyRelative("coolDownRate"));
             EditorGUILayout.PropertyField(shockwave.FindPropertyRelative("radiusUp"));
             EditorGUILayout.PropertyField(shockwave.FindPropertyRelative("slowAmount"));
             EditorGUILayout.PropertyField(shockwave.FindPropertyRelative("residueDuration"));

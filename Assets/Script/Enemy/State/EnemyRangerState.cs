@@ -15,7 +15,6 @@ public class EnemyRangerState : IEnemyState
     public bool CanEnter  
     { get { return Time.time >= lastUesdTime + rangeCooltime; } set { CanEnter = value; } }
 
-    //밥먹기전적음 추적은 navmesh를받아서 속도를한순간올려주고 exit나갈때 줄여주는걸로 update로 목표까지갔다면 return또는 시간만큼추적으로고민중
     public EnemyRangerState(Enemy _enemy)
     {
         enemy = _enemy;

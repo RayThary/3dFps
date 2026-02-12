@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyBossState : IEnemyState
 {
@@ -34,12 +37,7 @@ public class EnemyBossState : IEnemyState
     }
 
     public void Update()
-    {
-        if (lastUesdTime + delayTime < Time.time)
-        {
-            attack();
-        }
-
+    {        
         if (!skillStop)
         {
 
@@ -49,11 +47,16 @@ public class EnemyBossState : IEnemyState
             enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRot, Time.deltaTime * 2);
         }
 
-        if (CanEnter)
+        if (CanEnter && skillStop)
         {
             lastUesdTime = Time.time;
             skillStop = false;
             CanEnter = false;
+        }
+
+        if (lastUesdTime + delayTime < Time.time)
+        {
+            attack();
         }
     }
 
@@ -75,26 +78,49 @@ public class EnemyBossState : IEnemyState
             case 4:
                 movePatten(); break;
         }
+        CanEnter = false;
         skillStop = true;
     }
 
     private int getNextPatten(bool _hpHalf)
     {
-        int missileChance = _hpHalf ? 40 : 30;
-        int jumpChance = _hpHalf ? 20 : 15;
-        int rockChance = _hpHalf ? 30 : 35;
-        int laserChance = _hpHalf ? 15 : 20;
+        if (skillCount == 0)
+            return 1;
 
-        int moveChance = _hpHalf ? 0 : 0;
-     
+        int missileChance = 30;
+        int jumpChance = 15;
+        int rockChance = 25;
+        int laserChance = 15;
+        int moveChance = 0;
 
-        if (skillCount >= 12) moveChance = 50;
-        else if (skillCount >= 10) moveChance = 25;
-        else if (skillCount >= 8) moveChance = 10;
+        if (!_hpHalf)
+        {
+            laserChance += 5;
+            rockChance += 5;
+        }
 
 
+        if (skillCount >= 8) moveChance = 70;
+        else if (skillCount >= 6) moveChance = 40;
+        else if (skillCount >= 4) moveChance = 20;
 
-        if (skillCount < 1) laserChance = 0;
+
+        //벽기준 패턴
+        if (enemy.WallCount <= 2)
+        {
+            laserChance = 8;   // 패널티성으로만 등장
+            jumpChance = 20;  // 다시 깔 기회는 줌
+        }
+        if (enemy.WallCount > 12)
+        {
+            laserChance = Mathf.Max(missileChance, rockChance, jumpChance) + 10;
+            jumpChance = 5;   // 더 이상 쌓이지 않게
+        }
+        if (enemy.WallCount > 14)
+        {
+            jumpChance = 0;
+        }
+
 
         if (enemy.WallCount < 2) laserChance = 10;
 
@@ -158,20 +184,18 @@ public class EnemyBossState : IEnemyState
         float hpRatio = enemy.Hp / hp;
         if (hpRatio > 0.7f)
         {
-            delayTime = Random.Range(3f, 5f);
+            delayTime = Random.Range(3f, 4f);
         }
         else if (hpRatio > 0.35f)
         {
-            delayTime = Random.Range(2.5f, 4.5f);
+            delayTime = Random.Range(2f, 3.5f);
         }
         else
         {
-            delayTime = Random.Range(2f, 3.5f);
+            delayTime = Random.Range(1.5f, 3f);
         }
-
-        CanEnter = false;
-        lastUesdTime = Mathf.Infinity;
         skillCount++;
+        lastUesdTime = Mathf.Infinity;
     }
 
     public void Exit()

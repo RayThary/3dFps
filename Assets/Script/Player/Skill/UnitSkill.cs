@@ -46,6 +46,8 @@ public class UnitSkill : MonoBehaviour
     private bool useSkill = false;
     public bool UseSkill { get { return useSkill; } set { useSkill = value; } }
 
+    private int skillLevel = 0;
+
     [System.Serializable]
     public class ThrowMissile
     {
@@ -95,7 +97,7 @@ public class UnitSkill : MonoBehaviour
 
         //업그레이드수치
         public float damageUp;
-        public float coolTimeUp;
+        public float coolDownRate;
         public float radiusUp;
         public float slowAmount;
         public float residueDuration;  // 지속 시간
@@ -159,8 +161,8 @@ public class UnitSkill : MonoBehaviour
         {
             case eSkillName.ThrowMissile:
                 unitThrowMissile = new UnitSkillThrowMissile();
-                unitThrowMissile.SetUp(this, throwMissile.damage, throwMissile.missileCount, throwMissile.missileSpeed, throwMissile.fireInterval,
-                    coolTime, spawnR, spawnL, nowOutLayer);
+                unitThrowMissile.SetUp(this, throwMissile.damage, throwMissile.missileCount, coolTime, throwMissile.missileSpeed,
+                    throwMissile.fireInterval, spawnR, spawnL, nowOutLayer);
                 break;
             case eSkillName.Shockwave:
                 unitShockwave = new UnitSkillShockwave();
@@ -175,6 +177,11 @@ public class UnitSkill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            DebugPrintUpgradeLevels();
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             switch (skillName)
@@ -197,23 +204,23 @@ public class UnitSkill : MonoBehaviour
         if (skillName == eSkillName.Shockwave)
         {
             var up = shockwaveUpgradeLevel;
-
-            if (up.damageLevel < up.damageMaxLevel)
+            //초반
+            if (up.damageLevel < up.damageMaxLevel && skillLevel >= 0)
                 list.Add(UpgradeType.Damage);
 
-            if (up.coolTimeLevel < up.coolTimeMaxLevel)
+            if (up.coolTimeLevel < up.coolTimeMaxLevel && skillLevel >= 0)
                 list.Add(UpgradeType.CoolDown);
 
-            if (up.radiusLevel < up.radiusMaxLevel)
+            if (up.radiusLevel < up.radiusMaxLevel && skillLevel >= 0)
                 list.Add(UpgradeType.Radius);
-
-            if (up.slowLevel < up.slowMaxLevel)
+            //중반 3이상
+            if (up.slowLevel < up.slowMaxLevel && skillLevel >= 3)
                 list.Add(UpgradeType.Slow);
 
-            if (up.residueLevel < up.residueMaxLevel)
+            if (up.residueLevel < up.residueMaxLevel && skillLevel >= 3)
                 list.Add(UpgradeType.ResidueShockwave);
-
-            if (up.doubleShockwaveLevel < up.doubleShockwaveMaxLevel)
+            //후반 6이상
+            if (up.doubleShockwaveLevel < up.doubleShockwaveMaxLevel && skillLevel >= 6)
                 list.Add(UpgradeType.DoubleShockwave);
         }
 
@@ -222,22 +229,25 @@ public class UnitSkill : MonoBehaviour
         {
             var up = throwMissileUpgradeLevel;
 
-            if (up.damageLevel < up.damageMaxLevel)
+            //초반
+            if (up.damageLevel < up.damageMaxLevel && skillLevel >= 0)
                 list.Add(UpgradeType.Damage);
 
-            if (up.coolDownLevel < up.coolDownMaxLevel)
+            if (up.coolDownLevel < up.coolDownMaxLevel && skillLevel >= 0)
                 list.Add(UpgradeType.CoolDown);
 
-            if (up.missileCountLevel < up.missileCountMaxLevel)
-                list.Add(UpgradeType.MissileCount);
-
-            if (up.fireIntervalLevel < up.fireIntervalMaxLevel)
-                list.Add(UpgradeType.FireInterval);
-
-            if (up.missileSpeedLevel < up.missileSpeedMaxLevel)
+            if (up.missileSpeedLevel < up.missileSpeedMaxLevel && skillLevel >= 0)
                 list.Add(UpgradeType.MissileSpeed);
 
-            if (up.criticalEnableLevel < up.criticalEnableMaxLevel)
+            //중반 3이상
+            if (up.fireIntervalLevel < up.fireIntervalMaxLevel && skillLevel >= 3)
+                list.Add(UpgradeType.FireInterval);
+
+            if (up.missileCountLevel < up.missileCountMaxLevel && skillLevel >= 3)
+                list.Add(UpgradeType.MissileCount);
+
+            //후반 6이상
+            if (up.criticalEnableLevel < up.criticalEnableMaxLevel && skillLevel >= 6)
                 list.Add(UpgradeType.CriticalEnable);
         }
 
@@ -247,6 +257,7 @@ public class UnitSkill : MonoBehaviour
     {
         unitShockwave.ApplyUpgrade(_type, shockwave);
         var up = shockwaveUpgradeLevel;
+        skillLevel++;
 
         switch (_type)
         {
@@ -255,6 +266,7 @@ public class UnitSkill : MonoBehaviour
                 break;
 
             case UpgradeType.CoolDown:
+                coolTime -= shockwave.coolDownRate;
                 up.coolTimeLevel++;
                 break;
 
@@ -279,8 +291,8 @@ public class UnitSkill : MonoBehaviour
     public void MissileSkillUpgrade(UpgradeType type)
     {
         unitThrowMissile.ApplyUpgrade(type, throwMissile);
-
         var up = throwMissileUpgradeLevel;
+        skillLevel++;
 
         switch (type)
         {
@@ -289,6 +301,7 @@ public class UnitSkill : MonoBehaviour
                 break;
 
             case UpgradeType.CoolDown:
+                coolTime -= throwMissile.coolDownRate;
                 up.coolDownLevel++;
                 break;
 
@@ -307,6 +320,34 @@ public class UnitSkill : MonoBehaviour
             case UpgradeType.CriticalEnable:
                 up.criticalEnableLevel = 1;
                 break;
+        }
+    }
+
+    public void DebugPrintUpgradeLevels()
+    {
+        if (skillName == eSkillName.ThrowMissile)
+        {
+            Debug.Log(
+                $"[Missile Upgrade Levels]\n" +
+                $"Damage: {throwMissileUpgradeLevel.damageLevel}\n" +
+                $"CoolDown: {throwMissileUpgradeLevel.coolDownLevel}\n" +
+                $"MissileCount: {throwMissileUpgradeLevel.missileCountLevel}\n" +
+                $"FireInterval: {throwMissileUpgradeLevel.fireIntervalLevel}\n" +
+                $"MissileSpeed: {throwMissileUpgradeLevel.missileSpeedLevel}\n" +
+                $"CriticalEnable: {throwMissileUpgradeLevel.criticalEnableLevel}"
+            );
+        }
+        else if (skillName == eSkillName.Shockwave)
+        {
+            Debug.Log(
+                $"[Shockwave Upgrade Levels]\n" +
+                $"Damage: {shockwaveUpgradeLevel.damageLevel}\n" +
+                $"CoolTime: {shockwaveUpgradeLevel.coolTimeLevel}\n" +
+                $"Radius: {shockwaveUpgradeLevel.radiusLevel}\n" +
+                $"Slow: {shockwaveUpgradeLevel.slowLevel}\n" +
+                $"Residue: {shockwaveUpgradeLevel.residueLevel}\n" +
+                $"DoubleShockwave: {shockwaveUpgradeLevel.doubleShockwaveLevel}"
+            );
         }
     }
 }

@@ -83,7 +83,7 @@ public class UnitSkillShockwave
     private void shockwaveEffect()
     {
         Vector3 unitVec = unit.transform.position;
-        unitVec.y = 0.1f;
+        unitVec.y = 0.5f;
         var pooling = PoolingManager.ePoolingObject.Shockwave;
         shockwaveEffectObj = PoolingManager.Instance.CreateObject(pooling, GameManager.instance.PoolingParents[pooling.ToString()]);
         shockwaveEffectObj.transform.position = unitVec;
@@ -132,7 +132,7 @@ public class UnitSkillShockwave
                 break;
 
             case UpgradeType.CoolDown:
-                coolTime -= up.coolTimeUp;
+                coolTime *= up.coolDownRate;
                 if (coolTime < 0.5f) coolTime = 0.5f; // 최소값 방지
                 break;
 

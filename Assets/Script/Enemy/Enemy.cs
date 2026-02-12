@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
         Sniper,
         Boom,
         Boss,
+        BossBoom,
     }
     [SerializeField] private eEnemyCategory enemyCategory;
     public eEnemyCategory Type { get { return enemyCategory; } set { enemyCategory = value; } }
@@ -30,7 +31,7 @@ public class Enemy : MonoBehaviour
     private float speed;
     private float damage;
     public float Damage { get { return damage; } }
-    private float stopDistance;
+    //인터페이스용 Stop
     private bool enemyStop = false;
     public bool EnemyStop { get { return enemyStop; } set { enemyStop = value; } }
 
@@ -71,7 +72,6 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector][SerializeField] private Transform rockPoint;
     public Transform RockPoint { get { return rockPoint; } set { rockPoint = value; } }
-    [SerializeField]
     private int currentWallCount;
     public int WallCount { get { return currentWallCount; } set { currentWallCount = value; } }
 
@@ -96,7 +96,6 @@ public class Enemy : MonoBehaviour
         SetUpStat();
 
         speed = enemyData.Speed;
-        stopDistance = enemyData.AttackStopRange;
 
         stateMachine = new EnemyStateMachine();
 
@@ -107,10 +106,10 @@ public class Enemy : MonoBehaviour
         int stage = GameManager.instance.GetStageNum;
         if (stage == 0) stage = 1;
 
-        float damageMultiplier = 1 + (stage - 1) * 0.4f;
-        float hpMultiplier = 1 + (stage - 1) * 0.25f;
-        damage = enemyData.Damage + damageMultiplier;
-        hp = enemyData.Hp + hpMultiplier;
+        damage = enemyData.Damage;
+
+        float hpMultiplier = 1f + (stage - 1) * 0.12f;
+        hp = enemyData.Hp * hpMultiplier;
     }
     private void SetupState()
     {
@@ -131,6 +130,7 @@ public class Enemy : MonoBehaviour
                 enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyRangerState(this);
                 return;
+
             case eEnemyCategory.Sniper:
                 lineR = GetComponentInChildren<LineRenderer>();
                 lineR.enabled = false;
@@ -138,10 +138,13 @@ public class Enemy : MonoBehaviour
                 enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage);
                 return;
+
+            case eEnemyCategory.BossBoom:
             case eEnemyCategory.Boom:
                 enemyChaseState = new EnemyBoomChaseState(this, playerTrs, transform, obstacleMask, enemyData);
                 enemyAttackState = new EnemyBoomState(this);
-                break;
+                return;
+
             case eEnemyCategory.Boss:
                 enemyChaseState = new EnemyBossState(this, missilePort1, missilePort2);
                 return;
@@ -169,6 +172,11 @@ public class Enemy : MonoBehaviour
 
     public void HitEnemy(float _damage, float _criticalDamage, bool _hitDamage)
     {
+        if (isDead)
+        {
+            return;
+        }
+
         hitCheck = true;
         if (_hitDamage)
         {
@@ -184,7 +192,11 @@ public class Enemy : MonoBehaviour
         if (hp <= 0)
         {
             animator.SetTrigger("Death");
-            GameManager.instance.AddKillCount();
+            animator.speed = 1;
+            if (enemyCategory != eEnemyCategory.BossBoom && enemyCategory != eEnemyCategory.Boss)
+            {
+                GameManager.instance.AddKillCount();
+            }
             box.enabled = false;
             isDead = true;
             isStarted = false;
@@ -284,6 +296,12 @@ public class Enemy : MonoBehaviour
 
     private void itemDrop()
     {
+        if (enemyCategory == eEnemyCategory.BossBoom)
+        {
+            item(PoolingManager.ePoolingObject.ItemAmmo);
+            return;
+        }
+
         int goldDropChance = Random.Range(0, 10);
         if (goldDropChance < 6)
             item(PoolingManager.ePoolingObject.ItemCoin);

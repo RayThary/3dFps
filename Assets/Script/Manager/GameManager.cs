@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Transform poolingRoot;
     public Transform GetPoolinRoot { get { return poolingRoot; } }
-
     private Transform worldnParent;
     public Transform GetWorldParent { get { return worldnParent; } }
 
@@ -82,14 +81,20 @@ public class GameManager : MonoBehaviour
     public bool UnitStop { get { return unitStop; } set { unitStop = value; } }
 
     //스테이지 관련
-    private bool isShopOpen;
-    public bool ShopOpen { get { return isShopOpen; } set { isShopOpen = value; } }
+    private bool isEscInputLocked;
+    public bool EscInputLocked { get { return isEscInputLocked; } set { isEscInputLocked = value; } }
 
     private bool stageChange = false;
     public bool StageChange { set { stageChange = value; } }
 
     private int enemyCount = 0;
     public int EnemyMaxCount { set { enemyCount = value; } }
+    private GameObject portalObj;
+    public GameObject Portal { get { return portalObj; } set { portalObj = value; } }
+
+    //씬전용 
+    private SpawnSetting _spawnSetting;
+    public SpawnSetting SetSpawnSetting { set { _spawnSetting = value; } }
 
     private void Awake()
     {
@@ -120,21 +125,28 @@ public class GameManager : MonoBehaviour
     //초기화될때마다 새로해줄것들
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+
+
         // 로비씬 넘어가기
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            stageNum = 0;
             return;
         }
 
         //월드오브젝트 다시설정
         GameObject worldObject = GameObject.Find("WorldObjects");
-        if (worldnParent != null)
+        if (worldObject != null)
             worldnParent = worldObject.transform.Find("WeaponParent");
 
         //초기화할것들
         isStageStart = false;
         nextStageNum++;
+        isEscInputLocked = false;
+
+        //Awake 초기화보다 먼저 Unit이 존재해야 함
         characterCreate();
+
         Initialize();
         ShopUI.instance.ConsumableShopUI.AmmoBuyReset();
 
@@ -232,7 +244,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    
+
 
     // Update is called once per frame
     void Update()
@@ -243,22 +255,25 @@ public class GameManager : MonoBehaviour
             stageChange = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && !isShopOpen && SceneManager.GetActiveScene().buildIndex != 0)
+        if (Input.GetKeyDown(KeyCode.Escape) && !isEscInputLocked && SceneManager.GetActiveScene().buildIndex != 0)
         {
-            UIManager.instance.PauseOption();
+            Cursor.lockState = CursorLockMode.None;
+            UIManager.instance.PauseKey();
         }
     }
 
     public void AddKillCount()
     {
         enemyCount--;
-
         if (enemyCount <= 0)
         {
-            UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
+            if (portalObj != null)
+                portalObj.SetActive(true);
         }
-            
+
     }
+
+
     IEnumerator loadSceneWithLoading(int _stageNum)
     {
         unitStop = true;
@@ -272,6 +287,9 @@ public class GameManager : MonoBehaviour
             case 6:
                 StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[3])); break;
         }
+
+        RemoveEnemy();
+        RemovePoolingRoot();
 
         loadingBarObj = UIManager.instance.LoadingBar;
         loadingBarObj.SetActive(true);
@@ -302,6 +320,23 @@ public class GameManager : MonoBehaviour
         stageNum++;
 
         op.allowSceneActivation = true;
+    }
+
+    public void RemoveEnemy()
+    {
+        if (_spawnSetting != null)
+            _spawnSetting.RemoveEnemy();
+    }
+
+    public void RemovePoolingRoot()
+    {
+        for (int i = 0; i < poolingRoot.childCount; i++)
+        {
+            if (poolingRoot.GetChild(i).childCount != 0)
+            {
+                PoolingManager.Instance.RemoveAllPoolingObject(poolingRoot.GetChild(i).gameObject);
+            }
+        }
     }
 
 }

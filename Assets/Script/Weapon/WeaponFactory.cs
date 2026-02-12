@@ -22,7 +22,7 @@ public static class WeaponFactory
     {
         dataDic = new Dictionary<eWeaponType, WeaponData>();
 
-        var all = Resources.LoadAll<WeaponData>("WeaponData");
+        var all = Resources.LoadAll<WeaponData>("Data/WeaponData");
         foreach(var data in all)
         {
             dataDic[data.WeaponType] = data;

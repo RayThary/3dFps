@@ -1,44 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class enemyTest : MonoBehaviour
 {
-    public bool testSpawn = false;
-    public bool a, b, c;
+    public bool start = false;
+    public GameObject target;
 
+    public NavMeshAgent na;
 
     void Start()
     {
-
+        na = GetComponent<NavMeshAgent>();
+        target = GameManager.instance.GetUnit.gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (testSpawn)
-        {
-            GameObject obj;
-            if (a)
-            {
-                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyA, transform);
-            }
-            else if (b)
-            {
-                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyB, transform);
-            }
-            else if(c)
-            {
-                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyC, transform);
-            }
-            else
-            {
-                obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.EnemyF, transform);
-            }
-            obj.transform.position = Vector3.zero;
-            testSpawn = false;
-        }
 
+        if (start)
+        {
+            na.SetDestination(target.transform.position);
+        }
 
     }
 }

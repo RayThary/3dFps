@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public enum BulletType
-    {
-        HandGun,
-        SubMachine,
-    }
-    [SerializeField] private BulletType bulletType;
-    private bool isCreate = true;
 
+    private bool poolingCreate = true;
     private void OnEnable()
     {
-        if (isCreate)
+        if (poolingCreate)
         {
-            isCreate = false;
+            poolingCreate = false;
             return;
         }
         Invoke("removePooling", 0.1f);

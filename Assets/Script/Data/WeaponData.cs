@@ -23,9 +23,9 @@ public class WeaponData : ScriptableObject
     [Header("총기 사격 설정")]
     public PoolingManager.ePoolingObject PoolingMuzzle;
     public bool Automatic;
-    public Bullet.BulletType BulletType;
     public bool ZoomWeapon;
     public float fireDelay;// 오토일경우에만 설정
+    public float fireCooldown;
 
     [Header("업그레이드 설정")]
     public int weaponMaxLevel;

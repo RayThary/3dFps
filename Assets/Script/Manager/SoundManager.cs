@@ -49,8 +49,8 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
         DontDestroyOnLoad(gameObject);
+
         m_backGroundSource = GetComponent<AudioSource>();
         m_backGroundSource.outputAudioMixerGroup = m_mixer.FindMatchingGroups("BackGround")[0];
         StartCoroutine(bgStart());
@@ -274,7 +274,6 @@ public class SoundManager : MonoBehaviour
             }
         }
         bgmSoundPlay(clip);
-        Debug.Log("∏ÿ√„");
         BGMSoundPause(true);
     }
 

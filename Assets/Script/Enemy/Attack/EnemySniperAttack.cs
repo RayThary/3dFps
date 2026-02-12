@@ -10,7 +10,7 @@ public class EnemySniperAttack : MonoBehaviour
         enemy = GetComponentInParent<Enemy>();
     }
 
-
+   
     //애니메이션
     private void attackStart()
     {
