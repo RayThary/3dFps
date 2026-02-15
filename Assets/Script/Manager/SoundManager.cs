@@ -21,6 +21,8 @@ public class SoundManager : MonoBehaviour
         NomalHit,
         SubMachineGunEnd,
         RifleEnd,
+        UnitHit,
+        DoorOpen,
     }
 
     private AudioSource m_backGroundSource;
@@ -121,7 +123,6 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     /// <param name="_clip"></param>
     /// <param name="_volum"></param>
-    /// <param name="_pitch">랜덤값으로 주기 ex)0.9~1.1 </param>
     /// <param name="_parent"></param>
     public void GunSFXCreate(Clips _clip, float _volum, Transform _parent)
     {
@@ -129,7 +130,7 @@ public class SoundManager : MonoBehaviour
         AudioClip clip = clips.Find(x => x.name == _clip.ToString());
         StartCoroutine(GunSFXPlaying(clip, _volum, 0, _parent, false, false));
     }
-    public void GunHitSFXCreate(Clips _clip, float _volum, Transform _parent, bool _isCritical)
+    public void HitSFXCreate(Clips _clip, float _volum, Transform _parent, bool _isCritical)
     {
         //총의 피격소리
         AudioClip clip = clips.Find(x => x.name == _clip.ToString());

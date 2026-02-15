@@ -187,7 +187,7 @@ public class Enemy : MonoBehaviour
             hp -= _damage;
         }
 
-        SoundManager.instance.GunHitSFXCreate(SoundManager.Clips.CriticalHit, 1, GameManager.instance.WeaponSoundParent, _hitDamage);
+        SoundManager.instance.HitSFXCreate(SoundManager.Clips.CriticalHit, 1, GameManager.instance.WeaponSoundParent, _hitDamage);
 
         if (hp <= 0)
         {
@@ -201,6 +201,11 @@ public class Enemy : MonoBehaviour
             isDead = true;
             isStarted = false;
             hitCheck = false;
+
+            if(enemyCategory == eEnemyCategory.Boss)
+            {
+                UIManager.instance.ResultWindow.GameResult(GameManager.instance.GetUnit, true);
+            }
         }
     }
 

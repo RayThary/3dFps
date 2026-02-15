@@ -59,8 +59,6 @@ public class Unit : MonoBehaviour
     // 플레이어슬롯
     public class UnitSlot
     {
-        public Transform unitMeleeSlot1;
-        public Transform unitMeleeSlot2;
         public Transform unitSlot1;
         public Transform unitSlot2;
 
@@ -175,7 +173,7 @@ public class Unit : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
             }
         }
-
+      
     }
 
 
@@ -194,6 +192,7 @@ public class Unit : MonoBehaviour
     {
         unitCurrentHp -= _damage;
         OnUnitChangeHp?.Invoke(unitCurrentHp);
+        SoundManager.instance.HitSFXCreate(SoundManager.Clips.UnitHit, 1, GameManager.instance.WeaponSoundParent, false);
 
         if (unitCurrentHp <= 0)
         {
@@ -205,6 +204,7 @@ public class Unit : MonoBehaviour
     {
         //아직안만듬
         anim.SetTrigger("Death");
+        UIManager.instance.ResultWindow.GameResult(this, false);
     }
 
     public void ReloadEnd()

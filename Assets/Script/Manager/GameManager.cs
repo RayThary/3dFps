@@ -96,6 +96,9 @@ public class GameManager : MonoBehaviour
     private SpawnSetting _spawnSetting;
     public SpawnSetting SetSpawnSetting { set { _spawnSetting = value; } }
 
+    private float startTime;
+    public float StartTime { get { return startTime; } set { startTime = value; } }
+
     private void Awake()
     {
 

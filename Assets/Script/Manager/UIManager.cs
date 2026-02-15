@@ -41,6 +41,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]private FadeWinodw fadeWinodw;
     public FadeWinodw FadeWindow { get { return fadeWinodw; } }
 
+    [SerializeField] private ResultWindow resultWindow;
+    public ResultWindow ResultWindow { get { return resultWindow; } }
+
     private void Awake()
     {
         if (instance == null)
@@ -245,9 +248,9 @@ public class UIManager : MonoBehaviour
 
 
         GameManager.instance.IsPaused = false;
-        Time.timeScale = 1;
         SceneManager.LoadSceneAsync(0);
         baseWindow.SetActive(true);
+        //timeScale은 씬에서 초기화되게 해줌
     }
     public void OnButtonInGameOption()
     {

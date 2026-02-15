@@ -17,7 +17,7 @@ public class StageDoor : MonoBehaviour
             isPlayerIn = true;
             unit = other.GetComponent<Unit>();
             GameManager.instance.CenterTextObj.SetActive(true);
-            GameManager.instance.CenterText.text = "[F] 상점열기";
+            GameManager.instance.CenterText.text = "[F] 스테이지 시작";
         }
 
     }
@@ -49,6 +49,12 @@ public class StageDoor : MonoBehaviour
 
     private void stageStart()
     {
+        if (GameManager.instance.GetStageNum == 1 )
+        {
+            GameManager.instance.StartTime = Time.time;
+        }
+        SoundManager.instance.SFXCreate(SoundManager.Clips.DoorOpen, GameManager.instance.WeaponSoundParent);
+
         UIManager.instance.FadeWindow.Fade(0.3f);
         unit.gameObject.transform.position = targetTrs.position;
     }
