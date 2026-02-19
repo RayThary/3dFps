@@ -77,7 +77,7 @@ public class EnemyMeleeChaseState : IEnemyState
 
     private bool chase()
     {
-        if (enemy.EnemyStop && enemy.EnemyAttackState.CanEnter)
+        if (enemy.EnemyStop )
         {
             enemy.EnemyStop = false;
         }
@@ -87,7 +87,7 @@ public class EnemyMeleeChaseState : IEnemyState
         }
 
         float dis = Vector3.Distance(playerTrs.position, enemyTrs.position);
-        if (enemy.EnemyAttackState.CanEnter && dis <= stopDistance)
+        if (dis <= stopDistance)
         {
             enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
             enemy.EnemyStop = true;

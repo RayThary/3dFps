@@ -40,7 +40,6 @@ public class WeaponView : MonoBehaviour
     private float gunDamage;
     public float GunDamage { get { return gunDamage; } set { gunDamage = value; } }
 
-    private LayerMask headMask;
     private MeshRenderer mesh;
 
     private int weaponUpPrice = 100;

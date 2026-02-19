@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
         {
             case eEnemyCategory.Melee:
                 enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
-                enemyAttackState = new EnemyMeleeState(this, speed);
+                enemyAttackState = new EnemyMeleeState(this);
                 return;
 
             case eEnemyCategory.Charger:

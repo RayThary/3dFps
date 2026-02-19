@@ -172,11 +172,17 @@ public abstract class Weapon
         reserveAmmo = Mathf.Min(reserveAmmo + addAmount, maxReserveAmmo);
     }
     //±¸¸Å¿ë
-    public void BuyAddAmmo()
+    public bool BuyAddAmmo()
     {
+        if (maxReserveAmmo <= reserveAmmo)
+        {
+            return false;
+        }
+
         int addAmount = Mathf.FloorToInt(maxAmmo * 0.66f);
         addAmount += maxAmmo;
         reserveAmmo = Mathf.Min(reserveAmmo + addAmount, maxReserveAmmo);
+        return true;
     }
 
     public string Upgrade(WeaponView _view, int _upgradeNum, bool _auto)

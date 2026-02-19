@@ -40,8 +40,11 @@ public class EnemyBossState : IEnemyState
     {        
         if (!skillStop)
         {
-
-            Vector3 unitVec = GameManager.instance.GetUnit.transform.position;
+            Unit unit = GameManager.instance.GetUnit;
+            if (unit == null)
+                return;
+            
+            Vector3 unitVec = unit.transform.position;
             unitVec.y = 0;
             Quaternion targetRot = Quaternion.LookRotation(unitVec - enemy.transform.position);
             enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRot, Time.deltaTime * 2);

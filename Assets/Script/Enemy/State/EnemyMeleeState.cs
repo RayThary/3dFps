@@ -6,14 +6,12 @@ public class EnemyMeleeState : IEnemyState
 {
 
     private Enemy enemy;
-    private float speed;
 
     public bool CanEnter { get; set; } = true;
 
-    public EnemyMeleeState(Enemy _enemy, float _speed)
+    public EnemyMeleeState(Enemy _enemy)
     {
         enemy = _enemy;
-        speed = _speed;
     }
     public void Enter()
     {

@@ -15,6 +15,7 @@ public class BossHp : MonoBehaviour
 
     void Start()
     {
+        stageStart = false;
         hpUI = GetComponentInChildren<Image>().gameObject;
         hpUI.SetActive(false);
 
@@ -28,23 +29,19 @@ public class BossHp : MonoBehaviour
         maxHp = boss.Hp;
         hpImage.fillAmount = (float)boss.Hp / maxHp;
         hpUI.SetActive(true);
+        stageStart = true;
     }
 
 
 
     void Update()
     {
-        //if (!stageStart && GameManager.instance.IsStageStarted)
-        //{
-        //    maxHp = boss.Hp;
-        //    hpImage.fillAmount = (float)boss.Hp / maxHp;
-        //    hpUI.SetActive(true);
-        //    stageStart = true;
-        //}
-
         if (boss == null)
             return;
 
-        hpImage.fillAmount = (float)boss.Hp / maxHp;
+        if (stageStart)
+        {
+            hpImage.fillAmount = (float)boss.Hp / maxHp;
+        }
     }
 }

@@ -55,7 +55,7 @@ public class ConsumableShopUI : MonoBehaviour
 
             Unit player = GameManager.instance.GetUnit;
             UnitSkill skill = player.GetComponent<UnitSkill>();
-            
+
             var list = skill.GetAvailableUpgradeCards();
             if (list.Count == 0) return;
 
@@ -86,7 +86,7 @@ public class ConsumableShopUI : MonoBehaviour
     {
         Unit player = GameManager.instance.GetUnit;
 
-        if (player.Gold < shopSlot[0].ItemPrice)
+        if (player.Gold < shopSlot[0].ItemPrice || player.CurrentStat.unitMaxHp <= player.UnitHp)
             return;
 
         player.Gold -= shopSlot[0].ItemPrice;
@@ -107,9 +107,13 @@ public class ConsumableShopUI : MonoBehaviour
         if (player.Gold < currentPrice)
             return;
 
+        if (!player.UnitWeapon.BuyAddAmmo())
+        {
+            return;
+        }
+
         player.Gold -= currentPrice;
 
-        player.UnitWeapon.BuyAddAmmo();
 
         ammoBuyCount++;
 
