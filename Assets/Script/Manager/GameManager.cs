@@ -84,8 +84,6 @@ public class GameManager : MonoBehaviour
     private bool isEscInputLocked;
     public bool EscInputLocked { get { return isEscInputLocked; } set { isEscInputLocked = value; } }
 
-    private bool stageChange = false;
-    public bool StageChange { set { stageChange = value; } }
 
     private int enemyCount = 0;
     public int EnemyMaxCount { set { enemyCount = value; } }
@@ -252,12 +250,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (stageChange)
-        {
-            StartCoroutine(loadSceneWithLoading(nextStageNum));
-            stageChange = false;
-        }
-
         if (Input.GetKeyDown(KeyCode.Escape) && !isEscInputLocked && SceneManager.GetActiveScene().buildIndex != 0)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -276,6 +268,10 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void StageChange()
+    {
+        StartCoroutine(loadSceneWithLoading(nextStageNum));
+    }
 
     IEnumerator loadSceneWithLoading(int _stageNum)
     {
@@ -301,10 +297,10 @@ public class GameManager : MonoBehaviour
         AsyncOperation op = SceneManager.LoadSceneAsync(_stageNum);
         op.allowSceneActivation = false;
 
+        //로딩이 빨라서 3초짜리 연출 추가 , 늘어난다면 progress 로 연결
         while (op.progress < 0.89f)
         {
 
-            //게임자체적으로 로딩이늘어나면 op.progress로 로딩바를 바꿔줘야함
             yield return null;
         }
 

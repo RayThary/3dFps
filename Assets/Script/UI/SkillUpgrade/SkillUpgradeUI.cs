@@ -35,8 +35,8 @@ public class SkillUpgradeUI : MonoBehaviour
     {
         Time.timeScale = 1f;
         skillUI.SetActive(false);
-        GameManager.instance.StageChange = true;
         GameManager.instance.UnitStop = false;
+        GameManager.instance.StageChange();
     }
 
     private List<UpgradeType> GetRandomUpgrades(List<UpgradeType> list, int count)

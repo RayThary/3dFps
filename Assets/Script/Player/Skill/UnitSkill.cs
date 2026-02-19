@@ -178,10 +178,6 @@ public class UnitSkill : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            DebugPrintUpgradeLevels();
-        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             switch (skillName)
@@ -219,8 +215,8 @@ public class UnitSkill : MonoBehaviour
 
             if (up.residueLevel < up.residueMaxLevel && skillLevel >= 3)
                 list.Add(UpgradeType.ResidueShockwave);
-            //후반 6이상
-            if (up.doubleShockwaveLevel < up.doubleShockwaveMaxLevel && skillLevel >= 6)
+            //후반 5이상
+            if (up.doubleShockwaveLevel < up.doubleShockwaveMaxLevel && skillLevel >= 5)
                 list.Add(UpgradeType.DoubleShockwave);
         }
 
@@ -246,8 +242,8 @@ public class UnitSkill : MonoBehaviour
             if (up.missileCountLevel < up.missileCountMaxLevel && skillLevel >= 3)
                 list.Add(UpgradeType.MissileCount);
 
-            //후반 6이상
-            if (up.criticalEnableLevel < up.criticalEnableMaxLevel && skillLevel >= 6)
+            //후반 5이상
+            if (up.criticalEnableLevel < up.criticalEnableMaxLevel && skillLevel >= 5)
                 list.Add(UpgradeType.CriticalEnable);
         }
 
@@ -323,31 +319,5 @@ public class UnitSkill : MonoBehaviour
         }
     }
 
-    public void DebugPrintUpgradeLevels()
-    {
-        if (skillName == eSkillName.ThrowMissile)
-        {
-            Debug.Log(
-                $"[Missile Upgrade Levels]\n" +
-                $"Damage: {throwMissileUpgradeLevel.damageLevel}\n" +
-                $"CoolDown: {throwMissileUpgradeLevel.coolDownLevel}\n" +
-                $"MissileCount: {throwMissileUpgradeLevel.missileCountLevel}\n" +
-                $"FireInterval: {throwMissileUpgradeLevel.fireIntervalLevel}\n" +
-                $"MissileSpeed: {throwMissileUpgradeLevel.missileSpeedLevel}\n" +
-                $"CriticalEnable: {throwMissileUpgradeLevel.criticalEnableLevel}"
-            );
-        }
-        else if (skillName == eSkillName.Shockwave)
-        {
-            Debug.Log(
-                $"[Shockwave Upgrade Levels]\n" +
-                $"Damage: {shockwaveUpgradeLevel.damageLevel}\n" +
-                $"CoolTime: {shockwaveUpgradeLevel.coolTimeLevel}\n" +
-                $"Radius: {shockwaveUpgradeLevel.radiusLevel}\n" +
-                $"Slow: {shockwaveUpgradeLevel.slowLevel}\n" +
-                $"Residue: {shockwaveUpgradeLevel.residueLevel}\n" +
-                $"DoubleShockwave: {shockwaveUpgradeLevel.doubleShockwaveLevel}"
-            );
-        }
-    }
+
 }
