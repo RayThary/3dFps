@@ -6724,7 +6724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &867073000
 Transform:
   m_ObjectHideFlags: 0
@@ -11017,11 +11017,6 @@ MonoBehaviour:
   firstPersonMask:
     serializedVersion: 2
     m_Bits: 141047
-  thirdPersonMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  ChangeCam: {fileID: 867073001}
-  V3Cam: {fileID: 1767176322}
 --- !u!1 &1224610565
 GameObject:
   m_ObjectHideFlags: 0
@@ -15462,7 +15457,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1767176321
 Transform:
   m_ObjectHideFlags: 0
@@ -18529,7 +18524,7 @@ Transform:
   m_GameObject: {fileID: 1996880006}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 3.365, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18553,7 +18548,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 1
+  m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 7
@@ -18610,7 +18605,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.05
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0

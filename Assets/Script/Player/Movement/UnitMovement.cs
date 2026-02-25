@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.UI.CanvasScaler;
 //using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class UnitMovement
@@ -31,6 +32,7 @@ public class UnitMovement
 
     public void UnitMove(float _speed, bool _isDodge, Vector3 _dodgeVec, float _yaw)
     {
+
         Quaternion rot = Quaternion.Euler(0f, _yaw, 0f);
 
         Vector3 forward = rot * Vector3.forward;
@@ -42,6 +44,7 @@ public class UnitMovement
 
         moveVec = moveVec.normalized;
         
+        rigid.MoveRotation(rot);
         rigid.velocity = new Vector3(moveVec.x * _speed, rigid.velocity.y, moveVec.z * _speed);
         anim.SetBool("Run", moveVec != Vector3.zero);
     }

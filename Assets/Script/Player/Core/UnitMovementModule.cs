@@ -38,18 +38,14 @@ public class UnitMovementModule
     public void UpdateMovement()
     {
         unitRotation.unitMouseLook(unitTrs, playerInput.GetAxis[InputAction.MouseX], playerInput.GetAxis[InputAction.MouseY], unit.Sensitivity);
-        //unitMovement.UnitMove(unit.UnitSpeed, unit.IsDodge, unit.DodgeVec, unitRotation.Yaw);
+        unitMovement.UnitMove(unit.UnitSpeed, unit.IsDodge, unit.DodgeVec, unitRotation.Yaw);
         unitDodge.dodge(playerInput, unit, unitMovement, unit.UnitSpeed, unitMovement.GetMoveVec);
         unitMovement.jump(unit.CurrentStat.unitJumpPower, playerInput);
 
         isMoving = movingCheck();
     }
 
-    public void FixedUpdateMovement()
-    {
-        unitMovement.UnitMove(unit.UnitSpeed, unit.IsDodge, unit.DodgeVec, unitRotation.Yaw);
-        //unitMovement.jump(unit.CurrentStat.unitJumpPower, playerInput);
-    }
+ 
 
 
     private bool movingCheck()

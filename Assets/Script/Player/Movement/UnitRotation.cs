@@ -49,8 +49,6 @@ public class UnitRotation
     public void unitMouseLook(Transform unit, float _mouseX, float _mouseY, float _sensitivity)
     {
         yaw += _mouseX * _sensitivity;
-        unit.rotation = Quaternion.Euler(0f, yaw, 0f);
-        //unit.Rotate(0, _mouseX * _sensitivity, 0f, Space.Self);
 
         rotationPitch -= _mouseY * _sensitivity;
         rotationPitch = Mathf.Clamp(rotationPitch, minPitch, maxPitch);

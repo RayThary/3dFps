@@ -151,11 +151,6 @@ public class Unit : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-        movementModule.FixedUpdateMovement();
-    }
-
     void Update()
     {
         if (GameManager.instance.IsPaused || GameManager.instance.UnitStop) return;
