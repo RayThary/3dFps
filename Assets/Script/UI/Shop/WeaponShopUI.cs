@@ -105,7 +105,6 @@ public class WeaponShopUI : MonoBehaviour
                 return weaponIcon[i].sprite;
         }
 
-        Debug.LogWarning($"아이콘 없음:{weaponName}");
         return null;
     }
 }

@@ -6,6 +6,7 @@ public class PortalSpawn : MonoBehaviour
 {
     private CapsuleCollider capCol;
     private bool isPlayerIn = false;
+    private bool checkF = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -23,6 +24,7 @@ public class PortalSpawn : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             isPlayerIn = false;
+            checkF = false;
             GameManager.instance.CenterTextObj.SetActive(false);
         }
     }
@@ -34,21 +36,15 @@ public class PortalSpawn : MonoBehaviour
             gameObject.SetActive(false);
 
     }
-    public bool test = false;
     // Update is called once per frame
     void Update()
     {
-        if (test)
-        {
-            UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
-            test = false;
-        }
-
-        if (!isPlayerIn)
+        if (!isPlayerIn|| checkF)
             return;
 
         if (Input.GetKeyDown(KeyCode.F))
         {
+            checkF = true;
             UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
         }
 

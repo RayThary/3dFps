@@ -15,6 +15,11 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         canvasGroup.alpha = 0.5f;
     }
 
+    void OnDisable()
+    {
+        canvasGroup.alpha = 0.5f;
+    }
+
     [SerializeField] private CanvasGroup canvasGroup;
     private void Start()
     {

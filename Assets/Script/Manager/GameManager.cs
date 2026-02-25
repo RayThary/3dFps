@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             stageNum = 0;
+            nextStageNum = 1;
             return;
         }
 
@@ -191,11 +192,17 @@ public class GameManager : MonoBehaviour
         //플레이어
         if (unit != null)
         {
-            unit.transform.position = new Vector3(0, 0, -50);
-            unit.transform.rotation = Quaternion.Euler(Vector3.zero);
+            StartCoroutine(unitSeting());
         }
     }
+    
 
+    IEnumerator unitSeting()
+    {
+        yield return new WaitForFixedUpdate();
+        unit.transform.position = new Vector3(0f, 0.15f, -50f);
+        unit.transform.rotation = Quaternion.Euler(Vector3.zero);
+    }
 
     private void characterCreate()
     {

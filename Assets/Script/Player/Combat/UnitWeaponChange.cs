@@ -136,6 +136,7 @@ public class UnitWeaponChange
 
             if (_playerinput.ButtonDown[InputAction.FCheck])
             {
+                unit.UnitAttackModule.IsFire = false;
                 WeaponChange(hit.transform.GetComponentInParent<WeaponView>());
             }
         }

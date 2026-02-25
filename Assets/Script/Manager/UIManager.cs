@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SkillUpgradeUI skillUpgradeUI;
     public SkillUpgradeUI GetSkillUpgradeUI { get { return skillUpgradeUI; } }
 
-    [SerializeField]private FadeWinodw fadeWinodw;
+    [SerializeField] private FadeWinodw fadeWinodw;
     public FadeWinodw FadeWindow { get { return fadeWinodw; } }
 
     [SerializeField] private ResultWindow resultWindow;
@@ -58,7 +58,6 @@ public class UIManager : MonoBehaviour
         InitFPSOption();
         InitScreenModeOption();
 
-        LoadOptionData();
 
         d_Resolutions.onValueChanged.AddListener(ApplyResolution);
         d_FPS.onValueChanged.AddListener(ApplyFPS);
@@ -68,6 +67,7 @@ public class UIManager : MonoBehaviour
         SoundManager.instance.SetSFXSound(s_SFX);
         optionClose.onClick.AddListener(OnButtonOptionClose);
 
+        LoadOptionData();
         DontDestroyOnLoad(gameObject);
     }
 
@@ -85,21 +85,33 @@ public class UIManager : MonoBehaviour
         OptionData data = JsonUtility.FromJson<OptionData>(json);
 
         //해상도
-        if (data.ResolutionIndex < Screen.resolutions.Length)
+        if (data.ResolutionIndex < resolutions.Count)
         {
             Resolution r = resolutions[data.ResolutionIndex];
             Screen.SetResolution(r.width, r.height, data.ScreenMode);
             d_Resolutions.value = data.ResolutionIndex;
             d_Resolutions.RefreshShownValue();
         }
-
-        //화면모드
-        if (Screen.fullScreenMode != data.ScreenMode)
+        else
         {
-            Screen.SetResolution(Screen.width, Screen.height, data.ScreenMode);
-            d_ScreenMode.value = screenModes.IndexOf(data.ScreenMode);
+            data.ResolutionIndex = 0;
+
+            if (resolutions.Count > 0)
+            {
+                Resolution r = resolutions[0];
+                Screen.SetResolution(r.width, r.height, data.ScreenMode);
+                d_Resolutions.value = 0;
+            }
+        }
+        int modeIndex = screenModes.IndexOf(data.ScreenMode);
+
+        if (modeIndex >= 0)
+        {
+            d_ScreenMode.value = modeIndex;
             d_ScreenMode.RefreshShownValue();
         }
+
+        Screen.fullScreenMode = data.ScreenMode;
 
         //프레임
         Application.targetFrameRate = data.FrameRate == -1 ? -1 : data.FrameRate;
@@ -122,23 +134,35 @@ public class UIManager : MonoBehaviour
     {
         d_Resolutions.options.Clear();
         resolutions.Clear();
-        resolutions.AddRange(Screen.resolutions);
+
+        float targetAspect = (float)Screen.currentResolution.width / Screen.currentResolution.height;
+        Resolution[] allResolutions = Screen.resolutions;
 
         int currentIndex = 0;
-        for (int i = 0; i < resolutions.Count; i++)
+        for (int i = 0; i < allResolutions.Length; i++)
         {
+            float aspect = (float)allResolutions[i].width / allResolutions[i].height;
+
+            if (Mathf.Abs(aspect - targetAspect) > 0.01f)
+                continue;
+
+            resolutions.Add(allResolutions[i]);
+
             TMP_Dropdown.OptionData optionData = new()
-            { text = $"{resolutions[i].width} x {resolutions[i].height} {Mathf.RoundToInt((float)resolutions[i].refreshRateRatio.value)}hz" };
+            { text = $"{allResolutions[i].width} x {allResolutions[i].height} {Mathf.RoundToInt((float)allResolutions[i].refreshRateRatio.value)}hz" };
+
             d_Resolutions.options.Add(optionData);
 
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
+            if (allResolutions[i].width == Screen.width &&
+                allResolutions[i].height == Screen.height)
             {
-                currentIndex = i;
+                currentIndex = resolutions.Count - 1;
             }
+
         }
 
         d_Resolutions.value = currentIndex;
+        d_Resolutions.RefreshShownValue();
     }
 
     private void InitFPSOption()
@@ -215,6 +239,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void ApplyScreenOption()
+    {
+        FullScreenMode mode = screenModes[d_ScreenMode.value];
+        Screen.fullScreenMode = mode;
+    }
+
     public void PauseKey()
     {
         Time.timeScale = 0;
@@ -271,6 +301,7 @@ public class UIManager : MonoBehaviour
 
     public void OnButtonOptionClose()
     {
+        ApplyScreenOption();
         saveOption();
         optionWindow.SetActive(false);
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -280,7 +311,9 @@ public class UIManager : MonoBehaviour
     private void ApplyResolution(int index)
     {
         Resolution r = resolutions[index];
-        Screen.SetResolution(r.width, r.height, Screen.fullScreen);
+
+
+        Screen.SetResolution(r.width, r.height, Screen.fullScreenMode);
     }
 
     private void ApplyFPS(int index)

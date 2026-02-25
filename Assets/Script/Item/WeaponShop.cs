@@ -47,7 +47,6 @@ public class WeaponShop : MonoBehaviour
         var slot1View = unit.UnitAttackModule.GetUnitWeaponChange.GetWeaponview(1);
         var slot2View = unit.UnitAttackModule.GetUnitWeaponChange.GetWeaponview(2);
 
-        Debug.Log($"{slot1.GetName}, {slot2.GetName}");
         ShopUI.instance.WeaponShopUI.SetWeaponShop(slot1View, slot1.GetName, slot2View, slot2.GetName);
 
         ShopUI.instance.WeaponShopUI.ShopOpen();

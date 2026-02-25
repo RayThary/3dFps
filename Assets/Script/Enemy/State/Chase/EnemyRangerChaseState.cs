@@ -211,7 +211,6 @@ public class EnemyRangerChaseState : IEnemyState
         {
             if (i == 19)
             {
-                Debug.Log("추격실패");
                 enemy.NavMesh.SetDestination(targetVec);
                 break;
             }

@@ -19,8 +19,8 @@ public class UnitAttackModule
     private CinemachineVirtualCamera povCamera;
     private bool zoomCheck = false;
     private bool fireLock = false;
-    public bool FireLock { set { fireLock = value; } }
     private bool isFire = false;
+    public bool IsFire { set { isFire = value; } }
 
     public void SetUp(Unit _unit, Animator _anim, UnitRotation _unitRotation, CinemachineVirtualCamera _povCamera, PlayerInput _playerInput)
     {
@@ -47,9 +47,9 @@ public class UnitAttackModule
 
         unitWeaponChange.WeaponChangeCheck(_playerInput);
         unitWeaponChange.WeaponChangeCool();
+        attack(_playerInput);
         weaponChange(_playerInput);
         zoom(_playerInput);
-        attack(_playerInput);
         weaponReroad(_playerInput);
     }
 
@@ -105,11 +105,11 @@ public class UnitAttackModule
                 switch (unit.UnitWeapon.WeaponType)
                 {
                     case eWeaponType.SubMachineGun:
-                        unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetWeaponview(),
+                        unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetWeaponview(), this,
                             unit.UnitWeapon.FireDelay, unit.UnitWeapon.SpreadRange);
                         break;
                     case eWeaponType.Rifle:
-                        unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetWeaponview(),
+                        unitAttack.Attack_Auto(unit.UnitWeapon, _playerInput, unitWeaponChange.GetWeaponview(), this,
                             unit.UnitWeapon.FireDelay, unit.UnitWeapon.SpreadRange);
                         break;
                 }

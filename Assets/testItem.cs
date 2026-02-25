@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class testItem : MonoBehaviour
 {
@@ -18,14 +17,9 @@ public class testItem : MonoBehaviour
     {
         if (a)
         {
-            GameObject obj = PoolingManager.Instance.CreateObject(PoolingManager.ePoolingObject.ItemCoin, a1);
-            obj.transform.position = transform.position;
-            count++;
-            if (count > 3)
-            {
-                a = false;
-                count = 0;
-            }
+            Debug.Log(Time.timeScale);
+            Time.timeScale = 1;
+            a = false;
         }
     }
 }

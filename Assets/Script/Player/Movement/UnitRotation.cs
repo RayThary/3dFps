@@ -18,29 +18,27 @@ public class UnitRotation
     private float minPitch;
     private float maxPitch;
 
-    private float minMeleePitch;
-    private float maxMeleePitch;
 
+    private float tempMouseY;
+    private float delta;
 
     private bool attackCheck = false;
     private bool mouseMoveAttack;
 
     private Transform playerHead;
-    private Transform playerNeck;
 
     private UnitAttack unitAttack;
 
-    public void SetUnitRotation(Transform _head, Transform _neck, float _minP, float _maxP, float _maxRecoilAngle, float recoverSpd)
+    private float yaw;
+    public float Yaw { get { return yaw; } }
+
+    public void SetUnitRotation(Transform _head, float _minP, float _maxP, float _maxRecoilAngle, float recoverSpd)
     {
         playerHead = _head;
         minPitch = _minP;
         maxPitch = _maxP;
         maxRecoilAngle = _maxRecoilAngle;
         recoilRecoverSpeed = recoverSpd;
-        playerNeck = _neck;
-
-        minMeleePitch = minMeleePitch / 2;
-        maxMeleePitch = maxPitch * 2;
     }
     //어택이늦게 선언되기때문에 따로 참조
     public void SetUnitAttack(UnitAttack _unitAttack)
@@ -50,7 +48,9 @@ public class UnitRotation
 
     public void unitMouseLook(Transform unit, float _mouseX, float _mouseY, float _sensitivity)
     {
-        unit.Rotate(0, _mouseX * _sensitivity, 0f, Space.World);
+        yaw += _mouseX * _sensitivity;
+        unit.rotation = Quaternion.Euler(0f, yaw, 0f);
+        //unit.Rotate(0, _mouseX * _sensitivity, 0f, Space.Self);
 
         rotationPitch -= _mouseY * _sensitivity;
         rotationPitch = Mathf.Clamp(rotationPitch, minPitch, maxPitch);
@@ -66,8 +66,6 @@ public class UnitRotation
         attackCheck = true;
     }
 
-    private float tempMouseY;
-    private float delta;
     //반동후되돌아가는부분
     public void ApplyRotation(PlayerInput _playerInput)
     {
@@ -96,8 +94,6 @@ public class UnitRotation
 
 
         finalPitch = Mathf.Clamp(finalPitch, minPitch, maxPitch);
-        playerNeck.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
-
 
         playerHead.localRotation = Quaternion.Euler(finalPitch, 0f, 0f);
 

@@ -10,6 +10,8 @@ public class StageDoor : MonoBehaviour
 
     [SerializeField] private Transform targetTrs;
 
+    private bool checkF = false;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -27,6 +29,7 @@ public class StageDoor : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             isPlayerIn = false;
+            checkF = false;
             GameManager.instance.CenterTextObj.SetActive(false);
         }
     }
@@ -38,24 +41,27 @@ public class StageDoor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isPlayerIn) return;
+        if (!isPlayerIn || checkF) return;
 
         if (Input.GetKeyDown(KeyCode.F))
         {
             stageStart();
+            checkF = true;
         }
 
     }
 
     private void stageStart()
     {
-        if (GameManager.instance.GetStageNum == 1 )
+        if (GameManager.instance.GetStageNum == 1)
         {
             GameManager.instance.StartTime = Time.time;
         }
         SoundManager.instance.SFXCreate(SoundManager.Clips.DoorOpen, GameManager.instance.WeaponSoundParent);
 
         UIManager.instance.FadeWindow.Fade(0.3f);
-        unit.gameObject.transform.position = targetTrs.position;
+        Vector3 targetPos = targetTrs.position;
+        targetPos.y = 0.15f;
+        unit.gameObject.transform.position = targetPos;
     }
 }

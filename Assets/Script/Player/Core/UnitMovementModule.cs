@@ -14,9 +14,9 @@ public class UnitMovementModule
 
     private Transform unitTrs;
     private bool isMoving;
-    public bool IsMoving { get { return isMoving; }  }
+    public bool IsMoving { get { return isMoving; } }
 
-    public void SetUp(Unit _unit, UnitData _unitData, Animator _anim, Rigidbody _rigid, Transform _unitTrs, Transform _head, Transform _neck, PlayerInput _playerInput)
+    public void SetUp(Unit _unit, UnitData _unitData, Animator _anim, Rigidbody _rigid, Transform _unitTrs, Transform _head, PlayerInput _playerInput)
     {
         unit = _unit;
         unitTrs = _unitTrs;
@@ -27,7 +27,7 @@ public class UnitMovementModule
         unitMovement.SetUp(unitTrs, _anim, _rigid, _playerInput);
 
         unitRotation = new UnitRotation();
-        unitRotation.SetUnitRotation(_head, _neck, _unitData.MinPitch, _unitData.MaxPitch, _unitData.MaxRecoilAngle, unit.Sensitivity);
+        unitRotation.SetUnitRotation(_head, _unitData.MinPitch, _unitData.MaxPitch, _unitData.MaxRecoilAngle, unit.Sensitivity);
         unit.CurrentRotation = unitRotation;
 
         unitDodge = unit.GetComponent<UnitDodge>();
@@ -37,13 +37,18 @@ public class UnitMovementModule
 
     public void UpdateMovement()
     {
-        unitMovement.jump(unit.CurrentStat.unitJumpPower, playerInput);
-        unitRotation.unitMouseLook(unitTrs, playerInput.GetAxis[InputAction.MouseX],
-            playerInput.GetAxis[InputAction.MouseY], unit.Sensitivity);
+        unitRotation.unitMouseLook(unitTrs, playerInput.GetAxis[InputAction.MouseX], playerInput.GetAxis[InputAction.MouseY], unit.Sensitivity);
+        //unitMovement.UnitMove(unit.UnitSpeed, unit.IsDodge, unit.DodgeVec, unitRotation.Yaw);
         unitDodge.dodge(playerInput, unit, unitMovement, unit.UnitSpeed, unitMovement.GetMoveVec);
-        unitMovement.UnitMove(unit.UnitSpeed, unit.IsDodge, unit.DodgeVec);
+        unitMovement.jump(unit.CurrentStat.unitJumpPower, playerInput);
 
         isMoving = movingCheck();
+    }
+
+    public void FixedUpdateMovement()
+    {
+        unitMovement.UnitMove(unit.UnitSpeed, unit.IsDodge, unit.DodgeVec, unitRotation.Yaw);
+        //unitMovement.jump(unit.CurrentStat.unitJumpPower, playerInput);
     }
 
 

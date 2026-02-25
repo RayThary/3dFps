@@ -100,15 +100,15 @@ public class UnitAttack : MonoBehaviour
     }
 
 
-    public void Attack_Auto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView, float _shotDelay, float _SpreadRange)
+    public void Attack_Auto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView, UnitAttackModule _unitAttackModule, float _shotDelay, float _SpreadRange)
     {
 
         if (!isAttackAuto)
         {
-            StartCoroutine(attackAuto(_weapon, _input, _weaponView, _shotDelay, _SpreadRange));
+            StartCoroutine(attackAuto(_weapon, _input, _weaponView, _unitAttackModule, _shotDelay, _SpreadRange));
         }
     }
-    private IEnumerator attackAuto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView, float _shotDelay, float _SpreadRange)
+    private IEnumerator attackAuto(Weapon _weapon, PlayerInput _input, WeaponView _weaponView, UnitAttackModule _unitAttackModule, float _shotDelay, float _SpreadRange)
     {
         isAttackAuto = true;
         isRecoil = true;
@@ -146,8 +146,11 @@ public class UnitAttack : MonoBehaviour
         }
         isRecoil = false;
         unitRot.ResetMouseRecoil();
+        _unitAttackModule.IsFire = false;
         if (_weaponView != null) _weaponView.UnitAttackAutoAnim(false);
         yield return new WaitForSeconds(0.1f);
+
+
         isAttackAuto = false;
 
     }

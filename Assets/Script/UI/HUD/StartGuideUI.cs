@@ -21,7 +21,7 @@ public class StartGuideUI : MonoBehaviour
 
         if (t >= 0)
         {
-            t -= Time.deltaTime / guideRemoveTime;
+            t -= Time.unscaledDeltaTime / guideRemoveTime;
             t = Mathf.Clamp01(t);
             canvasGroup.alpha = Mathf.Lerp(0, startAlpha, t);
         }

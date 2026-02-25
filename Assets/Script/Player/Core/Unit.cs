@@ -34,7 +34,6 @@ public class Unit : MonoBehaviour
     public Transform GetUnitHead { get { return unitHead; } }
 
     [SerializeField] private Transform unitHandSlot;
-    [SerializeField] private Transform neck;
 
     ///플레이어 상태값
     private float unitCurrentHp;
@@ -105,8 +104,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera povCamera;
     public CinemachineVirtualCamera PovCamera { get { return povCamera; } }
 
-
-
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -124,7 +121,7 @@ public class Unit : MonoBehaviour
 
         addWeapon();
         movementModule = new UnitMovementModule();
-        movementModule.SetUp(this, unitData, anim, rigid, transform, unitHead, neck, playerInput);
+        movementModule.SetUp(this, unitData, anim, rigid, transform, unitHead, playerInput);
         attackModule = new UnitAttackModule();
         attackModule.SetUp(this, anim, unitRotation, povCamera, playerInput);
 
@@ -152,6 +149,11 @@ public class Unit : MonoBehaviour
         unitSlot.unitSlot2 = unitHandSlot.GetChild(1);
 
 
+    }
+
+    private void FixedUpdate()
+    {
+        movementModule.FixedUpdateMovement();
     }
 
     void Update()
