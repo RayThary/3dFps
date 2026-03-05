@@ -218,7 +218,7 @@ public abstract class Weapon
                 if (_auto)
                 {
                     fireDelay -= fireAdd;
-                    fireDelay = Mathf.Max(0.05f, fireDelay);
+                    fireDelay = Mathf.Max(0.08f, fireDelay);
                     return $"연사속도 +{fireAdd:F3}";
                 }
                 else
