@@ -35,6 +35,7 @@ public class EnemyBoomAttack : MonoBehaviour
     }
     private void attackBoom()
     {
+        GameManager.instance.AddKillCount();
         enemy.EnemyBoomAttack(PoolingManager.ePoolingObject.EnemyBoom);
     }
 

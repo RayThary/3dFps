@@ -80,15 +80,23 @@ public class GameManager : MonoBehaviour
     private bool unitStop = false;
     public bool UnitStop { get { return unitStop; } set { unitStop = value; } }
 
+
+
     //스테이지 관련
     private bool isEscInputLocked;
     public bool EscInputLocked { get { return isEscInputLocked; } set { isEscInputLocked = value; } }
 
-
+    [SerializeField]
     private int enemyCount = 0;
     public int EnemyMaxCount { set { enemyCount = value; } }
-    private GameObject portalObj;
+    [SerializeField]private GameObject portalObj;
     public GameObject Portal { get { return portalObj; } set { portalObj = value; } }
+
+
+    private bool stageEnemyAggro = false;
+    public bool StageEnemyAggro { get { return stageEnemyAggro; } }
+    private float stageTimer;
+    [SerializeField]private float stageMaxTime = 60;
 
     //씬전용 
     private SpawnSetting _spawnSetting;
@@ -96,6 +104,7 @@ public class GameManager : MonoBehaviour
 
     private float startTime;
     public float StartTime { get { return startTime; } set { startTime = value; } }
+
 
     private void Awake()
     {
@@ -145,6 +154,9 @@ public class GameManager : MonoBehaviour
         isStageStart = false;
         nextStageNum++;
         isEscInputLocked = false;
+        stageTimer = 0;
+        stageEnemyAggro = false;
+        stageMaxTime = 60 + (stageNum * 20);
 
         //Awake 초기화보다 먼저 Unit이 존재해야 함
         characterCreate();
@@ -159,6 +171,7 @@ public class GameManager : MonoBehaviour
             loadingBar.fillAmount = 0;
         }
 
+        Cursor.lockState = CursorLockMode.Locked;
 
         unitStop = false;
     }
@@ -195,7 +208,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(unitSeting());
         }
     }
-    
+
 
     IEnumerator unitSeting()
     {
@@ -257,10 +270,24 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Escape) && !isEscInputLocked && SceneManager.GetActiveScene().buildIndex != 0)
         {
             Cursor.lockState = CursorLockMode.None;
             UIManager.instance.PauseKey();
+        }
+        enemyAggro();
+    }
+
+    private void enemyAggro()
+    {
+        if (isStageStart)
+        {
+            stageTimer += Time.deltaTime;
+            if (stageTimer > stageMaxTime)
+            {
+                stageEnemyAggro = true;
+            }
         }
     }
 
@@ -269,8 +296,11 @@ public class GameManager : MonoBehaviour
         enemyCount--;
         if (enemyCount <= 0)
         {
-            if (portalObj != null)
+            if (portalObj != null && !portalObj.activeSelf)
+            {
                 portalObj.SetActive(true);
+                UIManager.instance.GetSkillUpgradeUI.StageClearText();
+            }
         }
 
     }

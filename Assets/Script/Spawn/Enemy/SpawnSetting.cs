@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,6 +19,7 @@ public class SpawnSetting : MonoBehaviour
 
     [SerializeField] private List<NavMeshAgent> enemy = new List<NavMeshAgent>();
     private List<Vector3> enemyPos = new List<Vector3>();
+    private bool enemyAggro = true;
     void Start()
     {
         GameManager.instance.SetSpawnSetting = this;
@@ -47,12 +49,27 @@ public class SpawnSetting : MonoBehaviour
         StartCoroutine(spawnSetUp());
     }
 
+    private void Update()
+    {
+        if (enemyAggro && GameManager.instance.StageEnemyAggro)
+        {
+            for (int i = 0; i < enemy.Count; i++)
+            {
+                if (enemy[i].gameObject.activeSelf)
+                {
+                    Enemy _enemy = enemy[i].GetComponent<Enemy>();
+                    _enemy.HitCheck = true;
+                }
+            }
+            enemyAggro = false;
+        }
+    }
+
     IEnumerator spawnSetUp()
     {
         yield return null;
         for (int i = 0; i < enemy.Count; i++)
         {
-            enemy[i].transform.position = enemyPos[i];
             enemy[i].Warp(enemyPos[i]);
         }
     }
@@ -132,7 +149,7 @@ public class SpawnSetting : MonoBehaviour
         string enemyName = _Enemy.ToString();
         GameObject obj = PoolingManager.Instance.CreateObject(_Enemy, GameManager.instance.PoolingParents[enemyName]);
         obj.GetComponent<NavMeshAgent>().enabled = false;
-        obj.transform.position = Vector3.down * -200;
+        obj.transform.position = Vector3.zero;
         float objR = obj.GetComponent<BoxCollider>().bounds.extents.magnitude;
         objR += 1;
 
@@ -168,7 +185,7 @@ public class SpawnSetting : MonoBehaviour
         }
 
     }
-    
+
     //버그가생겨서 포탈이나왔을경우 몬스터제거용
     public void RemoveEnemy()
     {

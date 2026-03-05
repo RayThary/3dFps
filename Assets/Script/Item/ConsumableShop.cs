@@ -43,8 +43,8 @@ public class ConsumableShop : MonoBehaviour
     private void openShop()
     {
         GameManager.instance.UnitStop = true;
+        GameManager.instance.GetUnit.unitStopVelocity();
         Cursor.lockState = CursorLockMode.None;
-
         ShopUI.instance.ConsumableShopUI.ShopOpen();
         GameManager.instance.CenterTextObj.SetActive(false);
     }

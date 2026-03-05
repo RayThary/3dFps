@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject loadingBarWindow;
     public GameObject LoadingBar { get { return loadingBarWindow; } }
 
+    [SerializeField] private Toggle testMode;
+    public Toggle TestMode { get { return testMode; } }
 
     [SerializeField] private Slider s_MasterSound;
     [SerializeField] private Slider s_BGM;
@@ -30,6 +32,7 @@ public class UIManager : MonoBehaviour
     private readonly List<int> frameRate = new();
     [SerializeField] private TMP_Dropdown d_ScreenMode;
     private readonly List<FullScreenMode> screenModes = new();
+
 
     [SerializeField] private Button optionClose;
 

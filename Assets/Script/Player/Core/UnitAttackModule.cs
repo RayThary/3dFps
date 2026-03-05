@@ -68,7 +68,12 @@ public class UnitAttackModule
 
         if (_playerInput.ButtonDown[InputAction.Fire])
         {
-            isFire = true;
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                return;
+            }
+            IsFire = true;
         }
 
         if (unitHandMotion.IsSwitching)

@@ -28,7 +28,8 @@ public class EnemyBoomChaseState : IEnemyState
     public void Enter()
     {
         enemy.NavMesh.speed = speed;
-        enemy.NavMesh.ResetPath();
+        if (enemy.NavMesh.isOnNavMesh)
+            enemy.NavMesh.ResetPath();
 
     }
 

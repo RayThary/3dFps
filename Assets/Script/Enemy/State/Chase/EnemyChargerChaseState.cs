@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMeleeChaseState : IEnemyState
+public class EnemyChargerChaseState : IEnemyState
 {
     private Enemy enemy;
     private Transform playerTrs;
@@ -19,7 +19,7 @@ public class EnemyMeleeChaseState : IEnemyState
 
     public bool CanEnter { get; set; } = true;
 
-    public EnemyMeleeChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
+    public EnemyChargerChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
         LayerMask _obstacleMask, float _roamRadius, EnemyData _enemyData)
     {
         enemy = _enemy;
@@ -52,9 +52,14 @@ public class EnemyMeleeChaseState : IEnemyState
             checkChase = Vector3.Distance(enemyTrs.position, playerTrs.position) < chaseDistance;
         }
 
+        if (!enemy.EnemyAttackState.CanEnter)
+        {
+            checkChase = false;
+        }
+
         if (checkChase)
         {
-            bool isAttackCheck = chase();         
+            bool isAttackCheck = chase();
             if (isAttackCheck == false)
             {
                 enemy.NavMesh.SetDestination(playerTrs.position);
@@ -68,7 +73,7 @@ public class EnemyMeleeChaseState : IEnemyState
 
     private bool chase()
     {
-       
+
 
         float dis = Vector3.Distance(playerTrs.position, enemyTrs.position);
         if (dis <= stopDistance)

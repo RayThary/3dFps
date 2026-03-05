@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySniperState : IEnemySniperState
 {
-    private float sniperCooltime = 5;
+    private float sniperCooltime = 50;
     private float lastUesdTime = 0;
     public bool CanEnter
     { get { return Time.time >= lastUesdTime + sniperCooltime; } set { CanEnter = value; } }
@@ -14,8 +14,8 @@ public class EnemySniperState : IEnemySniperState
     private float damage;
 
     private float shotTime = 2;
-    //제외할레이어가 늘어나면 수정필요
-    private int excludeLayer => ~LayerMask.GetMask("Player");
+
+    private LayerMask obstacleMask;
 
     private Enemy enemy;
     private Transform snipingTrs;
@@ -23,7 +23,7 @@ public class EnemySniperState : IEnemySniperState
 
     private LineRenderer lineR;
 
-    public EnemySniperState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs, LineRenderer _lineR, float _damage)
+    public EnemySniperState(Enemy _enemy, Transform _enemyTrs, Transform _targetTrs, LineRenderer _lineR, float _damage, LayerMask _obstacleMask)
     {
         enemy = _enemy;
         snipingTrs = _enemyTrs;
@@ -31,6 +31,7 @@ public class EnemySniperState : IEnemySniperState
         lineR = _lineR;
         damage = _damage;
         lastUesdTime = -sniperCooltime;
+        obstacleMask = _obstacleMask;
     }
 
     public void Enter()
@@ -59,23 +60,23 @@ public class EnemySniperState : IEnemySniperState
         Vector3 targetVec;
         while (endTime >= Time.time)
         {
-            targetVec = targetTrs.position + (Vector3.up * 2);
-            dir = targetVec - snipingTrs.position;
-            if (Physics.Raycast(snipingTrs.position, dir, out hit, Mathf.Infinity, excludeLayer))
-            {
 
-                lineR.SetPosition(0, snipingTrs.position);
-                lineR.SetPosition(1, hit.point);
-
-            }
+            Transform camTrs = Camera.main.transform;
+            Vector3 point = camTrs.position + camTrs.forward * 0.3f;
+            point.y -= 1.5f;
+            lineR.SetPosition(0, snipingTrs.position);
+            lineR.SetPosition(1, point);
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.5f);
-
+        lineR.enabled = false;
         targetVec = targetTrs.position + (Vector3.up * 2);
-        dir = targetVec - snipingTrs.position;
-        if (Physics.Raycast(snipingTrs.position, dir, out hit, Mathf.Infinity))
+        dir = (targetVec - snipingTrs.position).normalized;
+
+        yield return new WaitForSeconds(0.1f);
+
+        int mask = obstacleMask | LayerMask.GetMask("Player", "Ground");
+        if (Physics.Raycast(snipingTrs.position, dir, out hit, Mathf.Infinity, mask))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -84,7 +85,6 @@ public class EnemySniperState : IEnemySniperState
 
         }
 
-        lineR.enabled = false;
         enemy.Animator.speed = 1;
     }
     public void Exit()

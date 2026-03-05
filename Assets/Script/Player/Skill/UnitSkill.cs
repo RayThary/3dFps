@@ -162,7 +162,7 @@ public class UnitSkill : MonoBehaviour
             case eSkillName.ThrowMissile:
                 unitThrowMissile = new UnitSkillThrowMissile();
                 unitThrowMissile.SetUp(this, throwMissile.damage, throwMissile.missileCount, coolTime, throwMissile.missileSpeed,
-                    throwMissile.fireInterval, spawnR, spawnL, nowOutLayer);
+                    throwMissile.fireInterval, spawnR, spawnL, transform, nowOutLayer);
                 break;
             case eSkillName.Shockwave:
                 unitShockwave = new UnitSkillShockwave();

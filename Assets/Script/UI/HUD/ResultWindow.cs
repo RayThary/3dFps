@@ -28,6 +28,7 @@ public class ResultWindow : MonoBehaviour
     {
         gameObject.SetActive(true);
         GameManager.instance.UnitStop = true;
+        GameManager.instance.GetUnit.unitStopVelocity();
         Cursor.lockState = CursorLockMode.None;
 
         float startTime = GameManager.instance.StartTime;

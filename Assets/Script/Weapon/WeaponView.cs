@@ -125,12 +125,16 @@ public class WeaponView : MonoBehaviour
         int basePrice = 100;
 
         // °¡°Ý »ó½Â·ü
-        float priceRate = 1.15f;
+        float priceRate = 1.05f;
 
         float rand = UnityEngine.Random.Range(0.9f, 1.15f);
 
         float price = basePrice * (weaponLevel * priceRate) * rand;
 
+        if (UIManager.instance.TestMode.isOn)
+        {
+            price *= 0.7f;
+        }
         weaponUpPrice = Mathf.RoundToInt(price);
     }
     public void UnitAttackSingleAnim()

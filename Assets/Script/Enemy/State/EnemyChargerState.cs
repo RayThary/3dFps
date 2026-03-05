@@ -17,7 +17,7 @@ public class EnemyChargerState : IEnemyState
     private BoxCollider attackBox;
 
     //ÄðÅ¸ÀÓ 
-    private float chargerCooltime = 5;
+    private float chargerCooltime = 3;
     private float lastUesdTime = 0;
     public bool CanEnter
     { get { return Time.time >= lastUesdTime + chargerCooltime; } set { CanEnter = value; } }
@@ -30,7 +30,7 @@ public class EnemyChargerState : IEnemyState
         targetTrs = _targetTrs;
         speed = _speed;
         attackBox = _attackBox;
-        chargerSpeed = 20;
+        chargerSpeed = 25;
         lastUesdTime = -chargerCooltime;
     }
     public void Enter()
@@ -52,16 +52,12 @@ public class EnemyChargerState : IEnemyState
     private void chargerAttack()
     {
         float dis = Vector3.Distance(enemyTrs.position, targetVec);
-        if (dis <= 8 && !isAttack)
+        if (dis <= 12 && !isAttack)
         {
             enemy.Animator.SetTrigger("Attack");
             attackBox.enabled = true;
             isAttack = true;
         }
-
-
-
-
     }
     public void Exit()
     {

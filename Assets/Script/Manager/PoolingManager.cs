@@ -30,9 +30,9 @@ public class PoolingManager : MonoBehaviour
         EnemyBoom,
         ItemAmmo,
         ItemCoin,
+        ItemHp,
         SkillMissile,
         Shockwave,
-        Portal,
     }
 
     [System.Serializable]

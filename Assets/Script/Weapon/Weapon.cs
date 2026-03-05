@@ -123,7 +123,7 @@ public abstract class Weapon
         fireRateUp = _data.fireRateUp;
 
         maxAmmoUp = _data.MaxAmmoUp;
-        ReserveAmmoUp = _data.ReserveAmmo;
+        ReserveAmmoUp = _data.ReserveAmmoUp;
 
         spreadDown = _data.spreadDown;
     }
@@ -165,11 +165,18 @@ public abstract class Weapon
     public abstract void Zoomable(CinemachineVirtualCamera _vCamera, bool _zoom);
 
     //드랍용
-    public void AddAmmo()
+    public bool AddAmmo()
     {
         int addAmount = Mathf.FloorToInt(maxAmmo * 0.66f);
-
-        reserveAmmo = Mathf.Min(reserveAmmo + addAmount, maxReserveAmmo);
+        if (reserveAmmo >= maxReserveAmmo)
+        {
+            return false;
+        }
+        else
+        {
+            reserveAmmo = Mathf.Min(reserveAmmo + addAmount, maxReserveAmmo);
+            return true;
+        }
     }
     //구매용
     public bool BuyAddAmmo()
@@ -198,12 +205,12 @@ public abstract class Weapon
             case 0:
                 float critAdd = critChanceUp * randFactor;
                 criticalChance += critAdd;
-                return $"크리티컬 확률 +{critAdd:F1}%";
+                return $"크리티컬 확률 +{critAdd * 100:F1}%";
 
             case 1:
                 float critDmgAdd = critDamageUp * randFactor;
                 criticalDamage += critDmgAdd;
-                return $"크리티컬 데미지 +{critDmgAdd:F1}%";
+                return $"크리티컬 데미지 +{critDmgAdd * 100:F1}%";
 
             case 2:
                 float fireAdd = fireRateUp * randFactor;

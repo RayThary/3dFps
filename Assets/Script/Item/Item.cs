@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
     public enum ItemType
     {
         Gold,
-        Ammo
+        Ammo,
+        Hp,
     }
 
     [SerializeField] private ItemType itemType;
@@ -53,13 +55,18 @@ public class Item : MonoBehaviour
         float rand = Random.Range(0, 1);
         int coinValue;
         if (rand < 0.45f)
-            coinValue = 1;
-        else if (rand < 0.80f)
             coinValue = 2;
-        else
+        else if (rand < 0.80f)
             coinValue = 3;
+        else
+            coinValue = 4;
 
-        amount = coinValue * 10;
+        amount = coinValue * 13;
+
+        if (UIManager.instance != null && UIManager.instance.TestMode.isOn)
+        {
+            amount *= 2;
+        }
 
         rigid.isKinematic = false;
 
@@ -114,7 +121,15 @@ public class Item : MonoBehaviour
 
                 case ItemType.Ammo:
                     Weapon curWeapon = unit.UnitWeapon;
-                    curWeapon.AddAmmo();
+                    bool addAmmo = curWeapon.AddAmmo();
+                    if (!addAmmo)
+                    {
+                        unit.Gold += amount / 2;
+                    }
+                    break;
+                case ItemType.Hp:
+                    int hp = Mathf.FloorToInt(13 * Random.Range(0.8f, 1.3f));
+                    unit.UnitHp = Mathf.Min(unit.UnitHp + hp, unit.CurrentStat.unitMaxHp);
                     break;
             }
 
@@ -126,7 +141,7 @@ public class Item : MonoBehaviour
         else
         {
 
-            transform.position = Vector3.MoveTowards(transform.position, unit.transform.position, 10 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, unit.transform.position, 20 * Time.deltaTime);
         }
 
     }

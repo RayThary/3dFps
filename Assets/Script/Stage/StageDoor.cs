@@ -45,6 +45,7 @@ public class StageDoor : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
+            GameManager.instance.UnitStop = true;
             stageStart();
             checkF = true;
         }
@@ -63,5 +64,6 @@ public class StageDoor : MonoBehaviour
         Vector3 targetPos = targetTrs.position;
         targetPos.y = 0.15f;
         unit.gameObject.transform.position = targetPos;
+        GameManager.instance.UnitStop = false;
     }
 }

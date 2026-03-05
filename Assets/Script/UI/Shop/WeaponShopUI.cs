@@ -46,6 +46,7 @@ public class WeaponShopUI : MonoBehaviour
         GameManager.instance.UnitStop = false;
         Cursor.lockState = CursorLockMode.Locked;
         GameManager.instance.EscInputLocked = false;
+        initText();
     }
 
     private void UpgradeSlot(WeaponView view, int _slot)
@@ -73,11 +74,18 @@ public class WeaponShopUI : MonoBehaviour
         shopSlot[0].priceText.text = $"{slot1View.WeaponUpPrice}";
         shopSlot[1].priceText.text = $"{slot2View.WeaponUpPrice}";
     }
+    private void initText()
+    {
+
+        shopSlot[0].upgradeText.text = "";
+        shopSlot[1].upgradeText.text = "";
+    }
 
     public void SetWeaponShop(WeaponView _slot1View, string _slot1Name, WeaponView _slot2View, string _slot2Name)
     {
         GameManager.instance.EscInputLocked = true;
         GameManager.instance.UnitStop = true;
+        GameManager.instance.GetUnit.unitStopVelocity();
 
         slot1View = _slot1View;
         slot2View = _slot2View;

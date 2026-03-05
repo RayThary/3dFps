@@ -7,9 +7,13 @@ public class ThrowMissile : MonoBehaviour
 
     private float damage;
     private Vector3 shootDir;
+    private Vector3 targetVec;
     [SerializeField] private LayerMask hitObject;
     [SerializeField] private float speed = 30;
     private bool isCiritical = false;
+
+    private bool envCollisionArmed = false;
+
     private void OnTriggerEnter(Collider other)
     {
         int layer = other.gameObject.layer;
@@ -23,8 +27,13 @@ public class ThrowMissile : MonoBehaviour
             {
                 other.GetComponent<Enemy>().HitEnemy(damage, 1.5f, true);
             }
+            PoolingManager.Instance.RemovePoolingObject(gameObject);
         }
-        else if ((hitObject.value & (1 << layer)) != 0)
+
+        if (!envCollisionArmed)
+            return;
+
+        if ((hitObject.value & (1 << layer)) != 0)
         {
             PoolingManager.Instance.RemovePoolingObject(gameObject);
         }
@@ -34,12 +43,14 @@ public class ThrowMissile : MonoBehaviour
     }
 
 
-    public void SetUp(float _damage, float _missileSpeed, Vector3 _shootDir,bool _isCiritical)
+    public void SetUp(float _damage, float _missileSpeed, Vector3 _shootDir,Vector3 _targetVec, bool _isCiritical)
     {
         damage = _damage;
         speed = _missileSpeed;
         shootDir = _shootDir;
+        targetVec = _targetVec;
         isCiritical = _isCiritical;
+        envCollisionArmed = false;
     }
     void Start()
     {
@@ -50,5 +61,14 @@ public class ThrowMissile : MonoBehaviour
     void Update()
     {
         transform.position += shootDir * Time.deltaTime * speed;
+
+        if (!envCollisionArmed)
+        {
+            float forwardDot = Vector3.Dot(transform.position - targetVec, shootDir);
+            if (forwardDot >= 0.5f)
+            {
+                envCollisionArmed = true;
+            }
+        }
     }
 }

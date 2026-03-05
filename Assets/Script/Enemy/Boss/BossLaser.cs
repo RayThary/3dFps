@@ -69,7 +69,10 @@ public class BossLaser : MonoBehaviour
         }
         else
         {
-            hitPoint = endPoint.position;
+            Transform camTrs = Camera.main.transform;
+            Vector3 point = camTrs.position + camTrs.forward * 0.3f;
+            point.y -= 1.5f;
+            hitPoint = point;
         }
         lineR.SetPosition(0, startPoint.position);
         lineR.SetPosition(1, hitPoint);

@@ -36,16 +36,23 @@ public class PortalSpawn : MonoBehaviour
             gameObject.SetActive(false);
 
     }
-    // Update is called once per frame
+
     void Update()
     {
-        if (!isPlayerIn|| checkF)
+        if (!isPlayerIn || checkF)
             return;
 
         if (Input.GetKeyDown(KeyCode.F))
         {
             checkF = true;
-            UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
+            if (GameManager.instance.GetStageNum < 5)
+            {
+                UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
+            }
+            else
+            {
+                UIManager.instance.ResultWindow.GameResult(GameManager.instance.GetUnit, true);
+            }
         }
 
     }

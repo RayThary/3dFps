@@ -6,6 +6,15 @@ using UnityEngine.UIElements;
 
 public class EnemyRangerChaseState : IEnemyState
 {
+    public enum eState
+    {
+        chase,
+        hold,
+        stop,
+    }
+
+    private eState _eState;
+
     private Enemy enemy;
     private Transform playerTrs;
     private Transform enemyTrs;
@@ -52,70 +61,98 @@ public class EnemyRangerChaseState : IEnemyState
         {
             return;
         }
-        chaseCheck();
+        if (enemy.HitCheck)
+        {
+            isAggro = true;
+        }
+        else
+        {
+            chaseCheck();
+        }
+
         if (isAggro)
         {
-            bool isChasingNow = chase();
-
-            if (isChasingNow)
+            _eState = attackState();
+            Debug.Log(_eState.ToString());
+            switch (_eState)
             {
-                bool isShotCheck = rayCheck();
+                // 사거리 밖이면 무조건 접근
+                case eState.chase:
+                    enemy.Animator.SetBool("Idle", false);
+                    enemy.NavMesh.updateRotation = true;
 
-                if (isShotCheck)
-                {
-
-                    if (enemy.EnemyAttackState.CanEnter)
-                    {
-                        enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
-                        enemy.EnemyStop = true;
-
-                        //공격중 회전방지
-                        enemy.NavMesh.updateRotation = false;
-                    }
-                }
-                else
-                {
                     enemy.NavMesh.SetDestination(playerTrs.position);
-                }
-            }
-            else
-            {
+                    break;
 
-                float dis = Vector3.Distance(enemyTrs.position, playerTrs.position);
-                bool isDeadZone = Mathf.Abs(dis - stopDistance) <= 0.5f;
-                bool canShotPos = rayCheck();
-                //사격가능한지 확인및 데드존체크
-                if (isDeadZone)
-                {
-                    if (canShotPos)
+                case eState.hold:
+
+
+                    enemy.NavMesh.ResetPath();
+                    enemy.Animator.SetBool("Idle", true);
+                    enemy.NavMesh.updateRotation = false;
+                    enemy.transform.LookAt(playerTrs);
+
+                    //공격가능여부체크
+                    bool canShotPos = rayCheck();
+
+                    if (!canShotPos)
+                    {
+                        enemy.Animator.SetBool("Idle", false);
+                        enemy.NavMesh.updateRotation = true;
+                        enemy.NavMesh.SetDestination(playerTrs.position);
+                        break;
+                    }
+
+                    // 시야는 있는데 쿨타임이면 그냥 유지(버티기)
+                    if (!enemy.EnemyAttackState.CanEnter)
+                    {
+                        break;
+                    }
+
+                    enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
+                    enemy.EnemyStop = true;
+
+                    break;
+
+                case eState.stop:
+                    //후퇴
+                    enemy.Animator.SetBool("Idle", false);
+                    Vector3 dir = (enemyTrs.position - playerTrs.position).normalized;
+                    Vector3 retreatPos = playerTrs.position + dir * stopDistance;
+                    enemy.NavMesh.updateRotation = false;
+                    enemy.transform.LookAt(playerTrs);
+                    enemy.NavMesh.SetDestination(retreatPos);
+
+                    if (!enemy.NavMesh.SetDestination(retreatPos))
                     {
                         enemy.NavMesh.ResetPath();
                         enemy.Animator.SetBool("Idle", true);
-                        return;
+                        enemy.NavMesh.updateRotation = false;
+                        enemy.transform.LookAt(playerTrs);
                     }
-                    else
+
+                    if (enemy.EnemyAttackState.CanEnter)
                     {
-                        enemy.NavMesh.SetDestination(playerTrs.position);
-                        enemy.Animator.SetBool("Idle", false);
-                        return;
+                        bool canShotPosStop = rayCheck();
+                        if (canShotPosStop)
+                        {
+                            enemy.StateMachine.ChangeState(enemy.EnemyAttackState);
+                            enemy.EnemyStop = true;
+                            enemy.NavMesh.updateRotation = false;
+                            break;
+                        }
+                        else
+                        {
+                            enemy.Animator.SetBool("Idle", false);
+                            enemy.NavMesh.updateRotation = true;
+
+                            enemy.NavMesh.SetDestination(playerTrs.position);
+                            break;
+                        }
                     }
-                }
-
-                enemy.Animator.SetBool("Idle", false);
-
-                if (dis > stopDistance)
-                {
-                    enemy.NavMesh.SetDestination(playerTrs.position);
-                }
-                else
-                {
-                    //뒤로가기
-                    Vector3 dir = (enemyTrs.position - playerTrs.position).normalized;
-                    Vector3 retreatPos = playerTrs.position + dir * stopDistance;
-                    enemy.transform.LookAt(playerTrs);
-                    enemy.NavMesh.SetDestination(retreatPos);
-                }
+                    break;
             }
+
         }
         else
         {
@@ -139,20 +176,20 @@ public class EnemyRangerChaseState : IEnemyState
         }
     }
 
-    private bool chase()
+    private eState attackState()
     {
-
-
         float dis = Vector3.Distance(playerTrs.position, enemyTrs.position);
-        if (dis <= stopDistance)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
 
+        float holdDistance = stopDistance - 3;
+
+        if (dis > stopDistance)
+            return eState.chase;
+
+
+        if (dis < holdDistance)
+            return eState.stop;
+
+        return eState.hold;
     }
 
     private bool rayCheck()

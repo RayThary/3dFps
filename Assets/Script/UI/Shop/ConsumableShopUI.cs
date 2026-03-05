@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.CanvasScaler;
 
 
 public class ConsumableShopUI : MonoBehaviour
@@ -69,6 +70,7 @@ public class ConsumableShopUI : MonoBehaviour
         shopPanel.SetActive(true);
         GameManager.instance.EscInputLocked = true;
         GameManager.instance.UnitStop = true;
+        GameManager.instance.GetUnit.unitStopVelocity();
     }
 
 
@@ -89,8 +91,8 @@ public class ConsumableShopUI : MonoBehaviour
             return;
 
         player.Gold -= shopSlot[0].ItemPrice;
-        player.UnitHp += Mathf.FloorToInt(shopSlot[0].ItemAmount * Random.Range(0.8f, 1.3f));
-        player.UnitHp = Mathf.Min(player.UnitHp, player.CurrentStat.unitMaxHp);
+        int addHp = Mathf.FloorToInt(13 * Random.Range(0.8f, 1.3f));
+        player.UnitHp = Mathf.Min(player.UnitHp + addHp, player.CurrentStat.unitMaxHp);
 
         shopSlot[0].button.interactable = false;
     }

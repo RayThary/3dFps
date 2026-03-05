@@ -18,7 +18,7 @@ public class Unit : MonoBehaviour
 
     private UnitAttackModule attackModule;
     public UnitAttackModule UnitAttackModule { get { return attackModule; } }
-    
+
 
     private Animator anim;
     private Rigidbody rigid;
@@ -37,7 +37,7 @@ public class Unit : MonoBehaviour
 
     ///플레이어 상태값
     private float unitCurrentHp;
-    public float UnitHp { get { return unitCurrentHp; }set { unitCurrentHp = value; } }
+    public float UnitHp { get { return unitCurrentHp; } set { unitCurrentHp = value; } }
 
     private float unitSpeed;
     public float UnitSpeed { get { return unitSpeed; } set { unitSpeed = value; } }
@@ -151,9 +151,13 @@ public class Unit : MonoBehaviour
 
     }
 
+
     void Update()
     {
-        if (GameManager.instance.IsPaused || GameManager.instance.UnitStop) return;
+        if (GameManager.instance.IsPaused || GameManager.instance.UnitStop)
+        {
+            return;
+        }
 
         playerInput.ReadInput();
         movementModule.UpdateMovement();
@@ -170,7 +174,7 @@ public class Unit : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
             }
         }
-      
+
     }
 
 
@@ -180,9 +184,10 @@ public class Unit : MonoBehaviour
         unitRotation.ApplyRotation(playerInput);
     }
 
-
-
-
+    public void unitStopVelocity()
+    {
+        rigid.velocity = new Vector3(0, rigid.velocity.y, 0);
+    }
 
 
     public void TakeDamge(float _damage)

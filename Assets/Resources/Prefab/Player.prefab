@@ -688,7 +688,7 @@ Transform:
   m_GameObject: {fileID: 2991660601112170467}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.20000005, z: 0.4000001}
+  m_LocalPosition: {x: -1, y: 0.20000005, z: 0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1105,7 +1105,6 @@ MonoBehaviour:
   unitData: {fileID: 11400000, guid: ec633be00cc3df340885b097963288d6, type: 2}
   unitHead: {fileID: 5401834921608893278}
   unitHandSlot: {fileID: 4206875433554880461}
-  neck: {fileID: 5947687007584758761}
   sensitivity: 0
   currentGold: 100
   povCamera: {fileID: 3314300461031420196}
@@ -1280,7 +1279,7 @@ Transform:
   m_GameObject: {fileID: 6483746715594310658}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0.20000005, z: 0.4000001}
+  m_LocalPosition: {x: 1, y: 0.20000005, z: 0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -7,12 +7,14 @@ public class EnemyChargeAttack : MonoBehaviour
     private Enemy enemy;
     private BoxCollider box;
 
+    [SerializeField]private bool hitCheck = false;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if (enemy.IsDead) return;
-            other.GetComponent<Unit>().TakeDamge(enemy.Damage);   
+            if (enemy.IsDead || hitCheck) return;
+            hitCheck = true;
+            other.GetComponent<Unit>().TakeDamge(enemy.Damage);
         }
     }
 
@@ -26,6 +28,7 @@ public class EnemyChargeAttack : MonoBehaviour
     private void attackEnd()
     {
         enemy.EnemyChargeAttackEnd();
+        hitCheck = false;
     }
 
     //애니메이션 이벤트추가용 

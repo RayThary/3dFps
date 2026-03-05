@@ -76,7 +76,17 @@ public class Enemy : MonoBehaviour
     public int WallCount { get { return currentWallCount; } set { currentWallCount = value; } }
 
     private bool hitCheck = false;
-    public bool HitCheck { get { return hitCheck; } }
+    public bool HitCheck { get { return hitCheck; } set { hitCheck = value; } }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (enemyData == null) return;
+
+        // 인식 범위(추격 시작 거리)
+        float chase = enemyData.chaseDistance;
+
+        Gizmos.DrawWireSphere(transform.position, chase);
+    }
 
     private void OnEnable()
     {
@@ -121,7 +131,7 @@ public class Enemy : MonoBehaviour
                 return;
 
             case eEnemyCategory.Charger:
-                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
+                enemyChaseState = new EnemyChargerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
                 enemyAttackState = new EnemyChargerState(this, transform, playerTrs, unitHitBox, speed);
 
                 return;
@@ -136,7 +146,7 @@ public class Enemy : MonoBehaviour
                 lineR.enabled = false;
 
                 enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
-                enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage);
+                enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage, obstacleMask);
                 return;
 
             case eEnemyCategory.BossBoom:
@@ -202,9 +212,9 @@ public class Enemy : MonoBehaviour
             isStarted = false;
             hitCheck = false;
 
-            if(enemyCategory == eEnemyCategory.Boss)
+            if (enemyCategory == eEnemyCategory.Boss)
             {
-                UIManager.instance.ResultWindow.GameResult(GameManager.instance.GetUnit, true);
+                GameManager.instance.Portal.SetActive(true);
             }
         }
     }
@@ -303,22 +313,31 @@ public class Enemy : MonoBehaviour
     {
         if (enemyCategory == eEnemyCategory.BossBoom)
         {
-            item(PoolingManager.ePoolingObject.ItemAmmo);
+            item(PoolingManager.ePoolingObject.ItemAmmo, 0);
             return;
         }
 
         int goldDropChance = Random.Range(0, 10);
         if (goldDropChance < 6)
-            item(PoolingManager.ePoolingObject.ItemCoin);
+            item(PoolingManager.ePoolingObject.ItemCoin, 0);
+        
 
         int ammoDropChance = Random.Range(0, 10);
         if (ammoDropChance < 6)
-            item(PoolingManager.ePoolingObject.ItemAmmo);
+            item(PoolingManager.ePoolingObject.ItemAmmo, 0);
+
+
+
+        int hpDropChance = Random.Range(0, 100);
+        if (hpDropChance < 5)
+            item(PoolingManager.ePoolingObject.ItemHp, 1);
+
     }
 
-    private void item(PoolingManager.ePoolingObject _item)
+    private void item(PoolingManager.ePoolingObject _item, int dropCount)
     {
-        int dropCount = Random.Range(1, 4);
+        if (dropCount == 0)
+            dropCount = Random.Range(1, 4);
 
         float randY = Random.Range(3, 3.5f);
         for (int i = 0; i < dropCount; i++)

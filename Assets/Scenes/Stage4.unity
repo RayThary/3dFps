@@ -420,7 +420,7 @@ MonoBehaviour:
     m_Bits: 33408
   inner: 0
   outer: 0
-  ShowGizmo: 1
+  ShowGizmo: 0
 --- !u!208 &94275012
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -17661,7 +17661,7 @@ MonoBehaviour:
     m_Bits: 33408
   inner: 0
   outer: 0
-  ShowGizmo: 1
+  ShowGizmo: 0
 --- !u!208 &775036925
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -17900,7 +17900,7 @@ MonoBehaviour:
     m_Bits: 33408
   inner: 0
   outer: 0
-  ShowGizmo: 1
+  ShowGizmo: 0
 --- !u!208 &800730779
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -48391,7 +48391,7 @@ MonoBehaviour:
     m_Bits: 33408
   inner: 0
   outer: 0
-  ShowGizmo: 1
+  ShowGizmo: 0
 --- !u!208 &8952002752234253702
 NavMeshObstacle:
   m_ObjectHideFlags: 0

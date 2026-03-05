@@ -32,7 +32,7 @@ public class UnitMovementModule
 
         unitDodge = unit.GetComponent<UnitDodge>();
         unitDodge.UnitSpeed = unit.UnitSpeed;
-        unitDodge.DodgeSpeed = unit.UnitSpeed * 1.8f;
+        unitDodge.DodgeSpeed = unit.UnitSpeed * 2.3f;
     }
 
     public void UpdateMovement()

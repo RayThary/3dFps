@@ -13,6 +13,7 @@ public class UnitSkillThrowMissile
     private float missileSpeed;
     private bool canCritical;
 
+
     //쿨타임
     private float coolTime;
     private float lastUsedTime = -Mathf.Infinity;
@@ -21,12 +22,14 @@ public class UnitSkillThrowMissile
     private Transform spawnPoint1;
     private Transform spawnPoint2;
 
+    private Transform unitTrs;
+
     //제외할 인식안할레이어
     private int outLayer;
 
 
-    public void SetUp(UnitSkill _unitSkill, float _damage, int _skillCount, float _coolTime,float _missileSpeed,float _fireInterval
-        , Transform _spawnPoint1, Transform _spawnPoint2, int _outLayer)
+    public void SetUp(UnitSkill _unitSkill, float _damage, int _skillCount, float _coolTime, float _missileSpeed, float _fireInterval
+        , Transform _spawnPoint1, Transform _spawnPoint2, Transform _unitTrs, int _outLayer)
     {
         unitSkill = _unitSkill;
         damage = _damage;
@@ -36,8 +39,11 @@ public class UnitSkillThrowMissile
         canCritical = false;
 
         coolTime = _coolTime;
+
         spawnPoint1 = _spawnPoint1;
         spawnPoint2 = _spawnPoint2;
+        unitTrs = _unitTrs;
+
         outLayer = _outLayer;
     }
 
@@ -89,7 +95,7 @@ public class UnitSkillThrowMissile
 
             bool isCrit = canCritical ? ciriticalCheck() : false;
 
-            obj.GetComponent<ThrowMissile>().SetUp(damage, missileSpeed, dir, isCrit);
+            obj.GetComponent<ThrowMissile>().SetUp(damage, missileSpeed, dir, unitTrs.position, isCrit);
             count++;
             yield return new WaitForSeconds(fireInterval);
         }

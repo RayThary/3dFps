@@ -30,7 +30,7 @@ public class UnitDodge : MonoBehaviour
         _unit.DodgeVec = _moveVec;
         _unit.UnitSpeed = dodgeSpeed;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
         _unit.UnitSpeed = unitSpeed;
 
