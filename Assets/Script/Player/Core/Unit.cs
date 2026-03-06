@@ -181,12 +181,22 @@ public class Unit : MonoBehaviour
 
     void LateUpdate()
     {
+        if (GameManager.instance.IsPaused || GameManager.instance.UnitStop)
+        {
+            return;
+        }
         unitRotation.ApplyRotation(playerInput);
     }
 
     public void unitStopVelocity()
     {
         rigid.velocity = new Vector3(0, rigid.velocity.y, 0);
+    }
+    public void unitTeleport(Vector3 _targetVec)
+    {
+        rigid.velocity = Vector3.zero;
+        rigid.angularVelocity = Vector3.zero;
+        rigid.position = _targetVec;
     }
 
 

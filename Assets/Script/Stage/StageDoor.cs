@@ -11,7 +11,6 @@ public class StageDoor : MonoBehaviour
     [SerializeField] private Transform targetTrs;
 
     private bool checkF = false;
-    public bool test = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -64,8 +63,7 @@ public class StageDoor : MonoBehaviour
         UIManager.instance.FadeWindow.Fade(0.3f);
         Vector3 targetPos = targetTrs.position;
         targetPos.y = 0.15f;
-        unit.gameObject.transform.position = targetPos;
-        unit.unitStopVelocity();
-        test = true;
+        //unit.gameObject.transform.position = targetPos;
+        unit.unitTeleport(targetPos);
     }
 }

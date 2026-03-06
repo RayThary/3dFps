@@ -213,8 +213,7 @@ public class GameManager : MonoBehaviour
     IEnumerator unitSeting()
     {
         yield return new WaitForFixedUpdate();
-        unit.transform.position = new Vector3(0f, 0.15f, -50f);
-        unit.transform.rotation = Quaternion.Euler(Vector3.zero);
+        unit.unitTeleport(new Vector3(0f, 0.15f, -50f));
     }
 
     private void characterCreate()

@@ -67,7 +67,6 @@ public class UnitAttack : MonoBehaviour
 
         bool shot = _weapon.Attack(muzzle);
 
-
         if (shot)
         {
             if (_weaponView != null) _weaponView.UnitAttackSingleAnim();

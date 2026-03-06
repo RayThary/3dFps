@@ -43,7 +43,7 @@ public class UnitMovement
         if (_isDodge) moveVec = _dodgeVec;
 
         moveVec = moveVec.normalized;
-        
+
         rigid.MoveRotation(rot);
         rigid.velocity = new Vector3(moveVec.x * _speed, rigid.velocity.y, moveVec.z * _speed);
         anim.SetBool("Run", moveVec != Vector3.zero);

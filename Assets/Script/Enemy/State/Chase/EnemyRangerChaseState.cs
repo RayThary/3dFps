@@ -73,7 +73,6 @@ public class EnemyRangerChaseState : IEnemyState
         if (isAggro)
         {
             _eState = attackState();
-            Debug.Log(_eState.ToString());
             switch (_eState)
             {
                 // 사거리 밖이면 무조건 접근

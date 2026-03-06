@@ -148,7 +148,7 @@ public class ConsumableShopUI : MonoBehaviour
         }
 
         shopSlot[2].button.interactable = false;
-
+        card.ShopSetup(selected, skill);
 
     }
 

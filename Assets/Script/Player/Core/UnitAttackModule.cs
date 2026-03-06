@@ -149,12 +149,14 @@ public class UnitAttackModule
     {
         if (_playerInput.ButtonDown[InputAction.Weapon1])
         {
+            unit.UnitWeapon.IsReloading = false;
             fireLockCheck(1);
             unitHandMotion.handMotion(unitWeaponChange, 1);
             fireLock = true;
         }
         else if (_playerInput.ButtonDown[InputAction.Weapon2])
         {
+            unit.UnitWeapon.IsReloading = false;
             fireLockCheck(2);
             unitHandMotion.handMotion(unitWeaponChange, 2);
             fireLock = true;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySniperState : IEnemySniperState
 {
-    private float sniperCooltime = 50;
+    private float sniperCooltime = 5;
     private float lastUesdTime = 0;
     public bool CanEnter
     { get { return Time.time >= lastUesdTime + sniperCooltime; } set { CanEnter = value; } }
@@ -36,6 +36,7 @@ public class EnemySniperState : IEnemySniperState
 
     public void Enter()
     {
+        enemy.NavMesh.isStopped = true;
         enemy.Animator.SetTrigger("Attack");
         lastUesdTime = Time.time;
         SniperShot = false;
@@ -64,8 +65,22 @@ public class EnemySniperState : IEnemySniperState
             Transform camTrs = Camera.main.transform;
             Vector3 point = camTrs.position + camTrs.forward * 0.3f;
             point.y -= 1.5f;
+            dir = (point - snipingTrs.position).normalized;
+            float distance = Vector3.Distance(point, snipingTrs.position);
+
+            RaycastHit hitObject;
+            int laserMask = obstacleMask | LayerMask.GetMask("Ground");
+
             lineR.SetPosition(0, snipingTrs.position);
-            lineR.SetPosition(1, point);
+
+            if (Physics.Raycast(snipingTrs.position, dir, out hitObject, distance, laserMask))
+            {
+                lineR.SetPosition(1, hitObject.point);
+            }
+            else
+            {
+                lineR.SetPosition(1, point);
+            }
             yield return null;
         }
 
@@ -93,6 +108,7 @@ public class EnemySniperState : IEnemySniperState
     public void Exit()
     {
         lastUesdTime = Time.time;
+        enemy.NavMesh.isStopped = false;
         enemy.EnemyStop = false;
     }
 
