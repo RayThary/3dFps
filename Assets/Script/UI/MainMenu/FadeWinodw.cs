@@ -11,6 +11,7 @@ public class FadeWinodw : MonoBehaviour
     public void Fade(float _time)
     {
         StartCoroutine(fadeStart(_time));
+        GameManager.instance.UnitStop = false;
     }
 
     IEnumerator fadeStart(float _time)

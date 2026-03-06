@@ -80,7 +80,10 @@ public class EnemySniperState : IEnemySniperState
         {
             if (hit.collider.CompareTag("Player"))
             {
-                GameManager.instance.GetUnit.TakeDamge(damage);
+                if (!enemy.IsDead)
+                {
+                    GameManager.instance.GetUnit.TakeDamge(damage);
+                }
             }
 
         }

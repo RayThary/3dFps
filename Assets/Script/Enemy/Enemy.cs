@@ -37,6 +37,9 @@ public class Enemy : MonoBehaviour
 
     private bool isDead = false;
     public bool IsDead { get { return isDead; } }
+    private bool deathCleanupDone = false;
+    private Coroutine deathFailSafeCoroutine;
+    private const float deathFailSafeDelay = 3f;
 
     private bool isStarted = false;
 
@@ -90,6 +93,13 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        deathCleanupDone = false;
+        isDead = false;
+        isStarted = false;
+        enemyStop = false;
+        hitCheck = false;
+        if (lineR != null) lineR.enabled = false;
+
         if (enemyCategory == eEnemyCategory.Boss)
         {
             EnemyBossAttack bossAttack = GetComponentInChildren<EnemyBossAttack>();
@@ -211,11 +221,35 @@ public class Enemy : MonoBehaviour
             isDead = true;
             isStarted = false;
             hitCheck = false;
+            enemyStop = false;
+            if (unitHitBox != null) unitHitBox.enabled = false;
+            if (lineR != null) lineR.enabled = false;
+            StopAllCoroutines();
+            StartDeathFailSafe();
 
             if (enemyCategory == eEnemyCategory.Boss)
             {
                 GameManager.instance.Portal.SetActive(true);
             }
+        }
+    }
+
+    private void StartDeathFailSafe()
+    {
+        if (deathFailSafeCoroutine != null)
+        {
+            StopCoroutine(deathFailSafeCoroutine);
+        }
+        deathFailSafeCoroutine = StartCoroutine(DeathFailSafe());
+    }
+
+    private IEnumerator DeathFailSafe()
+    {
+        yield return new WaitForSeconds(deathFailSafeDelay);
+
+        if (isDead && !deathCleanupDone && gameObject.activeInHierarchy)
+        {
+            EnemyDeath();
         }
     }
 
@@ -295,6 +329,19 @@ public class Enemy : MonoBehaviour
 
     public void EnemyDeath()
     {
+        if (deathCleanupDone)
+        {
+            return;
+        }
+        deathCleanupDone = true;
+        if (deathFailSafeCoroutine != null)
+        {
+            StopCoroutine(deathFailSafeCoroutine);
+            deathFailSafeCoroutine = null;
+        }
+        StopAllCoroutines();
+        if (lineR != null) lineR.enabled = false;
+
         animator.SetTrigger("Reset");
 
         box.enabled = true;

@@ -70,7 +70,7 @@ public class UpgradeCard : MonoBehaviour
                 return "감속 지속시간 증가";
 
             case UpgradeType.ResidueShockwave:
-                return "충격파 지속시간 증가";
+                return "충격파 지속피해 효과 강화";
 
             case UpgradeType.DoubleShockwave:
                 return "이중 충격파 발동";
