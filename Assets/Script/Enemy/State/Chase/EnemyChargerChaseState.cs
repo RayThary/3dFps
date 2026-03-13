@@ -20,13 +20,13 @@ public class EnemyChargerChaseState : IEnemyState
     public bool CanEnter { get; set; } = true;
 
     public EnemyChargerChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
-        LayerMask _obstacleMask, float _roamRadius, EnemyData _enemyData)
+        LayerMask _obstacleMask, float _roamRadius, float _speed, EnemyData _enemyData)
     {
         enemy = _enemy;
         enemyTrs = _enemyTrs;
         playerTrs = _playerTrs;
 
-        speed = _enemyData.Speed;
+        speed = _speed;
         stopDistance = _enemyData.AttackStopRange;
         chaseDistance = _enemyData.chaseDistance;
         obstacleMask = _obstacleMask;

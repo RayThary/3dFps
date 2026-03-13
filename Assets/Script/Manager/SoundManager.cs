@@ -250,7 +250,6 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-
     private void bgmSoundPlay(AudioClip clip)
     {
         m_backGroundSource.clip = clip;
@@ -264,6 +263,10 @@ public class SoundManager : MonoBehaviour
     public IEnumerator BGMSoundChange(AudioClip clip)
     {
         float bgVolum = m_backGroundSource.volume;
+        if(clip == m_backGroundSource.clip)
+        {
+            yield break;
+        }
         while (true)
         {
             bgVolum -= Time.deltaTime * 0.4f;
@@ -290,7 +293,6 @@ public class SoundManager : MonoBehaviour
         }
         else
         {
-            m_backGroundSource.time = 0;
             m_backGroundSource.UnPause();
         }
     }

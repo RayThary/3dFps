@@ -8,8 +8,8 @@ public enum UpgradeType
     CoolDown,
     //미사일
     MissileCount,
-    FireInterval,
     MissileSpeed,
+    pierce,
     CriticalEnable,
     //쇼크웨이브
     Radius,
@@ -53,7 +53,6 @@ public class UnitSkill : MonoBehaviour
     {
         public float damage = 70;
         public int missileCount = 4;
-        public float fireInterval = 0.15f;
         public float coolTime;
         public float missileSpeed = 30f;
 
@@ -62,9 +61,7 @@ public class UnitSkill : MonoBehaviour
         public float coolDownRate;
 
         public int missileCountUp;
-        public float fireIntervalUp;
         public float missileSpeedUp;
-        public bool criticalEnable = false;
     }
     [SerializeField] private ThrowMissile throwMissile;
     [System.Serializable]
@@ -73,17 +70,17 @@ public class UnitSkill : MonoBehaviour
         public int damageLevel;
         public int coolDownLevel;
         public int missileCountLevel;
-        public int fireIntervalLevel;
         public int missileSpeedLevel;
+        public int pierceLevel;
         public int criticalEnableLevel;
 
         // 최대 레벨들 (Inspector에서 설정 가능)
         public int damageMaxLevel = 5;
         public int coolDownMaxLevel = 3;
         public int missileCountMaxLevel = 4;
-        public int fireIntervalMaxLevel = 4;//발사간격
         public int missileSpeedMaxLevel = 4;//미사일속도
-        public int criticalEnableMaxLevel = 1; // 1번만 가능
+        public int pierceMaxLevel = 1;//관통
+        public int criticalEnableMaxLevel = 1; //크리티컬 1번만 가능
     }
     [SerializeField] private ThrowMissileUpgradeLevel throwMissileUpgradeLevel;
     public ThrowMissileUpgradeLevel missileUpLevel { get { return throwMissileUpgradeLevel; } }
@@ -162,7 +159,7 @@ public class UnitSkill : MonoBehaviour
             case eSkillName.ThrowMissile:
                 unitThrowMissile = new UnitSkillThrowMissile();
                 unitThrowMissile.SetUp(this, throwMissile.damage, throwMissile.missileCount, coolTime, throwMissile.missileSpeed,
-                    throwMissile.fireInterval, spawnR, spawnL, transform, nowOutLayer);
+                spawnR, spawnL, transform, nowOutLayer);
                 break;
             case eSkillName.Shockwave:
                 unitShockwave = new UnitSkillShockwave();
@@ -236,13 +233,14 @@ public class UnitSkill : MonoBehaviour
                 list.Add(UpgradeType.MissileSpeed);
 
             //중반 3이상
-            if (up.fireIntervalLevel < up.fireIntervalMaxLevel && skillLevel >= 3)
-                list.Add(UpgradeType.FireInterval);
-
             if (up.missileCountLevel < up.missileCountMaxLevel && skillLevel >= 3)
                 list.Add(UpgradeType.MissileCount);
 
             //후반 5이상
+
+            if (up.pierceLevel < up.pierceMaxLevel && skillLevel >= 5)
+                list.Add(UpgradeType.pierce);
+
             if (up.criticalEnableLevel < up.criticalEnableMaxLevel && skillLevel >= 5)
                 list.Add(UpgradeType.CriticalEnable);
         }
@@ -305,12 +303,12 @@ public class UnitSkill : MonoBehaviour
                 up.missileCountLevel++;
                 break;
 
-            case UpgradeType.FireInterval:
-                up.fireIntervalLevel++;
-                break;
-
             case UpgradeType.MissileSpeed:
                 up.missileSpeedLevel++;
+                break;
+
+            case UpgradeType.pierce:
+                up.pierceLevel = 1;
                 break;
 
             case UpgradeType.CriticalEnable:

@@ -202,7 +202,14 @@ public class Unit : MonoBehaviour
 
     public void TakeDamge(float _damage)
     {
-        unitCurrentHp -= _damage;
+        if (UIManager.instance.TestMode)
+        {
+            unitCurrentHp -= _damage / 2;
+        }
+        else
+        {
+            unitCurrentHp -= _damage;
+        }
         OnUnitChangeHp?.Invoke(unitCurrentHp);
         SoundManager.instance.HitSFXCreate(SoundManager.Clips.UnitHit, 1, GameManager.instance.WeaponSoundParent, false);
 

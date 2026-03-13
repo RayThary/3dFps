@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
 
     private GameObject currentCharacter;
 
+    private Image testModImage;
+
     //풀링 관련
     private Dictionary<string, Transform> poolingParents = new();
     public Dictionary<string, Transform> PoolingParents { get { return poolingParents; } }
@@ -136,14 +138,20 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
 
-
+        if(testModImage == null)
+        {
+            testModImage = UIManager.instance.TestMode.GetComponentInChildren<Image>();
+        }
         // 로비씬 넘어가기
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             stageNum = 0;
             nextStageNum = 1;
+            testModImage.gameObject.SetActive(true);
             return;
         }
+
+        testModImage.gameObject.SetActive(false);
 
         //월드오브젝트 다시설정
         GameObject worldObject = GameObject.Find("WorldObjects");
@@ -158,6 +166,7 @@ public class GameManager : MonoBehaviour
         stageEnemyAggro = false;
         stageMaxTime = 60 + (stageNum * 20);
 
+        enemyCount = 2000;
         //Awake 초기화보다 먼저 Unit이 존재해야 함
         characterCreate();
 
@@ -269,7 +278,19 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            
+            if (GameManager.instance.GetStageNum < 5)
+            {
+                UIManager.instance.GetSkillUpgradeUI.OpenUpgradeUI();
+                unit.Gold = 13000;
+            }
+            else
+            {
+                UIManager.instance.ResultWindow.GameResult(GameManager.instance.GetUnit, true);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.Escape) && !isEscInputLocked && SceneManager.GetActiveScene().buildIndex != 0)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -313,15 +334,23 @@ public class GameManager : MonoBehaviour
     {
         unitStop = true;
         SoundManager sm = SoundManager.instance;
-        switch (nextStageNum)
+        if (nextStageNum>=6)
         {
-            case 2:
-                StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[1])); break;
-            case 4:
-                StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[2])); break;
-            case 6:
-                StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[3])); break;
+            StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[3]));
         }
+        else if (nextStageNum >= 4)
+        {
+            StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[2]));
+        }
+        else if (nextStageNum >= 2)
+        {
+            StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[1]));
+        }
+        else
+        {
+            StartCoroutine(sm.BGMSoundChange(sm.BackGroundClip[0]));
+        }
+      
 
         RemoveEnemy();
         RemovePoolingRoot();

@@ -11,6 +11,7 @@ public class ThrowMissile : MonoBehaviour
     [SerializeField] private LayerMask hitObject;
     [SerializeField] private float speed = 30;
     private bool isCiritical = false;
+    private bool isPierce = false;
 
     private bool envCollisionArmed = false;
 
@@ -27,7 +28,11 @@ public class ThrowMissile : MonoBehaviour
             {
                 other.GetComponent<Enemy>().HitEnemy(damage, 1.5f, true);
             }
-            PoolingManager.Instance.RemovePoolingObject(gameObject);
+
+            if (!isPierce)
+            {
+                PoolingManager.Instance.RemovePoolingObject(gameObject);
+            }
         }
 
         if (!envCollisionArmed)
@@ -43,7 +48,7 @@ public class ThrowMissile : MonoBehaviour
     }
 
 
-    public void SetUp(float _damage, float _missileSpeed, Vector3 _shootDir,Vector3 _targetVec, bool _isCiritical)
+    public void SetUp(float _damage, float _missileSpeed, Vector3 _shootDir, Vector3 _targetVec, bool _isCiritical, bool _isPierce)
     {
         damage = _damage;
         speed = _missileSpeed;
@@ -51,6 +56,7 @@ public class ThrowMissile : MonoBehaviour
         targetVec = _targetVec;
         isCiritical = _isCiritical;
         envCollisionArmed = false;
+        isPierce = _isPierce;
     }
     void Start()
     {

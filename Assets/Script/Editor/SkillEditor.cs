@@ -50,7 +50,6 @@ public class SkillEditor : Editor
 
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("damage"));
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("missileCount"));
-            EditorGUILayout.PropertyField(missile.FindPropertyRelative("fireInterval"));
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("coolTime"));
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("missileSpeed"));
 
@@ -59,9 +58,7 @@ public class SkillEditor : Editor
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("damageUp"));
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("coolDownRate"));
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("missileCountUp"));
-            EditorGUILayout.PropertyField(missile.FindPropertyRelative("fireIntervalUp"));
             EditorGUILayout.PropertyField(missile.FindPropertyRelative("missileSpeedUp"));
-            EditorGUILayout.PropertyField(missile.FindPropertyRelative("criticalEnable"));
         }
     }
 
@@ -76,8 +73,8 @@ public class SkillEditor : Editor
             EditorGUILayout.PropertyField(missileLevel.FindPropertyRelative("damageMaxLevel"));
             EditorGUILayout.PropertyField(missileLevel.FindPropertyRelative("coolDownMaxLevel"));
             EditorGUILayout.PropertyField(missileLevel.FindPropertyRelative("missileCountMaxLevel"));
-            EditorGUILayout.PropertyField(missileLevel.FindPropertyRelative("fireIntervalMaxLevel"));
             EditorGUILayout.PropertyField(missileLevel.FindPropertyRelative("missileSpeedMaxLevel"));
+            EditorGUILayout.PropertyField(missileLevel.FindPropertyRelative("pierceMaxLevel"));
             EditorGUILayout.PropertyField(missileLevel.FindPropertyRelative("criticalEnableMaxLevel"));
         }
     }

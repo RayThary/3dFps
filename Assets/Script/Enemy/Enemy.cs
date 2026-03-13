@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private float hp;
     public float Hp { get { return hp; } }
-    private float speed;
+    [SerializeField] private float speed;
     private float damage;
     public float Damage { get { return damage; } }
     //인터페이스용 Stop
@@ -114,12 +114,7 @@ public class Enemy : MonoBehaviour
         playerTrs = GameManager.instance.GetUnit.GetComponent<Transform>();
 
         SetUpStat();
-
-        speed = enemyData.Speed;
-
         stateMachine = new EnemyStateMachine();
-
-
     }
     public void SetUpStat()
     {
@@ -130,24 +125,27 @@ public class Enemy : MonoBehaviour
 
         float hpMultiplier = 1f + (stage - 1) * 0.12f;
         hp = enemyData.Hp * hpMultiplier;
+
+        float value = Random.Range(0.95f, 1.1f);
+        speed = enemyData.Speed * value;
     }
-    private void SetupState()
+    private void SetupEnemyState()
     {
         switch (enemyCategory)
         {
             case eEnemyCategory.Melee:
-                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
+                enemyChaseState = new EnemyMeleeChaseState(this, playerTrs, transform, obstacleMask, roamRadius, speed, enemyData);
                 enemyAttackState = new EnemyMeleeState(this);
                 return;
 
             case eEnemyCategory.Charger:
-                enemyChaseState = new EnemyChargerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
+                enemyChaseState = new EnemyChargerChaseState(this, playerTrs, transform, obstacleMask, speed, roamRadius, enemyData);
                 enemyAttackState = new EnemyChargerState(this, transform, playerTrs, unitHitBox, speed);
 
                 return;
 
             case eEnemyCategory.Ranger:
-                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
+                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, speed, enemyData);
                 enemyAttackState = new EnemyRangerState(this);
                 return;
 
@@ -155,13 +153,13 @@ public class Enemy : MonoBehaviour
                 lineR = GetComponentInChildren<LineRenderer>();
                 lineR.enabled = false;
 
-                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, enemyData);
+                enemyChaseState = new EnemyRangerChaseState(this, playerTrs, transform, obstacleMask, roamRadius, speed, enemyData);
                 enemyAttackState = new EnemySniperState(this, lineR.transform, playerTrs, lineR, damage, obstacleMask);
                 return;
 
             case eEnemyCategory.BossBoom:
             case eEnemyCategory.Boom:
-                enemyChaseState = new EnemyBoomChaseState(this, playerTrs, transform, obstacleMask, enemyData);
+                enemyChaseState = new EnemyBoomChaseState(this, playerTrs, transform, speed, obstacleMask, enemyData);
                 enemyAttackState = new EnemyBoomState(this);
                 return;
 
@@ -179,7 +177,7 @@ public class Enemy : MonoBehaviour
         if (!isStarted && GameManager.instance.IsStageStarted)
         {
             isStarted = true;
-            SetupState();
+            SetupEnemyState();
             stateMachine.ChangeState(enemyChaseState);
         }
 
@@ -367,7 +365,7 @@ public class Enemy : MonoBehaviour
         int goldDropChance = Random.Range(0, 10);
         if (goldDropChance < 6)
             item(PoolingManager.ePoolingObject.ItemCoin, 0);
-        
+
 
         int ammoDropChance = Random.Range(0, 10);
         if (ammoDropChance < 6)

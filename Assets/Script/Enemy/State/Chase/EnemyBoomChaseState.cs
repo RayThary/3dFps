@@ -13,14 +13,14 @@ public class EnemyBoomChaseState : IEnemyState
 
 
     public bool CanEnter { get; set; } = true;
-    public EnemyBoomChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs,
+    public EnemyBoomChaseState(Enemy _enemy, Transform _playerTrs, Transform _enemyTrs, float _speed,
      LayerMask _obstacleMask, EnemyData _enemyData)
     {
         enemy = _enemy;
         enemyTrs = _enemyTrs;
         playerTrs = _playerTrs;
 
-        speed = _enemyData.Speed;
+        speed = _speed;
         stopDistance = _enemyData.AttackStopRange;
         obstacleMask = _obstacleMask;
     }

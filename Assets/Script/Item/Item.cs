@@ -61,7 +61,7 @@ public class Item : MonoBehaviour
         else
             coinValue = 4;
 
-        amount = coinValue * 13;
+        amount = coinValue * 26;
 
         if (UIManager.instance != null && UIManager.instance.TestMode.isOn)
         {

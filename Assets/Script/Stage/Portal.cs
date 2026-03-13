@@ -39,6 +39,7 @@ public class PortalSpawn : MonoBehaviour
 
     void Update()
     {
+      
         if (!isPlayerIn || checkF)
             return;
 

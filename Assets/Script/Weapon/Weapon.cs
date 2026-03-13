@@ -235,8 +235,8 @@ public abstract class Weapon
 
             case 4:
                 float reserveAdd = ReserveAmmoUp * randFactor;
-                reserveAmmo += Mathf.RoundToInt(reserveAdd);
-                return $"∫Ò√‡ ≈∫æ‡ +{Mathf.RoundToInt(reserveAdd)}";
+                maxReserveAmmo += Mathf.RoundToInt(reserveAdd);
+                return $"√÷¥Î ≈∫æ‡ +{Mathf.RoundToInt(reserveAdd)}";
 
             case 5:
                 float spreadAdd = spreadDown * randFactor;

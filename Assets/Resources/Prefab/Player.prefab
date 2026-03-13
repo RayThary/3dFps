@@ -1106,7 +1106,7 @@ MonoBehaviour:
   unitHead: {fileID: 5401834921608893278}
   unitHandSlot: {fileID: 4206875433554880461}
   sensitivity: 0
-  currentGold: 100
+  currentGold: 250
   povCamera: {fileID: 3314300461031420196}
 --- !u!114 &5232305930072985549
 MonoBehaviour:
@@ -1129,27 +1129,24 @@ MonoBehaviour:
   throwMissile:
     damage: 70
     missileCount: 4
-    fireInterval: 0.15
     coolTime: 6
     missileSpeed: 30
     damageUp: 1.2
     coolDownRate: 0.9
     missileCountUp: 2
-    fireIntervalUp: 0.2
     missileSpeedUp: 5
-    criticalEnable: 0
   throwMissileUpgradeLevel:
     damageLevel: 0
     coolDownLevel: 0
     missileCountLevel: 0
-    fireIntervalLevel: 0
     missileSpeedLevel: 0
+    pierceLevel: 0
     criticalEnableLevel: 0
     damageMaxLevel: 5
     coolDownMaxLevel: 3
     missileCountMaxLevel: 4
-    fireIntervalMaxLevel: 3
     missileSpeedMaxLevel: 3
+    pierceMaxLevel: 1
     criticalEnableMaxLevel: 1
   shockwave:
     damage: 70

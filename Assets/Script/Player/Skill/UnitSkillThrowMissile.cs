@@ -9,8 +9,8 @@ public class UnitSkillThrowMissile
 
     private float damage;
     private int skillCount;
-    private float fireInterval;
     private float missileSpeed;
+    private bool canPierce;
     private bool canCritical;
 
 
@@ -28,14 +28,13 @@ public class UnitSkillThrowMissile
     private int outLayer;
 
 
-    public void SetUp(UnitSkill _unitSkill, float _damage, int _skillCount, float _coolTime, float _missileSpeed, float _fireInterval
-        , Transform _spawnPoint1, Transform _spawnPoint2, Transform _unitTrs, int _outLayer)
+    public void SetUp(UnitSkill _unitSkill, float _damage, int _skillCount, float _coolTime, float _missileSpeed ,
+         Transform _spawnPoint1, Transform _spawnPoint2, Transform _unitTrs, int _outLayer)
     {
         unitSkill = _unitSkill;
         damage = _damage;
         skillCount = _skillCount;
         missileSpeed = _missileSpeed;
-        fireInterval = _fireInterval;
         canCritical = false;
 
         coolTime = _coolTime;
@@ -95,9 +94,9 @@ public class UnitSkillThrowMissile
 
             bool isCrit = canCritical ? ciriticalCheck() : false;
 
-            obj.GetComponent<ThrowMissile>().SetUp(damage, missileSpeed, dir, unitTrs.position, isCrit);
+            obj.GetComponent<ThrowMissile>().SetUp(damage, missileSpeed, dir, unitTrs.position, isCrit, canPierce);
             count++;
-            yield return new WaitForSeconds(fireInterval);
+            yield return new WaitForSeconds(0.15f);
         }
     }
 
@@ -126,12 +125,12 @@ public class UnitSkillThrowMissile
                 skillCount += up.missileCountUp;    //개수
                 break;
 
-            case UpgradeType.FireInterval:
-                fireInterval -= up.fireIntervalUp;  // 발사속도
-                break;
-
             case UpgradeType.MissileSpeed:
                 missileSpeed += up.missileSpeedUp;  //속도강화
+                break;
+
+            case UpgradeType.pierce:
+                canPierce = true;  //관통
                 break;
 
             case UpgradeType.CriticalEnable:

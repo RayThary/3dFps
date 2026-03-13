@@ -4963,7 +4963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missileType: 0
   enemyDamage: 0
-  missileSpeed: 15
+  missileSpeed: 30
   RemoveLayer:
     serializedVersion: 2
     m_Bits: 65984

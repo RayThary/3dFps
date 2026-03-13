@@ -70,7 +70,7 @@ public class UpgradeCard : MonoBehaviour
                 return "감속 지속시간 증가";
 
             case UpgradeType.ResidueShockwave:
-                return "충격파 지속피해 효과 강화";
+                return "지속피해 효과 강화";
 
             case UpgradeType.DoubleShockwave:
                 return "이중 충격파 발동";
@@ -79,8 +79,8 @@ public class UpgradeCard : MonoBehaviour
             case UpgradeType.MissileCount:
                 return "미사일 발사 수 증가";
 
-            case UpgradeType.FireInterval:
-                return "발사 간격 감소";
+            case UpgradeType.pierce:
+                return "미사일 관통";
 
             case UpgradeType.MissileSpeed:
                 return "미사일 속도 증가";
@@ -129,8 +129,8 @@ public class UpgradeCard : MonoBehaviour
             case UpgradeType.MissileCount:
                 return GetLevelBar(_unitSkill.missileUpLevel.missileCountLevel, _unitSkill.missileUpLevel.missileCountMaxLevel);
 
-            case UpgradeType.FireInterval:
-                return GetLevelBar(_unitSkill.missileUpLevel.fireIntervalLevel, _unitSkill.missileUpLevel.fireIntervalMaxLevel);
+            case UpgradeType.pierce:
+                return GetLevelBar(_unitSkill.missileUpLevel.pierceLevel, _unitSkill.missileUpLevel.pierceMaxLevel);
 
             case UpgradeType.MissileSpeed:
                 return GetLevelBar(_unitSkill.missileUpLevel.missileSpeedLevel, _unitSkill.missileUpLevel.missileSpeedMaxLevel);

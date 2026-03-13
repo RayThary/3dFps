@@ -403,7 +403,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\uC774\uB3D9 : WASD   \uB9C8\uC6B0\uC2A4 : \uC870\uC900\n\uB300\uC2DC
-    : Shift  / \uC2A4\uD0AC : E\n\uCEE4\uC11C \uD45C\uC2DC/\uC228\uAE40 : Alt"
+    : Shift  / \uC2A4\uD0AC : E\n\uCEE4\uC11C \uD45C\uC2DC/\uC228\uAE40 : Tap"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e794a00804e11704e8938f1fb8d91605, type: 2}
   m_sharedMaterial: {fileID: -7938308146844441901, guid: e794a00804e11704e8938f1fb8d91605, type: 2}
